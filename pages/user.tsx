@@ -1,7 +1,7 @@
 const User = () => {
   return (
     <>
-      <h1>User Page</h1>
+      <h3>User Page</h3>
     </>
   );
 };

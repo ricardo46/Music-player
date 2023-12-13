@@ -1,7 +1,19 @@
-import Link from "next/link";
-import { NavContainer, NavLinksContainer, StyledLink } from "./NavBarStyles";
+import { DashBoardMessage, NavContainer, NavLinksContainer } from "./NavBarStyles";
+import { StyledButton, StyledLink } from "../StyledComponents/StyledComponents";
+import { useUser } from "@/Contexts/UserContext";
+import { deleteCookie } from "cookies-next";
+import { useRouter } from "next/router";
 
 export default function NavBar() {
+  const { user, setUser, clearUser } = useUser();
+  const router = useRouter();
+
+  const logOutEvent = () => {
+    clearUser();
+    deleteCookie("tokenCookie");
+    // router.push("/");
+  };
+
   return (
     <>
       <NavContainer>
@@ -10,10 +22,24 @@ export default function NavBar() {
         </div>
         <NavLinksContainer>
           <StyledLink href="/">Home</StyledLink>
-          <StyledLink href="/user">User</StyledLink>
-          <StyledLink href="/login">Login</StyledLink>
-          <StyledLink href="/register">Register</StyledLink>
+          {user.id != 0 && <StyledLink href="/user">User</StyledLink>}
+          {user.id == 0 && <StyledLink href="/login">Login</StyledLink>}
+          {user.id == 0 && <StyledLink href="/register">Register</StyledLink>}
+          {user.id != 0 && (
+            <StyledLink onClick={logOutEvent} href="/">
+              Logout
+            </StyledLink>
+            // <StyledButton onClick={logOutEvent}>Logout</StyledButton>
+          )}
         </NavLinksContainer>
+        {user.id != 0 && (
+          <DashBoardMessage>{"Welcome " + user.name}</DashBoardMessage>
+        )}
+        {/* <ul>
+          <li>{"Welcome " + user.name}</li>
+          <li>{"Email: " + user.email}</li>
+          <li>{"ID: " + user.id}</li>
+        </ul> */}
       </NavContainer>
     </>
   );

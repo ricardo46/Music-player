@@ -6,6 +6,7 @@ const LayoutContainer = styled.div`
   box-sizing: border-box;
   height: 100vh;
   margin: 0 auto;
+  /* max-width: 100vw; */
 `;
 
 const PageContainer = styled.div`

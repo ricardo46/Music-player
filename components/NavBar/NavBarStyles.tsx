@@ -1,9 +1,8 @@
-import Link from "next/link";
+import { DASHBOARD_LAPTOP_FONT_SIZE, DASHBOARD_MESSAGE_FONT_COLOR, DASHBOARD_MOBILE_FONT_SIZE } from "@/globalVariables";
 import styled from "styled-components";
+import { Message } from "../StyledComponents/StyledComponents";
 
-const StyledLink = styled(Link)`
-  text-decoration: none;
-`;
+
 
 const NavLinksContainer = styled.div`
   display: flex;
@@ -18,4 +17,16 @@ const NavContainer = styled.nav`
   border-bottom: 2px solid black;
 `;
 
-export { NavLinksContainer, NavContainer, StyledLink };
+const DashBoardMessage = styled(Message)`
+  margin: 0;
+  padding: 0;
+  color: ${DASHBOARD_MESSAGE_FONT_COLOR};
+  grid-column-start: span 3;
+  justify-self: end;
+  font-size: ${DASHBOARD_MOBILE_FONT_SIZE};
+  @media (min-width: 690px) {
+    font-size: ${DASHBOARD_LAPTOP_FONT_SIZE};
+  }
+`;
+
+export { NavLinksContainer, NavContainer ,DashBoardMessage};
