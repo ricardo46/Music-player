@@ -9,11 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/filestack-react": "^4.0.4",
+    "@uploadcare/blocks": "0.30.5",
     "axios": "^1.6.2",
     "bootstrap": "^5.3.2",
     "cookie": "^0.6.0",
     "cookies-next": "^4.1.0",
+    "cors": "^2.8.5",
+    "filestack-js": "^3.28.0",
+    "filestack-react": "^5.0.0",
     "next": "14.0.3",
+    "next-cloudinary": "^5.13.0",
     "react": "^18",
     "react-bootstrap": "^2.9.1",
     "react-dom": "^18",

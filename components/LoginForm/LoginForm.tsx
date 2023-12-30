@@ -1,9 +1,13 @@
 import { ChangeEvent, FormEvent, MouseEvent, useState, useEffect } from "react";
-import MultipleInputForm, { submitRequestInterface } from "../InputForm/MultipleInputForm";
+import MultipleInputForm, {
+  submitRequestInterface,
+} from "../MultipleInputForm/MultipleInputForm";
 import axios, { AxiosError } from "axios";
 import { setCookie, getCookie } from "cookies-next";
 import { useRouter } from "next/router";
 import { LOGIN_SUCCESS_REDIRECT_TIMEOUT } from "@/globalVariables";
+// import { useLayoutSubmitRequest } from "@/Contexts/LayoutContext";
+import { useUser } from "@/Contexts/UserContext";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("Insert email");
@@ -16,6 +20,7 @@ const LoginForm = () => {
     message: null,
   });
   const router = useRouter();
+  const { user, setUser, clearUser } = useUser();
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.name == "email") {
@@ -28,7 +33,6 @@ const LoginForm = () => {
 
   const onLoginSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // console.log("submit login");
 
     try {
       setSubmitRequest({
@@ -40,7 +44,7 @@ const LoginForm = () => {
       });
       const response = await axios.post(
         "https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/auth/login",
-        { email, password } //pass: aaaa1111
+        { email, password }
       );
 
       const authToken = response.data.authToken;
@@ -50,19 +54,17 @@ const LoginForm = () => {
         submitted: true,
         isLoading: false,
         errorMessage: null,
-        message: 'Login success!',
+        message: "Login success!",
       });
 
       setCookie("tokenCookie", authToken, {
-        maxAge: 60 * 60,
+        maxAge: 60 * 30,
       });
-      console.log("setting cookie", authToken);
+
+      console.log("response", response);
       setTimeout(() => {
         router.push("/user");
       }, LOGIN_SUCCESS_REDIRECT_TIMEOUT);
-      // router.push("/user");
-
-      // console.log("response", response);
     } catch (err: any) {
       setSubmitRequest({
         error: true,
@@ -71,8 +73,6 @@ const LoginForm = () => {
         isLoading: false,
         message: null,
       });
-
-      // console.log("error submit request", submitRequest);
     }
   };
 
@@ -99,18 +99,5 @@ const LoginForm = () => {
     />
   );
 };
-
-// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-//   // res.setHeader('Set-Cookie', cookie.serialize('token', req.body.token))
-
-//   // const cookie = serialize("ssr-cookie", "ssr-cookie-value", {
-//   //   httpOnly: true,
-//   //   path: "/",
-//   // });
-//   // res.setHeader("Set-Cookie", cookie);
-//   return {
-//     props: {token: req.cookies.token},
-//   };
-// };
 
 export default LoginForm;

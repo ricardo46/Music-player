@@ -11,7 +11,7 @@ import {
   FormMessageStyledContainer,
   StyledForm,
 } from "./FormStyledComponents";
-import LoadingAnimation from "./LoadingAnimation";
+import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 import UserMessage from "../UserMessage/UserMessage";
 
 interface Input {
@@ -74,7 +74,6 @@ const MultipleInputForm = ({
           ))}
           <FormButton onClick={onButtonClick}>{submitButtonName}</FormButton>
         </FormContainer>
-        
 
         {messageIsVisible && (
           <FormMessageStyledContainer>

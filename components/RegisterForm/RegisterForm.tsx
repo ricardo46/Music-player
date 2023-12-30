@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, MouseEvent, useState } from "react";
 import MultipleInputForm, {
   submitRequestInterface,
-} from "../InputForm/MultipleInputForm";
+} from "../MultipleInputForm/MultipleInputForm";
 import axios from "axios";
 import { REGISTER_SUCCESS_REDIRECT_TIMEOUT } from "@/globalVariables";
 
@@ -21,23 +21,8 @@ const RegisterForm = () => {
   });
   const router = useRouter();
 
-  //   const {
-  //     data: registerData,
-  //     submitRequest: registerSubmitRequest,
-  //     newFetch: newRegisterFetch,
-  //   } = useGetAPIData();
-
-  //   const {
-  //     data: loginData,
-  //     submitRequest: loginSubmitRequest,
-  //     newFetch: newLoginFetch,
-  //   } = useGetAPIData();
-
-  //   const navigate = useNavigate();
-
   const onRegisterSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // console.log("registering");
 
     try {
       setSubmitRequest({
@@ -50,7 +35,7 @@ const RegisterForm = () => {
 
       const response = await axios.post(
         "https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/auth/signup",
-        { name, email, password } //pass: aaaa1111
+        { name, email, password }
       );
 
       setSubmitRequest({
@@ -90,31 +75,6 @@ const RegisterForm = () => {
       setPassword(e.target.value);
     }
   };
-
-  //   useEffect(() => {
-  //     if (registerData.authToken) {
-  //       newLoginFetch({
-  //         apiParams: { email, password },
-  //         apiRequest: logUserInAPI,
-  //       });
-  //     }
-  //   }, [registerData]);
-
-  //   useEffect(() => {
-  //     if (loginData.user) {
-  //       const authToken = loginData.authToken;
-  //       setLocalStorageItem("authToken", authToken);
-  //       const user = loginData.user;
-  //       setUser({
-  //         id: user.id,
-  //         name: user.name,
-  //         email: user.email,
-  //         movieLists: user.movieLists,
-  //       });
-  //       setAuth(() => true);
-  //       navigate("/myAccount");
-  //     }
-  //   }, [loginData]);
 
   const handleClick = (e: MouseEvent<HTMLInputElement>) => {
     if (e.currentTarget.name == "name") {

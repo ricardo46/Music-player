@@ -1,3 +1,5 @@
+import { SongInterface } from "@/components/FileUploader/FileUploader";
+import { CookieValueTypes } from "cookies-next";
 import {
   Dispatch,
   ReactNode,
@@ -7,16 +9,19 @@ import {
   useState,
 } from "react";
 
-export type User = {
+export type UserType = {
   id: number;
   name: string;
   email: string;
+  uploadedSongs: SongInterface[] | null;
 };
 
 export interface UserContextInterface {
-  user: User;
-  setUser: Dispatch<SetStateAction<User>>;
+  user: UserType;
+  setUser: Dispatch<SetStateAction<UserType>>;
   clearUser: () => void;
+  authToken: CookieValueTypes | null;
+  setAuthToken: Dispatch<CookieValueTypes | null>;
 }
 
 const defaultState = {
@@ -24,14 +29,10 @@ const defaultState = {
     id: 0,
     name: "",
     email: "",
+    uploadedSongs: null,
   },
-  setUser: (user: User) => {},
+  setUser: (user: UserType) => {},
 } as UserContextInterface;
-
-// const authInitialValue = {
-//     auth: false,
-//     setAuth: () => {},
-//   };
 
 export const UserContext = createContext(defaultState);
 
@@ -39,39 +40,30 @@ type UserProviderProps = {
   children: ReactNode;
 };
 
-// const UserContext = createContext({});
-
-// interface Props {
-//   children: React.ReactNode;
-// }
-
 export const UserProvider = ({ children }: UserProviderProps) => {
-  const [user, setUser] = useState<User>({
+  const [user, setUser] = useState<UserType>({
     id: 0,
     name: "",
     email: "",
+    uploadedSongs: [],
   });
 
-  //   const [auth, setAuth] = useState(authInitialValue);
+  const [authToken, setAuthToken] = useState<CookieValueTypes | null>(null);
 
   const clearUser = () => {
     setUser({
       id: 0,
       name: "",
       email: "",
+      uploadedSongs: [],
     });
+    setAuthToken(null);
   };
 
-  //   const updateUser = (newData: User) => {
-  //     setUser((prev) => ({
-  //       ...prev,
-  //       ...newData,
-  //     }));
-  //   };
-
   return (
-    <UserContext.Provider value={{ user, setUser, clearUser }}>
-      {/* <UserContext.Provider value={{ user, setUser, updateUser, auth, setAuth }}></UserContext.Provider> */}
+    <UserContext.Provider
+      value={{ user, setUser, clearUser, authToken, setAuthToken }}
+    >
       {children}
     </UserContext.Provider>
   );
