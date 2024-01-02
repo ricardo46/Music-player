@@ -7,6 +7,11 @@ import {
   PlayerContainer,
   StyledAudio,
 } from "./AudioPlayerStyles";
+import { useUser } from "@/Contexts/UserContext";
+import { getCookie } from "cookies-next";
+import { submitRequestInterface } from "../MultipleInputForm/MultipleInputForm";
+import deleteSong from "@/Utils/deleteSong";
+import patchUser from "@/Utils/patchUser";
 
 interface AudioPlayerInterface {
   songs: SongInterface[] | null;
@@ -17,6 +22,14 @@ const AudioPlayer = ({ songs, handleEnded }: AudioPlayerInterface) => {
   const [songIndex, setSongIndex] = useState<number>(0);
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
+  const { user, setUser, clearUser } = useUser();
+  const [submitRequest, setSubmitRequest] = useState<submitRequestInterface>({
+    isLoading: false,
+    submitted: false,
+    error: false,
+    errorMessage: null,
+    message: null,
+  });
 
   const onSongEnded = () => {
     console.log("prev song", songIndex);
@@ -25,7 +38,6 @@ const AudioPlayer = ({ songs, handleEnded }: AudioPlayerInterface) => {
       if (songIndex == songs?.length - 1) {
         setSongIndex(0);
         setPlaying(false);
-
       } else {
         setSongIndex((prev) => prev + 1);
       }
@@ -36,7 +48,6 @@ const AudioPlayer = ({ songs, handleEnded }: AudioPlayerInterface) => {
   };
 
   const updateSongIndex = (index: number) => {
-
     setSongIndex(index);
   };
 
@@ -65,12 +76,69 @@ const AudioPlayer = ({ songs, handleEnded }: AudioPlayerInterface) => {
     }
   };
 
-  useEffect(() => {
+  const onDeleteClick = async (e: any, songID: number | undefined) => {
+    try {
+      const authToken = getCookie("tokenCookie");
+      setSubmitRequest({
+        isLoading: true,
+        error: false,
+        submitted: false,
+        errorMessage: null,
+        message: null,
+      });
+      console.log("authToken", authToken);
 
+      const deleteSongResponse = songID
+        ? await deleteSong(songID, authToken)
+        : null;
+
+      console.log("deleteSongResponse", deleteSongResponse);
+
+      let userPreviousSongs: SongInterface[] | null = user.uploadedSongs;
+
+      const newSongs: SongInterface[] | undefined = userPreviousSongs?.filter(
+        (song) => song.song_id != songID
+      );
+
+      console.log("newSongs", newSongs);
+
+      const responsePatch = await patchUser(
+        user.id,
+        { uploadedSongs: newSongs },
+        authToken
+      );
+
+      // console.log("responsePatch", responsePatch);
+
+      setUser((prev: any) => ({
+        ...prev,
+        uploadedSongs: newSongs,
+      }));
+
+      setSubmitRequest({
+        error: false,
+        submitted: true,
+        isLoading: false,
+        errorMessage: null,
+        message: "Song deleted from backend!",
+      });
+    } catch (err: any) {
+      console.log("error deleting song", err);
+
+      setSubmitRequest({
+        error: true,
+        submitted: true,
+        errorMessage: err ? err.response.data.message : null,
+        isLoading: false,
+        message: null,
+      });
+    }
+  };
+
+  useEffect(() => {
     if (audioRef.current && playing) {
       audioRef.current.play();
     } else {
-
       audioRef.current?.pause();
     }
   }, [songIndex, playing]);
@@ -82,7 +150,7 @@ const AudioPlayer = ({ songs, handleEnded }: AudioPlayerInterface) => {
           <SongsList>
             {songs.map((el: SongInterface, index: number) => {
               return (
-                <div key={el.id}>
+                <div key={el.song_id}>
                   {songIndex == index && (
                     <h3
                       onClick={(e) => onSongClick(e, index)}
@@ -92,6 +160,11 @@ const AudioPlayer = ({ songs, handleEnded }: AudioPlayerInterface) => {
                     <p onClick={(e) => onSongClick(e, index)}>
                       {`${index}- ${el.name}`}
                     </p>
+                  )}
+                  {el.song_id && user.id != 0 && (
+                    <StyledButton onClick={(e) => onDeleteClick(e, el.song_id)}>
+                      X
+                    </StyledButton>
                   )}
                 </div>
               );
@@ -109,8 +182,8 @@ const AudioPlayer = ({ songs, handleEnded }: AudioPlayerInterface) => {
                 src={songs[songIndex]?.url}
                 controls
                 onEnded={onSongEnded}
-                onPlay={()=>setPlaying(true)}
-                onPause={()=>setPlaying(false)}
+                onPlay={() => setPlaying(true)}
+                onPause={() => setPlaying(false)}
               />
             </>
           )}

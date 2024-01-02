@@ -6,14 +6,18 @@ import axios from "axios";
 import { getCookie } from "cookies-next";
 import { useUser } from "@/Contexts/UserContext";
 import { FileUploaderContainer } from "./FileUploadeStyles";
+import patchUser from "@/Utils/patchUser";
+import TimedMessage from "../TimedMessage/TimedMessage";
+import ErrorTimedMessage from "../ErrorMessage/ErrorMessage";
+import postSong from "@/Utils/postSong";
 
 export interface SongInterface {
   name: string;
   url: string;
-  id: number | undefined;
+  song_id: number | undefined;
 }
 
-type UploadedSongType = {
+export type UploadedSongType = {
   song_id: number;
 };
 
@@ -51,15 +55,8 @@ function FileUploader() {
 
       const songName = e.filesUploaded[0].filename;
       const songUrl = e.filesUploaded[0].url;
-      const postSongResponse = await axios.post(
-        "https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/song",
-        { name: songName, url: songUrl },
-        {
-          headers: {
-            Authorization: "Bearer " + authToken,
-          },
-        }
-      );
+
+      const postSongResponse = await postSong(songName, songUrl, authToken);
 
       console.log("postSongResponse", postSongResponse);
 
@@ -70,34 +67,36 @@ function FileUploader() {
         userPreviousSongs = [];
       }
 
-      const uploadedSongID: UploadedSongType = {
-        song_id: postSongResponse.data.id,
-      };
+      // interface SongInterface {
+      //   name: string;
+      //   url: string;
+      //   id: number | undefined;
+      // }
 
-      const newSongIDs: (SongInterface | UploadedSongType)[] = [
-        ...userPreviousSongs,
-        uploadedSongID,
-      ];
-      console.log("newUserSongs", newSongIDs);
-
-      const responsePatch = await axios.patch(
-        `https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/user/${user.id}`,
-        { uploadedSongs: newSongIDs },
-        {
-          headers: {
-            Authorization: "Bearer " + authToken,
-          },
-        }
-      );
-      console.log("responsePatch", responsePatch);
+      // const uploadedSongID: UploadedSongType = {
+      //   song_id: postSongResponse.data.id,
+      // };
 
       const newSong: SongInterface = {
         name: songName,
         url: songUrl,
-        id: postSongResponse.data.id,
+        song_id: postSongResponse.data.id,
       };
-
+      // const newSongIDs: (SongInterface | UploadedSongType)[] = [
+      //   ...userPreviousSongs,
+      //   uploadedSongID,
+      // ];
       const newSongs: SongInterface[] = [...userPreviousSongs, newSong];
+
+      console.log("newUserSongs", newSongs);
+
+      const responsePatch = await patchUser(
+        user.id,
+        { uploadedSongs: newSongs },
+        authToken
+      );
+
+      // console.log("responsePatch", responsePatch);
 
       setUser((prev: any) => ({
         ...prev,
@@ -156,6 +155,12 @@ function FileUploader() {
             }}
             onUploadDone={handleUpload}
           />
+        )}
+        {submitRequest.error && (
+          <ErrorTimedMessage errorMessage={"Error uploading song!"} />
+        )}
+        {submitRequest.error && (
+          <ErrorTimedMessage errorMessage={submitRequest.errorMessage} />
         )}
       </FileUploaderContainer>
     </>

@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { DetailedHTMLProps, HTMLAttributes, useEffect, useState } from "react";
+import { ExecutionContext } from "styled-components";
+import { TimedMessageContainer } from "./TimedMessageStyles";
 
-type TimedMessagePropsType = {message: string | null}
+export type TimedMessagePropsType = { message: string | null | any };
 
-const TimedMessage = ({message}:TimedMessagePropsType) => {
+const TimedMessage = ({ message }: TimedMessagePropsType) => {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
@@ -11,7 +13,9 @@ const TimedMessage = ({message}:TimedMessagePropsType) => {
     }, 5000);
   });
 
-  return <>{visible && <p>{message}</p>}</>;
+  return (
+    <TimedMessageContainer>{visible && <p>{message}</p>}</TimedMessageContainer>
+  );
 };
 
 export default TimedMessage;
