@@ -5,7 +5,7 @@ import MultipleInputForm, {
   submitRequestInterface,
 } from "../MultipleInputForm/MultipleInputForm";
 import axios from "axios";
-import { REGISTER_SUCCESS_REDIRECT_TIMEOUT } from "@/globalVariables";
+import { REDIRECT_TIMEOUT } from "@/globalVariables";
 
 const RegisterForm = () => {
   const [name, setName] = useState("Enter Name");
@@ -48,7 +48,7 @@ const RegisterForm = () => {
 
       setTimeout(() => {
         router.push("/login");
-      }, REGISTER_SUCCESS_REDIRECT_TIMEOUT);
+      }, REDIRECT_TIMEOUT);
 
       console.log("response", response);
     } catch (err: any) {

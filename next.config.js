@@ -17,3 +17,5 @@ module.exports = nextConfig;
 //       ]
 //     },
 // };
+
+env: {  NEXT_PUBLIC_G_KEY: process.env.NEXT_PUBLIC_FILESTACK_API_KEY  }
