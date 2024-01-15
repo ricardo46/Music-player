@@ -1,20 +1,26 @@
 import { DetailedHTMLProps, HTMLAttributes, useEffect, useState } from "react";
 import { ExecutionContext } from "styled-components";
-import { TimedMessageContainer } from "./TimedMessageStyles";
+import { StyledSuccessMessage } from "../StyledComponents/StyledComponents";
 
-export type TimedMessagePropsType = { message: string | null | any };
+// export type TimedMessagePropsType = { message: string | null | any };
 
-const TimedMessage = ({ message }: TimedMessagePropsType) => {
-  const [visible, setVisible] = useState(true);
+const TimedMessage = ({
+  visible,
+  message,
+}: {
+  visible: boolean;
+  message: string;
+}) => {
+  // const [visible, setVisible] = useState(true);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setVisible(false);
-    }, 5000);
-  });
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setVisible(false);
+  //   }, 15000);
+  // },[]);
 
   return (
-    <TimedMessageContainer>{visible && <p>{message}</p>}</TimedMessageContainer>
+    <>{visible && <StyledSuccessMessage>{message}</StyledSuccessMessage>}</>
   );
 };
 

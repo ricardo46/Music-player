@@ -8,6 +8,8 @@ import { useUser } from "@/Contexts/UserContext";
 import { useRouter } from "next/router";
 import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 import { useLayoutSubmitRequest } from "@/Contexts/LayoutContext";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import Header from "../Header/Header";
 
 type Props = {
   children: JSX.Element;
@@ -20,17 +22,21 @@ const Layout = ({ children }: Props) => {
     clearLayoutSubmitRequest,
   } = useLayoutSubmitRequest();
 
-  const router = useRouter();
+  const maxMobileWidth = useMediaQuery("(max-width:768px)");
 
   return (
-    <LayoutContainer>
-     
-      {layoutSubmitRequest.isLoading && <LoadingAnimation />}
+    <>
+      <LayoutContainer>
+        {layoutSubmitRequest.isLoading && <LoadingAnimation />}
+        {!layoutSubmitRequest.isLoading && <Header />}
 
-      {!layoutSubmitRequest.isLoading && <NavBar />}
-      <PageContainer> {children}</PageContainer>
-      <Footer />
-    </LayoutContainer>
+        {/* {!layoutSubmitRequest.isLoading && <NavBar />} */}
+        <PageContainer> {children}</PageContainer>
+        {maxMobileWidth && <NavBar />}
+
+        {!maxMobileWidth && <Footer />}
+      </LayoutContainer>
+    </>
   );
 };
 

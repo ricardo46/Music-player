@@ -1,21 +1,24 @@
 import styled from "styled-components";
 
 const StyledAudio = styled.audio`
-  margin: 2rem;
+  /* padding: 0rem 0rem 1rem ; */
 `;
 
 const PlayerContainer = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const PlayerAndSongsContainer = styled.div`
-  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 1rem;
+  padding: 0rem 0rem 1rem;
+  width: 100%;
+  border-bottom: solid black 2px;
 `;
 
-export { StyledAudio, PlayerContainer, PlayerAndSongsContainer };
+const PlayerButtonsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0rem 0rem 1rem;
+`;
+
+export { StyledAudio, PlayerContainer, PlayerButtonsContainer };

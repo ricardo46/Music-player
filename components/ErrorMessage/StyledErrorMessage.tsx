@@ -1,10 +1,14 @@
 import styled from "styled-components";
 import TimedMessage from "../TimedMessage/TimedMessage";
-import { TimedMessageContainer } from "../TimedMessage/TimedMessageStyles";
+import { StyledSuccessMessage } from "../StyledComponents/StyledComponents";
+import { ERROR_FONT_COLOR } from "@/globalVariables";
 
 const ErrorMessageContainer = styled.div`
- ${TimedMessageContainer} {
-    color: red;
+ ${StyledSuccessMessage} {
+    color: ${ERROR_FONT_COLOR};
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
   }
 `;
 

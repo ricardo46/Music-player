@@ -1,13 +1,13 @@
 import {
-  ErrorMessage,
-  SuccessMessage,
+  StyledErrorMessage,
+  StyledSuccessMessage,
 } from "../StyledComponents/StyledComponents";
 
 const UserMessage = ({ type, messageContent }) => {
   return (
     <>
-      {type == "error" && <ErrorMessage>{messageContent}</ErrorMessage>}
-      {type == "success" && <SuccessMessage>{messageContent}</SuccessMessage>}
+      {type == "error" && <StyledErrorMessage>{messageContent}</StyledErrorMessage>}
+      {type == "success" && <StyledSuccessMessage>{messageContent}</StyledSuccessMessage>}
     </>
   );
 };

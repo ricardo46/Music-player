@@ -9,11 +9,18 @@ import {
   useState,
 } from "react";
 
+export type ListOfSongs = {
+  id: number;
+  name: string;
+  playList: SongInterface[] | null;
+};
+
 export type UserType = {
   id: number;
   name: string;
   email: string;
   uploadedSongs: SongInterface[] | null;
+  playLists: ListOfSongs[] | null;
 };
 
 export interface UserContextInterface {
@@ -46,6 +53,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
     name: "",
     email: "",
     uploadedSongs: [],
+    playLists: null,
   });
 
   const [authToken, setAuthToken] = useState<CookieValueTypes | null>(null);
@@ -56,6 +64,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
       name: "",
       email: "",
       uploadedSongs: [],
+      playLists: null,
     });
     setAuthToken(null);
   };

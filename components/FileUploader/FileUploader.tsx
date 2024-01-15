@@ -1,15 +1,18 @@
 import { PickerOverlay } from "filestack-react";
 import { useRef, useState } from "react";
-import { StyledButton } from "../StyledComponents/StyledComponents";
 import { submitRequestInterface } from "../MultipleInputForm/MultipleInputForm";
-import axios from "axios";
 import { getCookie } from "cookies-next";
 import { useUser } from "@/Contexts/UserContext";
 import { FileUploaderContainer } from "./FileUploadeStyles";
-import patchUser from "@/Utils/patchUser";
 import TimedMessage from "../TimedMessage/TimedMessage";
 import ErrorTimedMessage from "../ErrorMessage/ErrorMessage";
-import postSong from "@/Utils/postSong";
+import getUploadedListOfSongsObj from "@/Utils/listOfSongsObj";
+import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
+import { MESSAGES_TIMEOUT } from "@/globalVariables";
+import { useRouter } from "next/router";
+import RedirectOnError from "../Redirect/RedirectOnError";
+import { patchUser, postSong } from "@/Utils/backEndUtils";
+import { verifyAuthentication } from "@/Utils/userUtils";
 
 export interface SongInterface {
   name: string;
@@ -25,6 +28,8 @@ function FileUploader() {
   const [showPicker, setShowPicker] = useState(false);
   // const [song, setSong] = useState<SongInterface | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const router = useRouter();
+
   const [submitRequest, setSubmitRequest] = useState<submitRequestInterface>({
     isLoading: false,
     submitted: false,
@@ -32,7 +37,12 @@ function FileUploader() {
     errorMessage: null,
     message: null,
   });
-  const { user, setUser } = useUser();
+
+  const [uploadMessageVisible, setUploadMessageVisible] = useState(false);
+
+  const { user, setUser, clearUser } = useUser();
+  const { songsPlaying, setSongsPlaying } = useSongsPlaying();
+
   // const onLoadedMetadata = () => {
   //     if (audioRef.current) {
   //         console.log(audioRef.current.duration);
@@ -44,104 +54,163 @@ function FileUploader() {
 
     try {
       const authToken = getCookie("tokenCookie");
-      setSubmitRequest({
-        isLoading: true,
-        error: false,
-        submitted: false,
-        errorMessage: null,
-        message: null,
-      });
       console.log("authToken", authToken);
-
-      const songName = e.filesUploaded[0].filename;
-      const songUrl = e.filesUploaded[0].url;
-
-      const postSongResponse = await postSong(songName, songUrl, authToken);
-
-      console.log("postSongResponse", postSongResponse);
-
-      let userPreviousSongs: SongInterface[] = [];
-      if (user.uploadedSongs) {
-        userPreviousSongs = user.uploadedSongs;
+      if (!authToken) {
+        clearUser();
       } else {
-        userPreviousSongs = [];
+        setSubmitRequest({
+          isLoading: true,
+          error: false,
+          submitted: false,
+          errorMessage: null,
+          message: null,
+        });
+        console.log("authToken", authToken);
+
+        const songName = e.filesUploaded[0].filename;
+        const songUrl = e.filesUploaded[0].url;
+
+        const postSongResponse = await postSong(songName, songUrl, authToken);
+
+        console.log("postSongResponse", postSongResponse);
+
+        let userPreviousSongs: SongInterface[] = [];
+        if (user.uploadedSongs) {
+          userPreviousSongs = user.uploadedSongs;
+        } else {
+          userPreviousSongs = [];
+        }
+
+        // interface SongInterface {
+        //   name: string;
+        //   url: string;
+        //   id: number | undefined;
+        // }
+
+        // const uploadedSongID: UploadedSongType = {
+        //   song_id: postSongResponse.data.id,
+        // };
+
+        const newSong: SongInterface = {
+          name: songName,
+          url: songUrl,
+          song_id: postSongResponse.data.id,
+        };
+        // const newSongIDs: (SongInterface | UploadedSongType)[] = [
+        //   ...userPreviousSongs,
+        //   uploadedSongID,
+        // ];
+        const newSongs: SongInterface[] = [...userPreviousSongs, newSong];
+
+        console.log("newUserSongs", newSongs);
+
+        const responsePatch = await patchUser(
+          user.id,
+          { uploadedSongs: newSongs, playLists: user.playLists },
+          authToken
+        );
+
+        // console.log("responsePatch", responsePatch);
+
+        setUser((prev: any) => ({
+          ...prev,
+          uploadedSongs: newSongs,
+        }));
+
+        setSongsPlaying(
+          getUploadedListOfSongsObj(newSongs, -1, "User Uploaded Songs")
+        );
+        // console.log("userPreviousSongs", userPreviousSongs);
+
+        // console.log("newSongs", newSongs);
+
+        setSubmitRequest({
+          error: false,
+          submitted: true,
+          isLoading: false,
+          errorMessage: null,
+          message: "Song added to backend!",
+        });
       }
-
-      // interface SongInterface {
-      //   name: string;
-      //   url: string;
-      //   id: number | undefined;
-      // }
-
-      // const uploadedSongID: UploadedSongType = {
-      //   song_id: postSongResponse.data.id,
-      // };
-
-      const newSong: SongInterface = {
-        name: songName,
-        url: songUrl,
-        song_id: postSongResponse.data.id,
-      };
-      // const newSongIDs: (SongInterface | UploadedSongType)[] = [
-      //   ...userPreviousSongs,
-      //   uploadedSongID,
-      // ];
-      const newSongs: SongInterface[] = [...userPreviousSongs, newSong];
-
-      console.log("newUserSongs", newSongs);
-
-      const responsePatch = await patchUser(
-        user.id,
-        { uploadedSongs: newSongs },
-        authToken
-      );
-
-      // console.log("responsePatch", responsePatch);
-
-      setUser((prev: any) => ({
-        ...prev,
-        uploadedSongs: newSongs,
-      }));
-
-      setSubmitRequest({
-        error: false,
-        submitted: true,
-        isLoading: false,
-        errorMessage: null,
-        message: "Song added to backend!",
-      });
     } catch (err: any) {
       console.log("error uploading song", err);
 
       setSubmitRequest({
         error: true,
         submitted: true,
-        errorMessage: err ? err.response.data.message : null,
+        errorMessage: `Error uploading song! ${
+          err.response
+            ? err.response.data.message
+            : err.message
+            ? err.message
+            : "Error on post song request!"
+        }`,
         isLoading: false,
         message: null,
       });
     }
+
+    setUploadMessageVisible(true);
+    setTimeout(() => {
+      setUploadMessageVisible(false);
+    }, MESSAGES_TIMEOUT);
   };
 
-  const handleOnclick = () => {
+  const handleUploadButtonClick = () => {
+    // console.log("upload click");
+    setSubmitRequest({
+      isLoading: false,
+      submitted: false,
+      error: false,
+      errorMessage: null,
+      message: null,
+    });
+    // const authToken = getCookie("tokenCookie");
+    // verifyAuthentication(authToken, setSubmitRequest, clearUser, 'Can not open file picker!')
     setShowPicker(true);
   };
 
   const handleOnclose = () => {
     setShowPicker(false);
-    console.log("setting piker to false");
+    // console.log("setting piker to false");
   };
 
   const handleEnded = () => {
-    console.log("song ended!");
+    // verifyAuthentication(getCookie("tokenCookie"), setSubmitRequest, clearUser, 'Can not play next song!')
+    // console.log("song ended!");
   };
+
+  // useEffect(() => {
+  //   if (submitRequest.error) {
+  //     setTimeout(() => {
+  //       router.push("/login");
+  //     }, REDIRECT_TIMEOUT);
+  //   }
+  // }, [submitRequest.error]);
 
   return (
     <>
-      <FileUploaderContainer>
-        <StyledButton onClick={handleOnclick}>Upload Song</StyledButton>
+      {/* {console.log("showPicker", showPicker)}
 
-        {showPicker && (
+      {console.log("user user", user)}
+      {console.log("submitRequest.error", submitRequest.error)} */}
+
+      <FileUploaderContainer>
+        <a
+          onClick={() => {
+            handleUploadButtonClick();
+            verifyAuthentication(
+              getCookie("tokenCookie"),
+              setSubmitRequest,
+              clearUser,
+              "Can not open file picker!"
+            );
+          }}
+        >
+          Upload Song
+        </a>
+
+        {!submitRequest.error && showPicker && (
           <PickerOverlay
             apikey={process.env.NEXT_PUBLIC_FILESTACK_API_KEY as string}
             // onSuccess={(res) => console.log(res)}
@@ -153,14 +222,39 @@ function FileUploader() {
                 handleOnclose();
               },
             }}
-            onUploadDone={handleUpload}
+            onUploadDone={(e) => {
+              handleUpload(e);
+              verifyAuthentication(
+                getCookie("tokenCookie"),
+                setSubmitRequest,
+                clearUser,
+                "Can not upload file!"
+              );
+            }}
           />
         )}
-        {submitRequest.error && (
-          <ErrorTimedMessage errorMessage={"Error uploading song!"} />
+
+        {submitRequest.errorMessage && (
+          <ErrorTimedMessage
+            visible={uploadMessageVisible}
+            errorMessage={submitRequest.errorMessage}
+          />
         )}
-        {submitRequest.error && (
-          <ErrorTimedMessage errorMessage={submitRequest.errorMessage} />
+        {submitRequest.message && (
+          <TimedMessage
+            visible={uploadMessageVisible}
+            message={submitRequest.message}
+          />
+        )}
+        {/* {submitRequest.error && (
+          <ErrorTimedMessage errorMessage={'You are not logged in! Redirecting to login page...'} />
+        )} */}
+
+        {user.id == 0 && (
+          <RedirectOnError
+            error={submitRequest.error}
+            message={"You are not logged in! Redirecting to login page..."}
+          />
         )}
       </FileUploaderContainer>
     </>

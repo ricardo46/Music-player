@@ -1,17 +1,13 @@
 import { useLayoutSubmitRequest } from "@/Contexts/LayoutContext";
-import { UserType, useUser } from "@/Contexts/UserContext";
-import AudioPlayer from "@/components/AudioPlayer/AudioPlayer";
+import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
+import { ListOfSongs, UserType, useUser } from "@/Contexts/UserContext";
+import getListOfSongsObj from "@/Utils/listOfSongsObj";
 import LoadingAnimation from "@/components/LoadingAnimation/LoadingAnimation";
+import SongListAndPlayer from "@/components/SongListAndPlayer/SongListAndPlayer";
 import TimedMessage from "@/components/TimedMessage/TimedMessage";
+import { MESSAGES_TIMEOUT } from "@/globalVariables";
 import axios from "axios";
-import {
-  DetailedHTMLProps,
-  LiHTMLAttributes,
-  MouseEvent,
-  MouseEventHandler,
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
 export async function getServerSideProps(context: any) {
   let errorDataAuth = null;
@@ -49,6 +45,14 @@ export async function getServerSideProps(context: any) {
 
 export default function Home({ userData, songs, errorSongs, errorAuth }: any) {
   const { user, setUser, clearUser } = useUser();
+  const listOfSongs: ListOfSongs = getListOfSongsObj(
+    songs,
+    -2,
+    "All Users Songs"
+  );
+  const { songsPlaying, setSongsPlaying } = useSongsPlaying();
+  const [messageIsVisible, setMessageIsVisible] = useState(false);
+
 
   const [songIndex, setSongIndex] = useState<number>(0);
   const {
@@ -57,13 +61,20 @@ export default function Home({ userData, songs, errorSongs, errorAuth }: any) {
     clearLayoutSubmitRequest,
   } = useLayoutSubmitRequest();
 
+  const [playing, setPlaying] = useState(false);
+
   const handleEnded = () => {
     console.log("song ended on home page!");
   };
 
+  // const handleSongClick = (e: any, index: number) => {
+  //   setSongIndex(index);
+  //   setPlaying(true);
+  // };
+
   useEffect(() => {
     console.log("errorSongs", errorSongs);
-    console.log("userData", userData);
+    console.log("songs", songs);
     if (errorAuth) {
       console.log("errorAuth");
       clearUser();
@@ -82,27 +93,39 @@ export default function Home({ userData, songs, errorSongs, errorAuth }: any) {
         ? errorAuth.message
         : "";
     }
-
+    setSongsPlaying(listOfSongs);
     setLayoutSubmitRequest({
       error: error,
       submitted: true,
       isLoading: false,
       errorMessage: errorMessages,
     });
+
+  if(error){
+    setMessageIsVisible(true);
+    setTimeout(() => {
+      setMessageIsVisible(false);
+    }, MESSAGES_TIMEOUT);
+  }  
   }, []);
 
   return (
     <>
       <h3>Home</h3>
       {layoutSubmitRequest.isLoading && <LoadingAnimation />}
-      {!layoutSubmitRequest.isLoading && songs?.length != 0 && (
-        <AudioPlayer songs={songs} handleEnded={handleEnded}></AudioPlayer>
+      <SongListAndPlayer />
+      {messageIsVisible && layoutSubmitRequest.errorMessage && (
+        <TimedMessage
+          visible={true}
+          message={'You are not logged in!'}
+        />
       )}
-      {layoutSubmitRequest.error && (
-        <TimedMessage message={layoutSubmitRequest.errorMessage} />
-      )}
+      {layoutSubmitRequest.errorMessage &&
+        console.log(
+          `${layoutSubmitRequest.errorMessage} You are not logged in!`
+        )}
       {songs?.length == 0 && (
-        <TimedMessage message={"No songs uploaded yet!"} />
+        <TimedMessage visible={true} message={"No songs uploaded yet!"} />
       )}
     </>
   );

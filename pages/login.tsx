@@ -85,7 +85,7 @@ const Login = ({ userData, errorAuth }: any) => {
     <>
       <h3>Login Page</h3>
       <LoginForm />
-      {console.log("user.name", user.name)}
+      {/* {console.log("user.name", user.name)} */}
     </>
   );
 };

@@ -34,7 +34,7 @@ const StyledInput = styled.input`
   border: gray 2px solid;
   color: white;
   text-align: center;
-  max-width: ${INPUT_MAX_WIDTH};
+  /* max-width: ${INPUT_MAX_WIDTH}; */
   &:focus {
     /* box-shadow: 0px 0px 2px ${FONT_COLOR}; */
     /* border: none; */
@@ -50,12 +50,10 @@ const StyledButton = styled.button`
   border-radius: 1rem;
   border: gray 2px solid;
   color: ${FONT_COLOR};
-  max-width: ${BUTTON_MAX_WIDTH};
 `;
 
 const StyledSelect = styled.select`
   border-radius: 1rem;
-
   height: 2rem;
   box-sizing: border-box;
   font-weight: 400;
@@ -63,8 +61,8 @@ const StyledSelect = styled.select`
   color: ${FONT_COLOR};
   text-align: center;
   background-color: gray;
-  width: 90%;
-  max-width: ${INPUT_MAX_WIDTH};
+  /* width: 70%; */
+  /* max-width: ${INPUT_MAX_WIDTH}; */
 `;
 
 const StyledLink = styled(Link)`
@@ -84,14 +82,14 @@ const SectionContainer = styled.section`
   gap: 0.5rem;
 `;
 
-const SuccessMessage = styled(Message)`
+const StyledSuccessMessage = styled(Message)`
   color: ${SUCCESS_FONT_COLOR};
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: normal;
 `;
 
-const ErrorMessage = styled(Message)`
+const StyledErrorMessage = styled(Message)`
   color: ${ERROR_FONT_COLOR};
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -141,8 +139,8 @@ export {
   StyledLink,
   SectionContainer,
   StyledSelect,
-  ErrorMessage,
-  SuccessMessage,
+  StyledErrorMessage,
+  StyledSuccessMessage,
   StyledInfo,
   SectionTitle,
   SmallImage,

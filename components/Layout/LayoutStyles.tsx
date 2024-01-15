@@ -6,11 +6,15 @@ const LayoutContainer = styled.div`
   box-sizing: border-box;
   height: 100vh;
   margin: 0 auto;
+  padding: 0 1rem;
   /* max-width: 100vw; */
 `;
 
 const PageContainer = styled.div`
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `;
 
 export { LayoutContainer, PageContainer };

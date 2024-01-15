@@ -1,9 +1,4 @@
-// import UserMessage from "../UserMessage/UserMessage";
 import { ChangeEvent, FormEvent, MouseEvent, useState } from "react";
-import {
-  LOGIN_SUCCESS_REDIRECT_TIMEOUT,
-  MESSAGE_DURATION,
-} from "../../globalVariables";
 import {
   FormButton,
   FormContainer,
@@ -13,6 +8,9 @@ import {
 } from "./FormStyledComponents";
 import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 import UserMessage from "../UserMessage/UserMessage";
+import ErrorTimedMessage from "../ErrorMessage/ErrorMessage";
+import TimedMessage from "../TimedMessage/TimedMessage";
+import { MESSAGES_TIMEOUT } from "@/globalVariables";
 
 interface Input {
   name: string;
@@ -24,7 +22,7 @@ export interface submitRequestInterface {
   isLoading: boolean;
   submitted: boolean;
   error: boolean;
-  errorMessage: null;
+  errorMessage: null | string;
   message: null | string;
 }
 
@@ -51,7 +49,7 @@ const MultipleInputForm = ({
     setMessageIsVisible(true);
     setTimeout(() => {
       setMessageIsVisible(false);
-    }, LOGIN_SUCCESS_REDIRECT_TIMEOUT);
+    }, MESSAGES_TIMEOUT);
   };
 
   return (
@@ -75,23 +73,22 @@ const MultipleInputForm = ({
           <FormButton onClick={onButtonClick}>{submitButtonName}</FormButton>
         </FormContainer>
 
-        {messageIsVisible && (
-          <FormMessageStyledContainer>
-            {submitRequest.error ? (
-              <UserMessage
-                type={"error"}
-                messageContent={submitRequest.errorMessage}
-              />
-            ) : (
-              <UserMessage
-                type={"success"}
-                messageContent={submitRequest.message}
-              />
-            )}
-
-            {submitRequest?.isLoading && <LoadingAnimation />}
-          </FormMessageStyledContainer>
-        )}
+        <FormMessageStyledContainer>
+          {submitRequest.error
+            ? submitRequest.errorMessage && (
+                <ErrorTimedMessage
+                  visible={messageIsVisible}
+                  errorMessage={submitRequest.errorMessage}
+                />
+              )
+            : submitRequest.message && (
+                <TimedMessage
+                  visible={messageIsVisible}
+                  message={submitRequest.message}
+                />
+              )}
+        </FormMessageStyledContainer>
+        {submitRequest?.isLoading && <LoadingAnimation />}
       </StyledForm>
     </>
   );

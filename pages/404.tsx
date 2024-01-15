@@ -1,7 +1,7 @@
 import { useLayoutSubmitRequest } from "@/Contexts/LayoutContext";
 import { UserType } from "@/Contexts/UserContext";
 import { requireAuthentication } from "@/Utils/requireAuthentication";
-import { REDIRECT_DELAY } from "@/globalVariables";
+import { REDIRECT_TIMEOUT } from "@/globalVariables";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -23,7 +23,7 @@ const NotFound = () => {
       });
     setTimeout(() => {
       router.push("/user");
-    }, REDIRECT_DELAY);
+    }, REDIRECT_TIMEOUT);
   },[]);
   return (
     <>

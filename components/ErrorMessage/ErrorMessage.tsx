@@ -1,17 +1,16 @@
-import exp from "constants";
-import TimedMessage, {
-  TimedMessagePropsType,
-} from "../TimedMessage/TimedMessage";
+import { StyledErrorMessage } from "../StyledComponents/StyledComponents";
+import TimedMessage from "../TimedMessage/TimedMessage";
 import { ErrorMessageContainer } from "./StyledErrorMessage";
-
 const ErrorTimedMessage = ({
+  visible,
   errorMessage,
 }: {
-  errorMessage: string | null;
+  visible: boolean;
+  errorMessage: string;
 }) => {
   return (
     <ErrorMessageContainer>
-      <TimedMessage message={errorMessage}></TimedMessage>
+      <TimedMessage visible={visible} message={errorMessage}></TimedMessage>
     </ErrorMessageContainer>
   );
 };

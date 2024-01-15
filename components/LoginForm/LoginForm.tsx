@@ -5,7 +5,7 @@ import MultipleInputForm, {
 import axios, { AxiosError } from "axios";
 import { setCookie, getCookie } from "cookies-next";
 import { useRouter } from "next/router";
-import { LOGIN_SUCCESS_REDIRECT_TIMEOUT } from "@/globalVariables";
+import { REDIRECT_TIMEOUT } from "@/globalVariables";
 // import { useLayoutSubmitRequest } from "@/Contexts/LayoutContext";
 import { useUser } from "@/Contexts/UserContext";
 
@@ -64,7 +64,7 @@ const LoginForm = () => {
       console.log("response", response);
       setTimeout(() => {
         router.push("/user");
-      }, LOGIN_SUCCESS_REDIRECT_TIMEOUT);
+      }, REDIRECT_TIMEOUT);
     } catch (err: any) {
       setSubmitRequest({
         error: true,

@@ -15,9 +15,11 @@ export const requireAuthentication = async (
       headers: { Authorization: "Bearer " + authToken },
     })
     .catch((err) => {
-      console.log("errrrrrrrrr", err);
+      // console.log("errrrrrrrrr", err.response?.data);
       errorData = err.response?.data;
     });
+
+  // console.log("response", response);
 
   switch (currentPath) {
     case "/user":
@@ -63,6 +65,7 @@ export const requireAuthentication = async (
   }
 
   const user: UserType = response?.data;
+  // console.log("userData", errorData);
 
   return {
     props: {

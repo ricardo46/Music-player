@@ -1,22 +1,44 @@
 import { useLayoutSubmitRequest } from "@/Contexts/LayoutContext";
-import { UserType, useUser } from "@/Contexts/UserContext";
+import { ListOfSongs, UserType, useUser } from "@/Contexts/UserContext";
 import { requireAuthentication } from "@/Utils/requireAuthentication";
-import AudioPlayer from "@/components/AudioPlayer/AudioPlayer";
-import FileUploader, {
-  SongInterface,
-} from "@/components/FileUploader/FileUploader";
 import LoadingAnimation from "@/components/LoadingAnimation/LoadingAnimation";
-import TimedMessage from "@/components/TimedMessage/TimedMessage";
-import axios from "axios";
 import { useEffect } from "react";
+import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
+import SongListAndPlayer from "@/components/SongListAndPlayer/SongListAndPlayer";
+import { useRouter } from "next/router";
+import RedirectOnError from "@/components/Redirect/RedirectOnError";
+import getListOfSongsObj from "@/Utils/listOfSongsObj";
+import axios from "axios";
+import { useAllSongs } from "@/Contexts/AllSongsContext";
+import { SongInterface } from "@/components/FileUploader/FileUploader";
 
 export async function getServerSideProps(context: any) {
   const currentUrl = context.resolvedUrl;
 
-  return requireAuthentication(context, currentUrl);
+  const resAuth = await requireAuthentication(context, currentUrl);
+  console.log("resAuth", resAuth);
+
+  if (resAuth.redirect) {
+    return await requireAuthentication(context, currentUrl);
+  }
+
+  const responseSongs: any = await axios
+    .get("https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/song")
+    .catch((err) => {
+      console.log("errorDataSong", err);
+    });
+
+  return {
+    props: {
+      userData: resAuth.props.userData,
+      errorAuth: resAuth.props.errorAuth,
+      allUsersSongs: responseSongs?.data || null,
+    }
+  }
+
 }
 
-const User = ({ userData, error }: { userData: UserType; error: any }) => {
+const User = ({ userData, error,allUsersSongs }: { userData: UserType; error: any, allUsersSongs: SongInterface[] }) => {
   const {
     layoutSubmitRequest,
     setLayoutSubmitRequest,
@@ -24,13 +46,26 @@ const User = ({ userData, error }: { userData: UserType; error: any }) => {
   } = useLayoutSubmitRequest();
 
   const { user, setUser } = useUser();
+  const { allSongs, setAllSongs } = useAllSongs();
+  const { songsPlaying, setSongsPlaying } = useSongsPlaying();
 
-  const handleEnded = () => {
-    console.log("song ended on user page!");
-  };
+  const router = useRouter();
+
+  const uploadedListOfSongs: ListOfSongs = getListOfSongsObj(
+    userData.uploadedSongs,
+    -1,
+    "User Uploaded Songs"
+  );
+
+  const listOfAllSongs: ListOfSongs = getListOfSongsObj(
+    allSongs, -2, 'All Users Songs'
+  );
 
   useEffect(() => {
     setUser(userData);
+    setAllSongs(allUsersSongs)
+    console.log("user.uploadedSongs", user.uploadedSongs);
+    setSongsPlaying(uploadedListOfSongs);
     setLayoutSubmitRequest({
       error: userData.uploadedSongs ? false : true,
       submitted: true,
@@ -42,19 +77,21 @@ const User = ({ userData, error }: { userData: UserType; error: any }) => {
   return (
     <>
       <h3>User Page</h3>
-      {layoutSubmitRequest.isLoading && <LoadingAnimation />}
+      {/* {console.log("user.uploadedSongs", user.uploadedSongs)} */}
 
-      {!layoutSubmitRequest.isLoading && user.uploadedSongs?.length != 0 && (
-        <AudioPlayer
-          songs={user.uploadedSongs}
-          handleEnded={handleEnded}
-        ></AudioPlayer>
-      )}
-      {!layoutSubmitRequest.isLoading && <FileUploader />}
-      {error && <TimedMessage message={layoutSubmitRequest.errorMessage} />}
-      {!layoutSubmitRequest.isLoading && user.uploadedSongs?.length == 0 && (
-        <TimedMessage message={"No songs uploaded yet!"} />
-      )}
+      {/* {console.log("songsPlaying", songsPlaying)} */}
+
+      {layoutSubmitRequest.isLoading && <LoadingAnimation />}
+      <div>
+        <SongListAndPlayer />
+
+        {user.id == 0 && (
+          <RedirectOnError
+            error={error}
+            message={"You are not logged in! Redirecting to login page..."}
+          />
+        )}
+      </div>
     </>
   );
 };

@@ -17,8 +17,8 @@ const FormContainer = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   justify-content: center;
-  width: 90%;
-  max-width: ${INPUT_MAX_WIDTH};
+  width: 100%;
+  /* max-width: ${INPUT_MAX_WIDTH}; */
 `;
 
 const StyledForm = styled.form`
@@ -28,8 +28,8 @@ const StyledForm = styled.form`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 0.5rem 0 0.5rem 0;
-  height: 7rem;
+  padding: 0;
+  /* height: 7rem; */
 `;
 
 const FormMessageStyledContainer = styled.div`
