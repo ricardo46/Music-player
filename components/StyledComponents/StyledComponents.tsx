@@ -3,10 +3,11 @@ import {
   BUTTON_FONT_SIZE,
   BUTTON_MAX_WIDTH,
   ERROR_FONT_COLOR,
-  FONT_COLOR,
   FONT_WEIGHT,
   INPUT_MAX_WIDTH,
   LAPTOP_MOVIE_CARD_FONT_SIZE,
+  MAIN_COLOR,
+  MAIN_FONT_COLOR,
   SECTION_TITLE_FONT_SIZE,
   SMALL_FONT_SIZE,
   SUCCESS_FONT_COLOR,
@@ -14,7 +15,7 @@ import {
 import Link from "next/link";
 
 const Message = styled.p`
-  color: ${FONT_COLOR};
+  color: ${MAIN_FONT_COLOR};
   font-size: 0.6rem;
   margin: 0;
   white-space: pre-wrap;
@@ -34,10 +35,8 @@ const StyledInput = styled.input`
   border: gray 2px solid;
   color: white;
   text-align: center;
-  /* max-width: ${INPUT_MAX_WIDTH}; */
   &:focus {
-    /* box-shadow: 0px 0px 2px ${FONT_COLOR}; */
-    /* border: none; */
+  
   }
 `;
 
@@ -49,7 +48,9 @@ const StyledButton = styled.button`
   font-size: ${BUTTON_FONT_SIZE};
   border-radius: 1rem;
   border: gray 2px solid;
-  color: ${FONT_COLOR};
+  color: ${MAIN_FONT_COLOR};
+  border: 2px solid ${MAIN_COLOR};
+  background-color: transparent;
 `;
 
 const StyledSelect = styled.select`
@@ -58,9 +59,12 @@ const StyledSelect = styled.select`
   box-sizing: border-box;
   font-weight: 400;
   font-size: 0.8rem;
-  color: ${FONT_COLOR};
+  color: ${MAIN_FONT_COLOR};
   text-align: center;
-  background-color: gray;
+  background-color: transparent;
+  border: 2px solid ${MAIN_COLOR}
+;
+padding: 0 1rem 0;
   /* width: 70%; */
   /* max-width: ${INPUT_MAX_WIDTH}; */
 `;
@@ -68,6 +72,8 @@ const StyledSelect = styled.select`
 const StyledLink = styled(Link)`
   font-weight: 400;
   text-decoration: none;
+  color: ${MAIN_FONT_COLOR};
+  
 `;
 
 const SectionContainer = styled.section`
@@ -112,7 +118,7 @@ const StyledInfo = styled.label`
 const SectionTitle = styled.h3`
   font-size: ${SECTION_TITLE_FONT_SIZE};
 
-  color: ${FONT_COLOR};
+  color: ${MAIN_FONT_COLOR};
   text-align: left;
 `;
 

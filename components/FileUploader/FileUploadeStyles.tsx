@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { StyledButton } from "../StyledComponents/StyledComponents";
+import { MAIN_COLOR } from "@/globalVariables";
 
 const FileUploaderContainer = styled.div`
   /* display: flex;
@@ -8,4 +10,13 @@ const FileUploaderContainer = styled.div`
   margin: 1rem; */
 `;
 
-export { FileUploaderContainer };
+const FileUploaderMobileButton = styled(StyledButton)`
+  border: none;
+  background-color: transparent;
+`;
+
+const FileUploaderLaptopButton = styled(FileUploaderMobileButton)`
+  border: solid 2px ${MAIN_COLOR};
+`;
+
+export { FileUploaderContainer,FileUploaderMobileButton,FileUploaderLaptopButton };

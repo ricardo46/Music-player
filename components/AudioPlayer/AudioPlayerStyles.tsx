@@ -1,3 +1,4 @@
+import { MOBILE_MAX_WIDTH } from "@/globalVariables";
 import styled from "styled-components";
 
 const StyledAudio = styled.audio`
@@ -12,6 +13,10 @@ const PlayerContainer = styled.div`
   padding: 0rem 0rem 1rem;
   width: 100%;
   border-bottom: solid black 2px;
+  @media (min-width: ${MOBILE_MAX_WIDTH}) {
+    border-bottom: none;
+
+  }
 `;
 
 const PlayerButtonsContainer = styled.div`

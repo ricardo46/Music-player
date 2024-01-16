@@ -97,6 +97,10 @@ const removeSongFromUploadedSongs = (user: UserType, id: number) => {
   return user.uploadedSongs?.filter((song) => song.song_id != id);
 };
 
+const removeSongFromAllSongs = (allSongs: SongInterface[], id: number) => {
+  return allSongs.filter((song) => song.song_id != id);
+};
+
 const getUserPlaylistsIDs = (user: UserType) => {
   return user.playLists ? user.playLists.map((playList) => playList.id) : [];
 };
@@ -160,4 +164,5 @@ export {
   removeSongFromUserPlaylistInFrontEnd,
   getListOfSongsFromID,
   removePlaylistFromList,
+  removeSongFromAllSongs,
 };

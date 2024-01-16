@@ -10,6 +10,7 @@ import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 import { useLayoutSubmitRequest } from "@/Contexts/LayoutContext";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../Header/Header";
+import { MOBILE_MAX_WIDTH } from "@/globalVariables";
 
 type Props = {
   children: JSX.Element;
@@ -22,7 +23,9 @@ const Layout = ({ children }: Props) => {
     clearLayoutSubmitRequest,
   } = useLayoutSubmitRequest();
 
-  const maxMobileWidth = useMediaQuery("(max-width:768px)");
+
+
+  const maxMobileWidth = useMediaQuery(`(max-width:${MOBILE_MAX_WIDTH})`);
 
   return (
     <>
@@ -31,6 +34,8 @@ const Layout = ({ children }: Props) => {
         {!layoutSubmitRequest.isLoading && <Header />}
 
         {/* {!layoutSubmitRequest.isLoading && <NavBar />} */}
+
+        
         <PageContainer> {children}</PageContainer>
         {maxMobileWidth && <NavBar />}
 

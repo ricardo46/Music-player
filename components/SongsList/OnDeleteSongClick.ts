@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 import { deleteUploadedSong } from "@/Utils/backEndUtils";
 import {
   getUserPlaylistsIDs,
+  removeSongFromAllSongs,
   removeSongFromUploadedSongs,
   removeSongFromUserPlaylistsInFrontEnd,
 } from "@/Utils/userUtils";
@@ -12,6 +13,7 @@ import { SongInterface } from "../FileUploader/FileUploader";
 import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
 import getListOfSongsObj from "@/Utils/listOfSongsObj";
 import { REDIRECT_TIMEOUT } from "@/globalVariables";
+import { useAllSongs } from "@/Contexts/AllSongsContext";
 
 const OnDeleteSongClick = async (
   user: UserType,
@@ -19,7 +21,9 @@ const OnDeleteSongClick = async (
   setSongsPlaying: Dispatch<SetStateAction<ListOfSongs | null>>,
   songID: number | undefined,
   setSubmitRequest: Dispatch<SetStateAction<submitRequestInterface>>,
-  setDeleteSongMessageIsVisible: Dispatch<SetStateAction<boolean>>
+  setDeleteSongMessageIsVisible: Dispatch<SetStateAction<boolean>>,
+  allSongs: SongInterface[],
+  setAllSongs: Dispatch<SetStateAction<SongInterface[]>>
 ) => {
   try {
     const authToken = getCookie("tokenCookie");
@@ -30,7 +34,6 @@ const OnDeleteSongClick = async (
       errorMessage: null,
       message: null,
     });
-    console.log("authToken", authToken);
 
     if (songID) {
       await deleteUploadedSong(
@@ -49,6 +52,16 @@ const OnDeleteSongClick = async (
         uploadedSongs: newUploadedSongs,
         playLists: newPlaylists,
       }));
+
+      const newAllSongs: SongInterface[] = removeSongFromAllSongs(
+        allSongs,
+        songID
+      );
+
+      setAllSongs(newAllSongs);
+
+      console.log("newAllSongsssssssss", newAllSongs);
+
 
       if (newUploadedSongs) {
         setSongsPlaying(

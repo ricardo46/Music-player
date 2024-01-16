@@ -83,7 +83,7 @@ const Login = ({ userData, errorAuth }: any) => {
   }, []);
   return (
     <>
-      <h3>Login Page</h3>
+      {/* <h3>Login Page</h3> */}
       <LoginForm />
       {/* {console.log("user.name", user.name)} */}
     </>
