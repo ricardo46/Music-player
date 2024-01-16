@@ -69,103 +69,10 @@ const UserListsDropDown = ({
     console.log("onListChange listOfLists", listOfLists);
   };
 
-  // const onNewListSubmit = async (e: any) => {
-  //   setInputValue("");
-  //   e.preventDefault();
-  //   let submitSuccessMessage = null;
-  //   let submitErrorMessage = null;
-
-  //   if (validNewListName(inputValue, playLists)) {
-  //     try {
-  //       setSubmitRequest({
-  //         isLoading: true,
-  //         error: false,
-  //         submitted: false,
-  //         message: null,
-  //         errorMessage: null,
-  //       });
-  //       // const postPlayListResponse = await postPlayList(inputValue, []);
-  //       submitSuccessMessage = `${inputValue} was added to the server`;
-
-  //       setSubmitRequest({
-  //         submitted: true,
-  //         isLoading: false,
-  //         message: submitSuccessMessage,
-  //         error: false,
-  //         errorMessage: null,
-  //       });
-
-  //       // const newListId = postPlayListResponse.data.id;
-  //       // await postUserList(
-  //       //   userId,
-  //       //   getUpdatedMovieListsIds(movieLists, newListId)
-  //       // );
-  //       setSubmitRequest({
-  //         submitted: true,
-  //         isLoading: false,
-  //         message: `${submitSuccessMessage}\n${inputValue} was added to the user`,
-  //         error: false,
-  //         errorMessage: null,
-  //       });
-  //       // const newList = getNewListObject(newListId, inputValue);
-  //       const prevPlayLists = playLists ? playLists : [];
-  //       // const newPlayLists = [...prevPlayLists, newList];
-
-  //       // setUser((prev: any) => ({
-  //       //   ...prev,
-  //       //   playLists: newPlayLists,
-  //       // }));
-
-  //       // setMovieListObj(newList);
-  //     } catch (err) {
-  //       console.log("err", err);
-
-  //       submitErrorMessage = `${inputValue} not added to the server!`;
-  //       setSubmitRequest({
-  //         error: true,
-  //         submitted: true,
-  //         isLoading: false,
-  //         message: "",
-  //         errorMessage: submitErrorMessage,
-  //       });
-  //     }
-  //   } else {
-  //     listNameExists(inputValue, getListNamesArray(playLists)) &&
-  //       setSubmitRequest({
-  //         error: true,
-  //         errorMessage: "That list already exists!",
-  //         submitted: true,
-  //         isLoading: false,
-  //         message: "",
-  //       });
-  //     stringIsEmpty(inputValue) &&
-  //       setSubmitRequest({
-  //         error: true,
-  //         errorMessage: "Please enter a list name!",
-  //         submitted: true,
-  //         isLoading: false,
-  //         message: "",
-  //       });
-  //   }
-  // };
-
-  // const onInputChange = (e: any) => {
-  //   setInputValue(e.target.value);
-  // };
-
   const handleClick = (e: MouseEvent<HTMLInputElement>) => {};
 
   return (
     <>
-      {/* {console.log("allSongs", allSongs)} */}
-      {/* <MultipleInputForm
-        onFormSubmit={onNewListSubmit}
-        inputs={[{ name: "NewListName", type: "text", value: inputValue }]}
-        submitRequest={submitRequest}
-        submitButtonName={"Create new list"}
-        onInputChange={onInputChange}
-        handleClick={handleClick}
-      /> */}
       <DropDown
         onChangeFunction={onListChange}
         // movieListObj={movieListObj}

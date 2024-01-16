@@ -8,9 +8,13 @@ import UserListsDropDown from "../UserListsDropDown/UserListsDropDown";
 import { useRouter } from "next/router";
 import DeletePlaylistButton from "../DeletePlaylistButton/DeletePlaylistButton";
 import {
+  PlayerAndDropDownContainer,
   PlayerAndSongsContainer,
   UserListsDropDownContainer,
 } from "./SongListAndPlayerStyles";
+import FileUploader from "../FileUploader/FileUploader";
+import { useMediaQuery } from "@mui/material";
+import { MOBILE_MAX_WIDTH } from "@/globalVariables";
 
 interface ListOfSongsPropInterface {
   // listOfSongs: ListOfSongs | null;
@@ -30,6 +34,8 @@ ListOfSongsPropInterface) => {
   const [playing, setPlaying] = useState(false);
   const router = useRouter();
 
+  const maxMobileWidth = useMediaQuery(`(max-width:${MOBILE_MAX_WIDTH})`);
+
   const handleEnded = () => {
     console.log("song ended on user page!");
   };
@@ -42,29 +48,37 @@ ListOfSongsPropInterface) => {
   return (
     <>
       <PlayerAndSongsContainer>
-        {!layoutSubmitRequest.isLoading &&
-          songsPlaying?.playList?.length != 0 && (
-            <AudioPlayer
-              handleEnded={handleEnded}
-              songIndex={songIndex}
-              setSongIndex={setSongIndex}
-              playing={playing}
-              setPlaying={setPlaying}
-            />
-          )}
-        {router.pathname == "/user" && (
-          <UserListsDropDownContainer>
-            <UserListsDropDown
-              updateSongIndex={setSongIndex}
-              setPlaying={setPlaying}
-            />
+        <PlayerAndDropDownContainer>
+          {!layoutSubmitRequest.isLoading &&
+            songsPlaying?.playList?.length != 0 && (
+              <AudioPlayer
+                handleEnded={handleEnded}
+                songIndex={songIndex}
+                setSongIndex={setSongIndex}
+                playing={playing}
+                setPlaying={setPlaying}
+              />
+            )}
+          {router.pathname == "/user" && (
+            <UserListsDropDownContainer>
+              <UserListsDropDown
+                updateSongIndex={setSongIndex}
+                setPlaying={setPlaying}
+              />
 
-            {/* {router.pathname == "/user" &&
+              {/* {router.pathname == "/user" &&
           !layoutSubmitRequest.isLoading &&
           songsPlaying?.id == -1 && <FileUploader />} */}
-            <DeletePlaylistButton />
-          </UserListsDropDownContainer>
-        )}
+              <DeletePlaylistButton />
+              {router.pathname == "/user" &&
+                !layoutSubmitRequest.isLoading &&
+                songsPlaying?.id == -1 &&
+                !maxMobileWidth && <FileUploader />}
+            </UserListsDropDownContainer>
+          )}
+        </PlayerAndDropDownContainer>
+
+        {/* {router.pathname == "/" && <h4>{songsPlaying?.name}</h4>} */}
         {songsPlaying && (
           <SongsList songIndex={songIndex} handleSongClick={handleSongClick} />
         )}

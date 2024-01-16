@@ -35,7 +35,7 @@ const Register = () => {
   }, []);
   return (
     <>
-      <h3>Register Page</h3>
+      {/* <h3>Register Page</h3> */}
 
       <RegisterForm />
     </>

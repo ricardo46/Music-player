@@ -25,12 +25,16 @@ import NewListForm from "../NewListForm/NewListForm";
 import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 import OnDeleteSongClick from "./OnDeleteSongClick";
 import {
+  ListName,
   PlayingSongNameContainer,
   SongButtonsContainer,
   SongContainer,
   SongNameContainer,
+  SongsContainer,
   StyledSongsList,
 } from "./SongsListStyles";
+import { AddToPlaylistIconStyled, RemoveSongFromListIconStyled, TrashIconStyled } from "../Icons/Icons";
+import { useAllSongs } from "@/Contexts/AllSongsContext";
 
 interface SongsListProp {
   // songs: ListOfSongs ;
@@ -70,6 +74,8 @@ SongsListProp) => {
   const [addSongMessageIsVisible, setAddSongMessageIsVisible] = useState(false);
   const [deleteSongMessageIsVisible, setDeleteSongMessageIsVisible] =
     useState(false);
+
+    const { allSongs, setAllSongs } = useAllSongs();
 
   const toggleAddSongModal = () => {
     setAddSongModalVisible(!addSongModalVisible);
@@ -198,9 +204,6 @@ SongsListProp) => {
         const newPlaylists: ListOfSongs[] | undefined =
           removeSongFromUserPlaylistInFrontEnd(user, songID, listOfSongsID);
 
-        console.log("user prev playLists", user.playLists);
-
-        console.log("newPlaylists", newPlaylists);
 
         setUser((prev: any) => ({
           ...prev,
@@ -209,7 +212,6 @@ SongsListProp) => {
 
         if (newPlaylists) {
           const newPlaylist = getListOfSongsFromID(newPlaylists, listOfSongsID);
-          console.log("newPlaylisttttt", newPlaylists);
 
           if (newPlaylist) {
             setSongsPlaying(newPlaylist);
@@ -243,7 +245,7 @@ SongsListProp) => {
     }
   };
 
-  const handleAddSongToPlayList = (e: any, song: SongInterface) => {
+  const handleAddSongToPlayList = (song: SongInterface) => {
     console.log("new song", song);
     setPlaylistNewSong(song);
     if (user.playLists) {
@@ -320,61 +322,62 @@ SongsListProp) => {
         />
       )}
       <StyledSongsList>
-        {songsPlaying?.playList &&
-          songsPlaying.playList.map((song: SongInterface, index: number) => {
-            return (
-              <SongContainer key={song.song_id}>
-                {songIndex == index && (
-                  <PlayingSongNameContainer
-                    onClick={(e) => handleSongClick(e, index)}
-                  >{`${index}- ${song.name}`}</PlayingSongNameContainer>
-                )}
-                {songIndex != index && (
-                  <SongNameContainer onClick={(e) => handleSongClick(e, index)}>
-                    {`${index}- ${song.name}`}
-                  </SongNameContainer>
-                )}
-                <SongButtonsContainer>
-                  {router.pathname == "/user" &&
-                    song.song_id &&
-                    user.id != 0 &&
-                    songsPlaying.id == -1 && (
-                      <StyledButton
-                        onClick={() =>
-                          OnDeleteSongClick(
-                            user,
-                            setUser,
-                            setSongsPlaying,
-                            song.song_id,
-                            setSubmitRequest,
-                            setDeleteSongMessageIsVisible
-                          )
-                        }
-                      >
-                        X
-                      </StyledButton>
-                    )}
-                  {router.pathname == "/user" &&
-                    (songsPlaying.id == -1 || songsPlaying.id == -2) && (
-                      <StyledButton
-                        onClick={(e) => handleAddSongToPlayList(e, song)}
-                      >
-                        +
-                      </StyledButton>
-                    )}
-                  {songsPlaying.id != -1 && songsPlaying.id != -2 && (
-                    <StyledButton
-                      onClick={(e) =>
-                        handleRemoveSongFromPlayList(songsPlaying, song)
-                      }
-                    >
-                      -
-                    </StyledButton>
+        {<ListName>{songsPlaying?.name}</ListName>}
+        <SongsContainer>
+          {songsPlaying?.playList &&
+            songsPlaying.playList.map((song: SongInterface, index: number) => {
+              return (
+                <SongContainer key={song.song_id}>
+                  {songIndex == index && (
+                    <PlayingSongNameContainer
+                      onClick={(e) => handleSongClick(e, index)}
+                    >{`${index}- ${song.name}`}</PlayingSongNameContainer>
                   )}
-                </SongButtonsContainer>
-              </SongContainer>
-            );
-          })}
+                  {songIndex != index && (
+                    <SongNameContainer
+                      onClick={(e) => handleSongClick(e, index)}
+                    >
+                      {`${index}- ${song.name}`}
+                    </SongNameContainer>
+                  )}
+                  <SongButtonsContainer>
+                    {router.pathname == "/user" &&
+                      song.song_id &&
+                      user.id != 0 &&
+                      songsPlaying.id == -1 && (
+                        <TrashIconStyled
+                          onClick={() =>
+                            OnDeleteSongClick(
+                              user,
+                              setUser,
+                              setSongsPlaying,
+                              song.song_id,
+                              setSubmitRequest,
+                              setDeleteSongMessageIsVisible,allSongs, setAllSongs
+                            )
+                          }
+                        />
+                      )}
+                    {router.pathname == "/user" &&
+                      (songsPlaying.id == -1 || songsPlaying.id == -2) && (
+                        <AddToPlaylistIconStyled
+                          onClick={() => handleAddSongToPlayList(song)}
+                        />
+                      )}
+                    {songsPlaying.id != -1 && songsPlaying.id != -2 && (
+                      <RemoveSongFromListIconStyled
+                        onClick={() =>
+                          handleRemoveSongFromPlayList(songsPlaying, song)
+                        }
+                      />
+                        
+                      
+                    )}
+                  </SongButtonsContainer>
+                </SongContainer>
+              );
+            })}
+        </SongsContainer>
       </StyledSongsList>
     </>
   );

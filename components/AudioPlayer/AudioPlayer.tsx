@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";
-import { StyledButton } from "../StyledComponents/StyledComponents";
+import { Message, StyledButton } from "../StyledComponents/StyledComponents";
 import {
   PlayerButtonsContainer,
   PlayerContainer,
@@ -7,6 +7,10 @@ import {
 } from "./AudioPlayerStyles";
 import { useUser } from "@/Contexts/UserContext";
 import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
+import {
+  BackwardIconStyled,
+  ForwardIconStyled,
+} from "../Icons/Icons";
 
 interface AudioPlayerInterface {
   // songs: ListOfSongs;
@@ -97,7 +101,7 @@ const AudioPlayer = ({
         <PlayerButtonsContainer>
           {songsPlaying?.playList && (
             <>
-              <StyledButton onClick={decrementSongIndex}>{"<"}</StyledButton>
+              <BackwardIconStyled onClick={decrementSongIndex} />
 
               <StyledAudio
                 ref={audioRef}
@@ -107,14 +111,14 @@ const AudioPlayer = ({
                 onPlay={() => setPlaying(true)}
                 onPause={() => setPlaying(false)}
               />
-              <StyledButton onClick={incrementSongIndex}>{">"}</StyledButton>
+              <ForwardIconStyled onClick={incrementSongIndex}/>
             </>
           )}
         </PlayerButtonsContainer>
-        <p>
+        <Message>
           {songsPlaying?.playList &&
             `Playing: ${songsPlaying.playList[songIndex].name}`}
-        </p>
+        </Message>
       </PlayerContainer>
       {/* {console.log('songsPlaying', songsPlaying)} */}
       {/* {console.log('songsPlaying songIndex', songIndex)} */}

@@ -1,6 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: "@svgr/webpack",
+    });
+    return config;
+  },
 };
 
 module.exports = nextConfig;
@@ -18,4 +25,6 @@ module.exports = nextConfig;
 //     },
 // };
 
-env: {  NEXT_PUBLIC_G_KEY: process.env.NEXT_PUBLIC_FILESTACK_API_KEY  }
+env: {
+  NEXT_PUBLIC_G_KEY: process.env.NEXT_PUBLIC_FILESTACK_API_KEY;
+}

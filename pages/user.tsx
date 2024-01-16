@@ -76,13 +76,12 @@ const User = ({ userData, error,allUsersSongs }: { userData: UserType; error: an
 
   return (
     <>
-      <h3>User Page</h3>
+      {/* <h3>User Page</h3> */}
       {/* {console.log("user.uploadedSongs", user.uploadedSongs)} */}
 
       {/* {console.log("songsPlaying", songsPlaying)} */}
 
       {layoutSubmitRequest.isLoading && <LoadingAnimation />}
-      <div>
         <SongListAndPlayer />
 
         {user.id == 0 && (
@@ -91,7 +90,6 @@ const User = ({ userData, error,allUsersSongs }: { userData: UserType; error: an
             message={"You are not logged in! Redirecting to login page..."}
           />
         )}
-      </div>
     </>
   );
 };

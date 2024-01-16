@@ -111,7 +111,7 @@ export default function Home({ userData, songs, errorSongs, errorAuth }: any) {
 
   return (
     <>
-      <h3>Home</h3>
+      {/* <h3>Home</h3> */}
       {layoutSubmitRequest.isLoading && <LoadingAnimation />}
       <SongListAndPlayer />
       {messageIsVisible && layoutSubmitRequest.errorMessage && (

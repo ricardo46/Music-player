@@ -1,4 +1,9 @@
+import { MAIN_FONT_COLOR, MOBILE_MAX_WIDTH } from "@/globalVariables";
 import styled from "styled-components";
+
+const ListName = styled.h4`
+  color: ${MAIN_FONT_COLOR};
+`;
 
 const StyledSongsList = styled.ul`
   display: flex;
@@ -8,10 +13,13 @@ const StyledSongsList = styled.ul`
   width: 100%;
   padding: 1rem;
   gap: 0.3rem;
+  overflow-y: hidden;
+  height: 100%;
+  
+  
 `;
 
 const SongContainer = styled.div`
-  height: 2rem;
 
   display: flex;
   justify-content: space-between;
@@ -29,7 +37,7 @@ const SongButtonsContainer = styled.div`
 const SongNameContainer = styled.p`
   /* min-width: 250px; */
   width: 100%;
-  height: 100%;
+  height: 2rem;
   display: flex;
 
   align-items: center;
@@ -38,6 +46,11 @@ const SongNameContainer = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 0 1rem;
+  @media (min-width: ${MOBILE_MAX_WIDTH}) {
+    
+    height: 2.5rem;
+
+    }
 `;
 
 const PlayingSongNameContainer = styled(SongNameContainer)`
@@ -46,10 +59,19 @@ const PlayingSongNameContainer = styled(SongNameContainer)`
   border-radius: 15px;
 `;
 
+const SongsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  width: 100%;
+`;
+
 export {
+  ListName,
   StyledSongsList,
   SongContainer,
   SongButtonsContainer,
   SongNameContainer,
   PlayingSongNameContainer,
+  SongsContainer,
 };

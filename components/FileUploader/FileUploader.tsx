@@ -3,16 +3,18 @@ import { useRef, useState } from "react";
 import { submitRequestInterface } from "../MultipleInputForm/MultipleInputForm";
 import { getCookie } from "cookies-next";
 import { useUser } from "@/Contexts/UserContext";
-import { FileUploaderContainer } from "./FileUploadeStyles";
+import { FileUploaderMobileButton, FileUploaderContainer, FileUploaderLaptopButton } from "./FileUploadeStyles";
 import TimedMessage from "../TimedMessage/TimedMessage";
 import ErrorTimedMessage from "../ErrorMessage/ErrorMessage";
 import getUploadedListOfSongsObj from "@/Utils/listOfSongsObj";
 import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
-import { MESSAGES_TIMEOUT } from "@/globalVariables";
+import { MESSAGES_TIMEOUT, MOBILE_MAX_WIDTH } from "@/globalVariables";
 import { useRouter } from "next/router";
 import RedirectOnError from "../Redirect/RedirectOnError";
 import { patchUser, postSong } from "@/Utils/backEndUtils";
 import { verifyAuthentication } from "@/Utils/userUtils";
+import { UploadIconStyled } from "../Icons/Icons";
+import { useMediaQuery } from "@mui/material";
 
 export interface SongInterface {
   name: string;
@@ -42,6 +44,7 @@ function FileUploader() {
 
   const { user, setUser, clearUser } = useUser();
   const { songsPlaying, setSongsPlaying } = useSongsPlaying();
+  const maxMobileWidth = useMediaQuery(`(max-width:${MOBILE_MAX_WIDTH})`);
 
   // const onLoadedMetadata = () => {
   //     if (audioRef.current) {
@@ -196,7 +199,19 @@ function FileUploader() {
       {console.log("submitRequest.error", submitRequest.error)} */}
 
       <FileUploaderContainer>
-        <a
+       {maxMobileWidth ? <FileUploaderMobileButton
+          onClick={() => {
+            handleUploadButtonClick();
+            verifyAuthentication(
+              getCookie("tokenCookie"),
+              setSubmitRequest,
+              clearUser,
+              "Can not open file picker!"
+            );
+          }}
+        >
+          <UploadIconStyled /> 
+        </FileUploaderMobileButton> : <FileUploaderLaptopButton
           onClick={() => {
             handleUploadButtonClick();
             verifyAuthentication(
@@ -208,7 +223,7 @@ function FileUploader() {
           }}
         >
           Upload Song
-        </a>
+        </FileUploaderLaptopButton>}
 
         {!submitRequest.error && showPicker && (
           <PickerOverlay
