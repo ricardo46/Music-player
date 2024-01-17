@@ -12,9 +12,10 @@ import { MESSAGES_TIMEOUT, MOBILE_MAX_WIDTH } from "@/globalVariables";
 import { useRouter } from "next/router";
 import RedirectOnError from "../Redirect/RedirectOnError";
 import { patchUser, postSong } from "@/Utils/backEndUtils";
-import { verifyAuthentication } from "@/Utils/userUtils";
+import { addSongToAllSongs, verifyAuthentication } from "@/Utils/userUtils";
 import { UploadIconStyled } from "../Icons/Icons";
 import { useMediaQuery } from "@mui/material";
+import { useAllSongs } from "@/Contexts/AllSongsContext";
 
 export interface SongInterface {
   name: string;
@@ -45,6 +46,7 @@ function FileUploader() {
   const { user, setUser, clearUser } = useUser();
   const { songsPlaying, setSongsPlaying } = useSongsPlaying();
   const maxMobileWidth = useMediaQuery(`(max-width:${MOBILE_MAX_WIDTH})`);
+  const { allSongs, setAllSongs } = useAllSongs();
 
   // const onLoadedMetadata = () => {
   //     if (audioRef.current) {
@@ -68,7 +70,6 @@ function FileUploader() {
           errorMessage: null,
           message: null,
         });
-        console.log("authToken", authToken);
 
         const songName = e.filesUploaded[0].filename;
         const songUrl = e.filesUploaded[0].url;
@@ -126,6 +127,13 @@ function FileUploader() {
         // console.log("userPreviousSongs", userPreviousSongs);
 
         // console.log("newSongs", newSongs);
+
+        const newAllSongs: SongInterface[] = addSongToAllSongs(
+          allSongs,
+          newSong
+        );
+
+        setAllSongs(newAllSongs);
 
         setSubmitRequest({
           error: false,
