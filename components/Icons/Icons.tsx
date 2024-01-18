@@ -67,6 +67,8 @@ const ForwardIconStyled = styled(ForwardLogo)`
   height: 2rem;
 `;
 
+const ForwardIconButton = styled.button``;
+
 const TrashIconStyled = styled(TrashIcon)`
   fill: ${MAIN_COLOR};
   width: 25px;
@@ -90,4 +92,5 @@ export {
   UploadIconStyled,
   UserIconStyled,
   RemoveSongFromListIconStyled,
+  ForwardIconButton,
 };

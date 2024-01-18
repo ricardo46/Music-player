@@ -9,6 +9,7 @@ import { useUser } from "@/Contexts/UserContext";
 import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
 import {
   BackwardIconStyled,
+  ForwardIconButton,
   ForwardIconStyled,
 } from "../Icons/Icons";
 
@@ -34,7 +35,7 @@ const AudioPlayer = ({
   const { songsPlaying, setSongsPlaying } = useSongsPlaying();
 
   const onSongEnded = () => {
-    console.log("prev song", songIndex);
+    // console.log("prev song", songIndex);
 
     if (songsPlaying?.playList) {
       if (songIndex == songsPlaying.playList.length - 1) {
@@ -111,7 +112,9 @@ const AudioPlayer = ({
                 onPlay={() => setPlaying(true)}
                 onPause={() => setPlaying(false)}
               />
-              <ForwardIconStyled onClick={incrementSongIndex}/>
+              <ForwardIconButton data-testid="forButton">
+                <ForwardIconStyled onClick={incrementSongIndex} />
+              </ForwardIconButton>
             </>
           )}
         </PlayerButtonsContainer>
@@ -119,6 +122,8 @@ const AudioPlayer = ({
           {songsPlaying?.playList &&
             `Playing: ${songsPlaying.playList[songIndex].name}`}
         </Message>
+      <p data-testid="custom-element2"></p>
+
       </PlayerContainer>
       {/* {console.log('songsPlaying', songsPlaying)} */}
       {/* {console.log('songsPlaying songIndex', songIndex)} */}

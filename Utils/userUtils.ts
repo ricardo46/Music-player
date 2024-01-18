@@ -102,7 +102,14 @@ const removeSongFromAllSongs = (allSongs: SongInterface[], id: number) => {
 };
 
 const addSongToAllSongs = (allSongs: SongInterface[], song: SongInterface) => {
-  return [...allSongs, song];
+  console.log("allSongs", allSongs);
+  console.log("song", song);
+
+  if (allSongs) {
+    return [...allSongs, song];
+  } else {
+    return [song];
+  }
 };
 
 const getUserPlaylistsIDs = (user: UserType) => {

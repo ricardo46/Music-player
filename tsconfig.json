@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["@uploadcare/blocks/types/jsx"],
+    "types": ["@uploadcare/blocks/types/jsx", "node", "jest"],
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -15,7 +15,8 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@/pages/*": ["/pages/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
