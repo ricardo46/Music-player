@@ -83,6 +83,12 @@ function FileUploader() {
 
         console.log("newUserSongs", newSongs);
 
+        const responsePatch = await patchUser(
+          user.id,
+          { uploadedSongs: newSongs, playLists: user.playLists },
+          authToken
+        );
+
         setUser((prev: any) => ({
           ...prev,
           uploadedSongs: newSongs,
