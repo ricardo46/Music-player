@@ -1,5 +1,4 @@
-import { SongInterface } from "@/components/FileUploader/FileUploader";
-import { CookieValueTypes } from "cookies-next";
+import { SongInterface } from "@/Utils/tsTypes";
 import {
   Dispatch,
   ReactNode,

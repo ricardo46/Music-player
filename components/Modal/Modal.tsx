@@ -1,7 +1,6 @@
+import { XIconStyled } from "../Icons/Icons";
 import {
-  StyledCloseButton,
   StyledModalContainer,
-  // StyledParagraph,
   StyledTitle,
   StyledTop,
   StyledModalWindow,
@@ -44,14 +43,8 @@ const CloseButton = ({
   children: any;
   onModalClose: () => void;
 }) => {
-  return (
-    <StyledCloseButton onClick={onModalClose}>{children}</StyledCloseButton>
-  );
+  return <XIconStyled onClick={onModalClose}>{children}</XIconStyled>;
 };
-
-// const Paragraph = ({ children }: { children: any }) => {
-//   return <StyledParagraph>{children}</StyledParagraph>;
-// };
 
 const Modal = ({
   children,
@@ -64,8 +57,7 @@ const Modal = ({
     <ModalContainer onModalClose={onModalClose}>
       <ModalWindow>
         <Top>
-          {/* <Title>Select a playlist or create a new one:</Title> */}
-            <CloseButton onModalClose={onModalClose}>X</CloseButton>
+          <CloseButton onModalClose={onModalClose}>X</CloseButton>
         </Top>
         {children}
       </ModalWindow>

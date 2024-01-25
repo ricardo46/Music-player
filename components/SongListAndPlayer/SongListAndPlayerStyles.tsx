@@ -1,26 +1,27 @@
-import { MOBILE_MAX_WIDTH } from "@/globalVariables";
+import { LAPTOP_WIDTH_ONE, MOBILE_MAX_WIDTH } from "@/globalVariables";
 import styled from "styled-components";
 
 const PlayerAndSongsContainer = styled.div`
-
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  padding: 1rem 0;
+  padding: 0;
   overflow: hidden;
   height: 100%;
+  width: 100%;
   @media (min-width: ${MOBILE_MAX_WIDTH}) {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    /* align-items: start; */
-
-    /* grid-template-rows: repeat(2, 1fr); */
-    /* grid-template-columns: 50% 50%; */
+    gap: 2rem;
+    padding: 1rem 0;
   }
 `;
 
 const PlayerAndDropDownContainer = styled.div`
+  padding: 1rem 0 0;
+  align-items: center;
+
   @media (min-width: ${MOBILE_MAX_WIDTH}) {
     display: flex;
     flex-direction: column;
@@ -32,16 +33,18 @@ const PlayerAndDropDownContainer = styled.div`
 
 const UserListsDropDownContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   justify-content: center;
   align-items: center;
   gap: 1rem;
   padding: 1rem 0;
-  border-bottom: 2px solid;
-  width: 100%;
-  min-height: 8rem;
+  border-bottom: 1px solid;
+  
   @media (min-width: ${MOBILE_MAX_WIDTH}) {
     border-bottom: none;
+  width: 60%;
+    
+  
   }
 `;
 

@@ -1,17 +1,16 @@
 import { useUser } from "@/Contexts/UserContext";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, MouseEvent, useState } from "react";
-import MultipleInputForm, {
-  submitRequestInterface,
-} from "../MultipleInputForm/MultipleInputForm";
+
 import axios from "axios";
-import { REDIRECT_TIMEOUT } from "@/globalVariables";
+import { LOGIN_PAGE_PATH, REDIRECT_TIMEOUT } from "@/globalVariables";
+import { submitRequestInterface } from "@/Utils/tsTypes";
+import MultipleInputForm from "../MultipleInputForm/MultipleInputForm";
 
 const RegisterForm = () => {
   const [name, setName] = useState("Enter Name");
   const [email, setEmail] = useState("Enter Email");
   const [password, setPassword] = useState("password");
-  const { user, setUser } = useUser();
   const [submitRequest, setSubmitRequest] = useState<submitRequestInterface>({
     isLoading: false,
     submitted: false,
@@ -47,7 +46,7 @@ const RegisterForm = () => {
       });
 
       setTimeout(() => {
-        router.push("/login");
+        router.push(LOGIN_PAGE_PATH);
       }, REDIRECT_TIMEOUT);
 
       console.log("response", response);
@@ -93,7 +92,7 @@ const RegisterForm = () => {
     <>
       <MultipleInputForm
         onFormSubmit={onRegisterSubmit}
-        handleClick={handleClick}
+        handleTextAreaClick={handleClick}
         inputs={[
           { name: "name", type: "text", value: name },
           { name: "email", type: "email", value: email },

@@ -70,7 +70,7 @@ const StyledModalWindow = styled.div`
 `;
 
 const StyledTop = styled.div`
-width: 100%;
+  width: 100%;
   display: flex;
   justify-content: end;
   border-bottom: 1px solid rgba(211, 211, 212, 0.575);
@@ -88,13 +88,6 @@ const StyledCloseButton = styled.button`
   font-size: 0.8rem;
 `;
 
-// const CloseButtonContainer = styled.div`
-// width: 100%;
-//   display: flex;
-// justify-content: end;
-// align-items: end;
-// `;
-
 const StyledParagraph = styled.p`
   text-align: justify;
   text-justify: inter-word;
@@ -103,17 +96,6 @@ const StyledParagraph = styled.p`
   font-size: 0.9rem;
   line-height: normal;
 `;
-
-// const StyledModalButton = styled.button`
-//   background-color: ${({ variant }) =>
-//     variant == "ACCEPT" ? "rgb(67, 224, 119)" : "rgb(237, 72, 72)"};
-//   margin: 0.2rem;
-//   color: white;
-//   border-radius: 3px;
-//   height: 1.6rem;
-//   font-size: 0.6rem;
-//   width: 4.7rem;
-// `;
 
 const StyledButtonsContainer = styled.div`
   margin: 0;

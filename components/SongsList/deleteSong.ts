@@ -1,5 +1,4 @@
 import { getCookie } from "cookies-next";
-import { submitRequestInterface } from "../MultipleInputForm/MultipleInputForm";
 import { Dispatch, SetStateAction } from "react";
 import { deleteUploadedSong } from "@/Utils/backEndUtils";
 import {
@@ -8,14 +7,13 @@ import {
   removeSongFromUploadedSongs,
   removeSongFromUserPlaylistsInFrontEnd,
 } from "@/Utils/userUtils";
-import { ListOfSongs, UserType, useUser } from "@/Contexts/UserContext";
-import { SongInterface } from "../FileUploader/FileUploader";
-import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
-import getListOfSongsObj from "@/Utils/listOfSongsObj";
-import { REDIRECT_TIMEOUT } from "@/globalVariables";
-import { useAllSongs } from "@/Contexts/AllSongsContext";
+import {
+  REDIRECT_TIMEOUT,
+} from "@/globalVariables";
+import { getUserUploadedSongsObj } from "@/Utils/listOfSongsObj";
+import { ListOfSongs, SongInterface, UserType, submitRequestInterface } from "@/Utils/tsTypes";
 
-const OnDeleteSongClick = async (
+const deleteSong = async (
   user: UserType,
   setUser: Dispatch<SetStateAction<UserType>>,
   setSongsPlaying: Dispatch<SetStateAction<ListOfSongs | null>>,
@@ -60,13 +58,8 @@ const OnDeleteSongClick = async (
 
       setAllSongs(newAllSongs);
 
-      console.log("newAllSongsssssssss", newAllSongs);
-
-
       if (newUploadedSongs) {
-        setSongsPlaying(
-          getListOfSongsObj(newUploadedSongs, -1, "User Uploaded Songs")
-        );
+        setSongsPlaying(getUserUploadedSongsObj(newUploadedSongs, user));
       }
     }
 
@@ -101,4 +94,4 @@ const OnDeleteSongClick = async (
   }, REDIRECT_TIMEOUT);
 };
 
-export default OnDeleteSongClick;
+export default deleteSong;

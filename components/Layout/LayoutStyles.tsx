@@ -3,26 +3,36 @@ import styled from "styled-components";
 
 const LayoutContainer = styled.div`
   display: grid;
-  grid-template-rows: 3rem auto 3rem;
+  grid-template-rows: 2rem auto 2.5rem;
   box-sizing: border-box;
   height: 100vh;
   margin: 0 auto;
   padding: 0 1rem;
-  /* max-width: 100vw; */
+  overflow: auto;
+  overflow-x: hidden;
+  position: relative;
 `;
 
 const PageContainer = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-around;
   align-items: start;
   overflow: hidden;
   height: 100%;
-  min-height: 15rem;
+  min-height: 27rem;
   align-items: center;
-  /* overflow-y: auto; */
-  /* display: flex;
-  flex-direction: column;
-  gap: 1rem; */
+  @media (min-width: ${MOBILE_MAX_WIDTH}) {
+    /* min-height: 20rem; */
+  }
 `;
 
-export { LayoutContainer, PageContainer };
+const BackgroundImageStyled = styled.img`
+  z-index: -10;
+  position: absolute;
+  opacity: 0.12;
+  height: 100%;
+  /* scale: 120%; */
+`;
+
+export { LayoutContainer, PageContainer, BackgroundImageStyled };

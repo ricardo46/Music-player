@@ -7,32 +7,24 @@ import {
   StyledForm,
 } from "./FormStyledComponents";
 import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
-import UserMessage from "../UserMessage/UserMessage";
 import ErrorTimedMessage from "../ErrorMessage/ErrorMessage";
 import TimedMessage from "../TimedMessage/TimedMessage";
 import { MESSAGES_TIMEOUT } from "@/globalVariables";
+import { submitRequestInterface } from "@/Utils/tsTypes";
 
-interface Input {
+interface MultipleInputInterface {
   name: string;
   type: string;
   value: string;
 }
 
-export interface submitRequestInterface {
-  isLoading: boolean;
-  submitted: boolean;
-  error: boolean;
-  errorMessage: null | string;
-  message: null | string;
-}
-
 type MultipleInputFormParams = {
-  inputs: Input[];
+  inputs: MultipleInputInterface[];
   onFormSubmit: (e: FormEvent<HTMLFormElement>) => void;
   submitRequest: submitRequestInterface;
   submitButtonName: string;
   onInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  handleClick: (e: MouseEvent<HTMLInputElement>) => void;
+  handleTextAreaClick: (e: MouseEvent<HTMLInputElement>) => void;
 };
 
 const MultipleInputForm = ({
@@ -41,7 +33,7 @@ const MultipleInputForm = ({
   submitRequest,
   submitButtonName,
   onInputChange,
-  handleClick,
+  handleTextAreaClick,
 }: MultipleInputFormParams) => {
   const [messageIsVisible, setMessageIsVisible] = useState(false);
 
@@ -54,11 +46,7 @@ const MultipleInputForm = ({
 
   return (
     <>
-      <StyledForm
-        onSubmit={(e) => {
-          onFormSubmit(e);
-        }}
-      >
+      <StyledForm onSubmit={onFormSubmit}>
         <FormContainer>
           {inputs.map((input) => (
             <FormInput
@@ -67,26 +55,25 @@ const MultipleInputForm = ({
               name={input.name}
               value={input.value}
               onChange={onInputChange}
-              onClick={handleClick}
+              onClick={handleTextAreaClick}
             />
           ))}
           <FormButton onClick={onButtonClick}>{submitButtonName}</FormButton>
         </FormContainer>
 
         <FormMessageStyledContainer>
-          {submitRequest.error
-            ? submitRequest.errorMessage && (
-                <ErrorTimedMessage
-                  visible={messageIsVisible}
-                  errorMessage={submitRequest.errorMessage}
-                />
-              )
-            : submitRequest.message && (
-                <TimedMessage
-                  visible={messageIsVisible}
-                  message={submitRequest.message}
-                />
-              )}
+          {submitRequest.error && submitRequest.errorMessage && (
+            <ErrorTimedMessage
+              visible={messageIsVisible}
+              errorMessage={submitRequest.errorMessage}
+            />
+          )}
+          {!submitRequest.error && submitRequest.message && (
+            <TimedMessage
+              visible={messageIsVisible}
+              message={submitRequest.message}
+            />
+          )}
         </FormMessageStyledContainer>
         {submitRequest?.isLoading && <LoadingAnimation />}
       </StyledForm>

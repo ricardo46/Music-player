@@ -1,42 +1,6 @@
-import { ListOfSongs } from "@/Contexts/UserContext";
-import { SongInterface } from "@/components/FileUploader/FileUploader";
 import axios from "axios";
 import { CookieValueTypes } from "cookies-next";
-
-// const deleteSong = async (songID: number, authToken: CookieValueTypes) => {
-//   const deleteSongResponse = await axios.delete(
-//     `https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/song/${songID}`,
-//     {
-//       headers: {
-//         Authorization: "Bearer " + authToken,
-//       },
-//     }
-//   );
-//   //   console.log("deleteSongResponse", deleteSongResponse);
-
-//   return deleteSongResponse;
-// };
-
-// const patchListOfSongs = async (
-//   listofsongs_id: number,
-//   newProps: {
-//     playList: SongInterface[] | undefined;
-//   },
-//   authToken: CookieValueTypes
-// ) => {
-//   const responsePatch = await axios.patch(
-//     `https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/listofsongs/${listofsongs_id}`,
-//     newProps,
-//     {
-//       headers: {
-//         Authorization: "Bearer " + authToken,
-//       },
-//     }
-//   );
-//   console.log("responsePatch 111");
-
-//   // return responsePatch;
-// };
+import { ListOfSongs, SongInterface } from "./tsTypes";
 
 const patchUser = async (
   userId: number,
@@ -55,7 +19,6 @@ const patchUser = async (
       },
     }
   );
-  //   console.log("responsePatch", responsePatch);
 
   return responsePatch;
 };
@@ -74,7 +37,6 @@ const postSong = async (
       },
     }
   );
-  //   console.log("postSongResponse", postSongResponse);
 
   return postSongResponse;
 };
@@ -98,7 +60,6 @@ const deleteUploadedSong = async (
       },
     }
   );
-  //   console.log("responsePatch", responsePatch);
 
   return responsePatch;
 };
@@ -121,7 +82,6 @@ const patchPlaylistAddSong = async (
       },
     }
   );
-  //   console.log("responsePatch", responsePatch);
 
   return responsePatch;
 };
@@ -183,6 +143,16 @@ const deletePlaylist = async (
   );
   return response;
 };
+const getAllSongsDataFromAPI = async (name: string) => {
+  const response = await axios.get(
+    "https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/song",
+    {
+      params: { song_name: name },
+    }
+  );
+
+  return response;
+};
 
 export {
   deleteUploadedSong,
@@ -192,4 +162,5 @@ export {
   deleteSongFromPlaylist,
   addPlaylist,
   deletePlaylist,
+  getAllSongsDataFromAPI,
 };

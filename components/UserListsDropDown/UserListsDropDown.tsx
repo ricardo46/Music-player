@@ -1,22 +1,19 @@
 import { useUser } from "@/Contexts/UserContext";
-import {
-  getListNamesArray,
-  listNameExists,
-  stringIsEmpty,
-  validNewListName,
-} from "@/Utils/functionUtils";
 import { Dispatch, MouseEvent, SetStateAction, useState } from "react";
-import MultipleInputForm, {
-  submitRequestInterface,
-} from "../MultipleInputForm/MultipleInputForm";
 import DropDown from "../DropDown/DropDown";
 import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
-import getUploadedListOfSongsObj from "@/Utils/listOfSongsObj";
-import getListOfSongsObj from "@/Utils/listOfSongsObj";
-import { verifyAuthentication } from "@/Utils/userUtils";
+import {
+  getSelectOptionsFromListOfSongs,
+  verifyAuthentication,
+} from "@/Utils/userUtils";
 import { getCookie } from "cookies-next";
 import RedirectOnError from "../Redirect/RedirectOnError";
-import { useAllSongs } from "@/Contexts/AllSongsContext";
+import { getUserUploadedSongsObj } from "@/Utils/listOfSongsObj";
+import {
+  selectComponentOptionsType,
+  submitRequestInterface,
+} from "@/Utils/tsTypes";
+import { LOGIN_PAGE_NAME } from "@/globalVariables";
 
 const UserListsDropDown = ({
   updateSongIndex,
@@ -26,17 +23,18 @@ const UserListsDropDown = ({
   setPlaying: Dispatch<SetStateAction<boolean>>;
 }) => {
   const { user, setUser, clearUser } = useUser();
-  const { allSongs, setAllSongs } = useAllSongs();
 
   const userId = user.id;
   const playLists = user.playLists ? user.playLists : [];
   const listOfLists = [
-    getListOfSongsObj(user.uploadedSongs, -1, "User Uploaded Songs"),
-    getListOfSongsObj(allSongs, -2, "All Users Songs"),
+    getUserUploadedSongsObj(user.uploadedSongs, user),
+
     ...playLists,
   ];
 
-  // const [inputValue, setInputValue] = useState("");
+  const options: selectComponentOptionsType =
+    getSelectOptionsFromListOfSongs(listOfLists);
+
   const [submitRequest, setSubmitRequest] = useState<submitRequestInterface>({
     isLoading: false,
     submitted: false,
@@ -46,10 +44,9 @@ const UserListsDropDown = ({
   });
   const { songsPlaying, setSongsPlaying } = useSongsPlaying();
 
-  const onListChange = (e: any) => {
-    // const playList = playLists?.find(
-    //   (playList) => playList.id == e.target.value
-    // );
+  const onListChange = (selectedOption: any) => {
+    console.log("selectedOption", selectedOption);
+
     setPlaying(false);
 
     verifyAuthentication(
@@ -61,7 +58,7 @@ const UserListsDropDown = ({
 
     updateSongIndex(0);
     const playList = listOfLists?.find(
-      (playList) => playList.id == e.target.value
+      (playList) => playList.id == selectedOption.value
     );
 
     playList ? setSongsPlaying(playList) : setSongsPlaying(null);
@@ -75,16 +72,14 @@ const UserListsDropDown = ({
     <>
       <DropDown
         onChangeFunction={onListChange}
-        // movieListObj={movieListObj}
-        defaultDropDownValue={playLists[0]?.name}
-        listOfLists={listOfLists}
-        listProp={"id"}
-        itemPropertyToShow={"name"}
+        options={options}
+        dropDownID={"list of lists"}
+        resetAfterClick={true}
       />
       {user.id == 0 && (
         <RedirectOnError
           error={submitRequest.error}
-          message={"You are not logged in! Redirecting to login page..."}
+          message={`You are not logged in! Redirecting to ${LOGIN_PAGE_NAME} page...`}
         />
       )}
     </>

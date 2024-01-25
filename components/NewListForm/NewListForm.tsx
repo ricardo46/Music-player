@@ -1,7 +1,5 @@
 import { MouseEvent, useState } from "react";
-import MultipleInputForm, {
-  submitRequestInterface,
-} from "../MultipleInputForm/MultipleInputForm";
+
 import {
   getListNamesArray,
   listNameExists,
@@ -9,12 +7,12 @@ import {
   validNewListName,
 } from "@/Utils/functionUtils";
 import { useUser } from "@/Contexts/UserContext";
-import TimedMessage from "../TimedMessage/TimedMessage";
-import ErrorTimedMessage from "../ErrorMessage/ErrorMessage";
-import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 import { getCookie } from "cookies-next";
 import { addPlaylist } from "@/Utils/backEndUtils";
 import { getNewListObject } from "@/Utils/userUtils";
+import MultipleInputForm from "../MultipleInputForm/MultipleInputForm";
+import { submitRequestInterface } from "@/Utils/tsTypes";
+import { NewListFormContainer } from "./NewListFormStyles";
 
 const NewListForm = () => {
   const [submitRequest, setSubmitRequest] = useState<submitRequestInterface>({
@@ -68,11 +66,6 @@ const NewListForm = () => {
         const newListId = postPlayListResponse.data.id;
         console.log("newListId", newListId);
 
-        // await postUserList(
-        //   userId,
-        //   getUpdatedMovieListsIds(movieLists, newListId)
-        // );
-
         const newList = getNewListObject(newListId, inputValue);
         console.log("newList", newList);
 
@@ -86,7 +79,6 @@ const NewListForm = () => {
           ...prev,
           playLists: newPlayLists,
         }));
-
       } catch (err) {
         console.log("err", err);
 
@@ -121,28 +113,19 @@ const NewListForm = () => {
     }
   };
 
-  const handleClick = (e: MouseEvent<HTMLInputElement>) => {
-    // console.log(`Creating list ${inputValue}`)
-  };
+  const handleInputClick = (e: MouseEvent<HTMLInputElement>) => {};
 
   return (
-    <>
-      {console.log("submitRequest?.isLoading", submitRequest?.isLoading)}
-
+    <NewListFormContainer>
       <MultipleInputForm
         onFormSubmit={onNewListSubmit}
         inputs={[{ name: "NewListName", type: "text", value: inputValue }]}
         submitRequest={submitRequest}
         submitButtonName={"Create new list"}
         onInputChange={onInputChange}
-        handleClick={handleClick}
+        handleTextAreaClick={handleInputClick}
       />
-      {/* {submitRequest.isLoading && <LoadingAnimation />} */}
-      {/* {submitRequest.error && (
-        <ErrorTimedMessage errorMessage={submitRequest.errorMessage} />
-      )} */}
-      {/* {!submitRequest.error && <TimedMessage message={submitRequest.message} />} */}
-    </>
+    </NewListFormContainer>
   );
 };
 

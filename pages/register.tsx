@@ -2,13 +2,19 @@ import { useLayoutSubmitRequest } from "@/Contexts/LayoutContext";
 import { useUser } from "@/Contexts/UserContext";
 import { requireAuthentication } from "@/Utils/requireAuthentication";
 import RegisterForm from "@/components/RegisterForm/RegisterForm";
+import {
+  APP_NAME,
+  REGISTER_PAGE_NAME,
+  USER_PAGE_PATH,
+} from "@/globalVariables";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 export async function getServerSideProps(context: any) {
-  const currentUrl= context.resolvedUrl
+  const currentUrl = context.resolvedUrl;
 
-  return requireAuthentication(context, currentUrl)
+  return requireAuthentication(context, currentUrl);
 }
 
 const Register = () => {
@@ -26,17 +32,15 @@ const Register = () => {
       isLoading: false,
       errorMessage: null,
     });
-    console.log('user.id',user.id)
     if (user.id != 0) {
-    console.log('user.id','zero')
-
-      router.push("/user");
+      router.push(USER_PAGE_PATH);
     }
   }, []);
   return (
     <>
-      {/* <h3>Register Page</h3> */}
-
+      <Head>
+        <title>{`${APP_NAME} | ${REGISTER_PAGE_NAME}`}</title>
+      </Head>
       <RegisterForm />
     </>
   );

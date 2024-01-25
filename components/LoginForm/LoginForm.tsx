@@ -1,13 +1,11 @@
-import { ChangeEvent, FormEvent, MouseEvent, useState, useEffect } from "react";
-import MultipleInputForm, {
-  submitRequestInterface,
-} from "../MultipleInputForm/MultipleInputForm";
-import axios, { AxiosError } from "axios";
-import { setCookie, getCookie } from "cookies-next";
+import { ChangeEvent, FormEvent, MouseEvent, useState } from "react";
+
+import axios from "axios";
+import { setCookie } from "cookies-next";
 import { useRouter } from "next/router";
-import { REDIRECT_TIMEOUT } from "@/globalVariables";
-// import { useLayoutSubmitRequest } from "@/Contexts/LayoutContext";
-import { useUser } from "@/Contexts/UserContext";
+import { REDIRECT_TIMEOUT, USER_PAGE_PATH } from "@/globalVariables";
+import { submitRequestInterface } from "@/Utils/tsTypes";
+import MultipleInputForm from "../MultipleInputForm/MultipleInputForm";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("Insert email");
@@ -20,7 +18,6 @@ const LoginForm = () => {
     message: null,
   });
   const router = useRouter();
-  const { user, setUser, clearUser } = useUser();
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.name == "email") {
@@ -63,7 +60,7 @@ const LoginForm = () => {
 
       console.log("response", response);
       setTimeout(() => {
-        router.push("/user");
+        router.push(USER_PAGE_PATH);
       }, REDIRECT_TIMEOUT);
     } catch (err: any) {
       setSubmitRequest({
@@ -88,7 +85,7 @@ const LoginForm = () => {
   return (
     <MultipleInputForm
       onFormSubmit={onLoginSubmit}
-      handleClick={handleClick}
+      handleTextAreaClick={handleClick}
       inputs={[
         { name: "email", type: "email", value: email },
         { name: "password", type: "password", value: password },

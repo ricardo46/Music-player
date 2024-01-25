@@ -1,4 +1,4 @@
-import { REDIRECT_TIMEOUT } from "@/globalVariables";
+import { LOGIN_PAGE_PATH, REDIRECT_TIMEOUT } from "@/globalVariables";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import ErrorTimedMessage from "../ErrorMessage/ErrorMessage";
@@ -14,13 +14,12 @@ const RedirectOnError = ({ error, message }: RedirectOnErrorPropInterface) => {
   useEffect(() => {
     if (error) {
       setTimeout(() => {
-        router.push("/login");
+        router.push(LOGIN_PAGE_PATH);
       }, REDIRECT_TIMEOUT);
     }
   }, [error]);
   return (
     <>
-      {console.log("errorRedirect", error)}
       {error && <ErrorTimedMessage visible={true} errorMessage={message} />}
     </>
   );
