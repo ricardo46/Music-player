@@ -1,5 +1,6 @@
-import { UserType } from "@/Contexts/UserContext";
 import axios from "axios";
+import { UserType } from "./tsTypes";
+import { HOME_PAGE_PATH, LOGIN_PAGE_PATH, REGISTER_PAGE_PATH, USER_PAGE_PATH } from "@/globalVariables";
 
 export const requireAuthentication = async (
   context: any,
@@ -15,39 +16,37 @@ export const requireAuthentication = async (
       headers: { Authorization: "Bearer " + authToken },
     })
     .catch((err) => {
-      // console.log("errrrrrrrrr", err.response?.data);
       errorData = err.response?.data;
     });
 
-  // console.log("response", response);
 
   switch (currentPath) {
-    case "/user":
+    case USER_PAGE_PATH:
       if (!response) {
         return {
           redirect: {
-            destination: "/login",
+            destination: LOGIN_PAGE_PATH,
             permanent: false,
           },
         };
       }
       break;
 
-    case "/login":
+    case LOGIN_PAGE_PATH:
       if (response) {
         return {
           redirect: {
-            destination: "/user",
+            destination: USER_PAGE_PATH,
             permanent: false,
           },
         };
       }
       break;
-    case "/register":
+    case REGISTER_PAGE_PATH:
       if (response) {
         return {
           redirect: {
-            destination: "/user",
+            destination: USER_PAGE_PATH,
             permanent: false,
           },
         };
@@ -55,17 +54,15 @@ export const requireAuthentication = async (
       break;
 
     default:
-      console.log(`The page ${currentPath} does not exist.`);
       return {
         redirect: {
-          destination: "/",
+          destination: HOME_PAGE_PATH,
           permanent: false,
         },
       };
   }
 
   const user: UserType = response?.data;
-  // console.log("userData", errorData);
 
   return {
     props: {

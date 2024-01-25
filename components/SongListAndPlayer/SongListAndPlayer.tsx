@@ -1,6 +1,6 @@
 import { useLayoutSubmitRequest } from "@/Contexts/LayoutContext";
 import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
 import TimedMessage from "../TimedMessage/TimedMessage";
 import SongsList from "../SongsList/SongsList";
@@ -14,15 +14,14 @@ import {
 } from "./SongListAndPlayerStyles";
 import FileUploader from "../FileUploader/FileUploader";
 import { useMediaQuery } from "@mui/material";
-import { MOBILE_MAX_WIDTH } from "@/globalVariables";
+import { MOBILE_MAX_WIDTH, SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID, USER_PAGE_PATH } from "@/globalVariables";
+import { usePlaying } from "@/Contexts/PlayingContext";
 
 interface ListOfSongsPropInterface {
-  // listOfSongs: ListOfSongs | null;
-  // onDeleteClick: (e: any, songID: number | undefined) => Promise<void>;
+ 
 }
 
-const SongListAndPlayer = ({}: // listOfSongs,
-// onDeleteClick,
+const SongListAndPlayer = ({}: 
 ListOfSongsPropInterface) => {
   const {
     layoutSubmitRequest,
@@ -31,18 +30,53 @@ ListOfSongsPropInterface) => {
   } = useLayoutSubmitRequest();
   const { songsPlaying, setSongsPlaying } = useSongsPlaying();
   const [songIndex, setSongIndex] = useState<number>(0);
-  const [playing, setPlaying] = useState(false);
+  const [beforeWidth, setBeforeWidth] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const { playing, setPlaying } = usePlaying();
+
   const router = useRouter();
+
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const progressBarRef = useRef<any>();
+  const animationRef = useRef<any>();
+  
 
   const maxMobileWidth = useMediaQuery(`(max-width:${MOBILE_MAX_WIDTH})`);
 
-  const handleEnded = () => {
-    console.log("song ended on user page!");
+  const whilePlaying = () => {
+    if (progressBarRef.current) {
+      progressBarRef.current.value = audioRef.current?.currentTime;
+    }
+    updatePlayerCurrentTime();
+    animationRef.current = requestAnimationFrame(whilePlaying);
+  };
+
+  const updatePlayerCurrentTime = () => {
+    if (progressBarRef.current) {
+      setBeforeWidth((progressBarRef.current.value / duration) * 100);
+
+      setCurrentTime(progressBarRef.current.value);
+    }
+  };
+
+  const togglePlaying = () => {
+    const prev = playing;
+    setPlaying(!prev);
+    if (!prev) {
+      animationRef.current = requestAnimationFrame(whilePlaying);
+    } else {
+      audioRef.current?.play();
+      cancelAnimationFrame(animationRef.current);
+    }
   };
 
   const handleSongClick = (e: any, index: number) => {
+    
     setSongIndex(index);
     setPlaying(true);
+
+    animationRef.current = requestAnimationFrame(whilePlaying);
   };
 
   return (
@@ -50,42 +84,47 @@ ListOfSongsPropInterface) => {
       <PlayerAndSongsContainer>
         <PlayerAndDropDownContainer>
           {!layoutSubmitRequest.isLoading &&
-            songsPlaying?.playList?.length != 0 && (
+             (
               <AudioPlayer
-                handleEnded={handleEnded}
                 songIndex={songIndex}
                 setSongIndex={setSongIndex}
                 playing={playing}
                 setPlaying={setPlaying}
+                animationRef={animationRef}
+                whilePlaying={whilePlaying}
+                audioRef={audioRef}
+                progressBarRef={progressBarRef}
+                updatePlayerCurrentTime={updatePlayerCurrentTime}
+                currentTime={currentTime}
+                beforeWidth={beforeWidth}
+                duration={duration}
+                setDuration={setDuration}
+                togglePlaying={togglePlaying}
               />
             )}
-          {router.pathname == "/user" && (
+          {router.pathname == USER_PAGE_PATH && (
             <UserListsDropDownContainer>
               <UserListsDropDown
                 updateSongIndex={setSongIndex}
                 setPlaying={setPlaying}
               />
 
-              {/* {router.pathname == "/user" &&
-          !layoutSubmitRequest.isLoading &&
-          songsPlaying?.id == -1 && <FileUploader />} */}
-              <DeletePlaylistButton />
-              {router.pathname == "/user" &&
+              {/* <DeletePlaylistButton /> */}
+              {/* {router.pathname == USER_PAGE_PATH &&
                 !layoutSubmitRequest.isLoading &&
-                songsPlaying?.id == -1 &&
-                !maxMobileWidth && <FileUploader />}
+                songsPlaying?.id == SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID &&
+                !maxMobileWidth && <FileUploader />} */}
             </UserListsDropDownContainer>
           )}
         </PlayerAndDropDownContainer>
 
-        {/* {router.pathname == "/" && <h4>{songsPlaying?.name}</h4>} */}
         {songsPlaying && (
           <SongsList songIndex={songIndex} handleSongClick={handleSongClick} />
         )}
 
         {!layoutSubmitRequest.isLoading &&
           songsPlaying?.playList?.length == 0 && (
-            <TimedMessage visible={true} message={"Playlist is empty!"} />
+            <TimedMessage visible={true} message={"No songs found!"} />
           )}
       </PlayerAndSongsContainer>
     </>

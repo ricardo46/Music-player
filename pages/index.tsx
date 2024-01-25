@@ -1,12 +1,19 @@
 import { useLayoutSubmitRequest } from "@/Contexts/LayoutContext";
 import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
-import { ListOfSongs, UserType, useUser } from "@/Contexts/UserContext";
-import getListOfSongsObj from "@/Utils/listOfSongsObj";
+import { useUser } from "@/Contexts/UserContext";
+import { getAllSongsDataFromAPI } from "@/Utils/backEndUtils";
+import { getAllUsersUploadedSongsObj } from "@/Utils/listOfSongsObj";
+import { ListOfSongs, UserType } from "@/Utils/tsTypes";
+import Description from "@/components/Description/Description";
+import { DescriptionStyled } from "@/components/Description/DescriptionStyles";
 import LoadingAnimation from "@/components/LoadingAnimation/LoadingAnimation";
+import SearchSongsForm from "@/components/SearchSongsForm/SearchSongsForm";
 import SongListAndPlayer from "@/components/SongListAndPlayer/SongListAndPlayer";
+import { DescriptionsContainer } from "@/components/StyledComponents/StyledComponents";
 import TimedMessage from "@/components/TimedMessage/TimedMessage";
-import { MESSAGES_TIMEOUT } from "@/globalVariables";
+import { APP_NAME, HOME_PAGE_NAME, MESSAGES_TIMEOUT } from "@/globalVariables";
 import axios from "axios";
+import Head from "next/head";
 import { useEffect, useState } from "react";
 
 export async function getServerSideProps(context: any) {
@@ -19,17 +26,14 @@ export async function getServerSideProps(context: any) {
       headers: { Authorization: "Bearer " + authToken },
     })
     .catch((err) => {
-      console.log("errorDataAuth", err);
       errorDataAuth = err.response.data;
     });
 
   let errorDataSong = null;
-  const responseSongs: any = await axios
-    .get("https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/song")
-    .catch((err) => {
-      console.log("errorDataSong", err);
-      errorDataSong = err.response.data;
-    });
+  const responseSongs: any = await getAllSongsDataFromAPI("").catch((err) => {
+    errorDataSong = err.response.data;
+  });
+  console.log("responseSongs", responseSongs);
 
   const user: UserType = responseAuth?.data ? responseAuth?.data : null;
 
@@ -45,14 +49,9 @@ export async function getServerSideProps(context: any) {
 
 export default function Home({ userData, songs, errorSongs, errorAuth }: any) {
   const { user, setUser, clearUser } = useUser();
-  const listOfSongs: ListOfSongs = getListOfSongsObj(
-    songs,
-    -2,
-    "All Users Songs"
-  );
+  const listOfSongs: ListOfSongs = getAllUsersUploadedSongsObj(songs);
   const { songsPlaying, setSongsPlaying } = useSongsPlaying();
   const [messageIsVisible, setMessageIsVisible] = useState(false);
-
 
   const [songIndex, setSongIndex] = useState<number>(0);
   const {
@@ -60,17 +59,6 @@ export default function Home({ userData, songs, errorSongs, errorAuth }: any) {
     setLayoutSubmitRequest,
     clearLayoutSubmitRequest,
   } = useLayoutSubmitRequest();
-
-  const [playing, setPlaying] = useState(false);
-
-  const handleEnded = () => {
-    console.log("song ended on home page!");
-  };
-
-  // const handleSongClick = (e: any, index: number) => {
-  //   setSongIndex(index);
-  //   setPlaying(true);
-  // };
 
   useEffect(() => {
     console.log("errorSongs", errorSongs);
@@ -101,33 +89,41 @@ export default function Home({ userData, songs, errorSongs, errorAuth }: any) {
       errorMessage: errorMessages,
     });
 
-  if(error){
-    setMessageIsVisible(true);
-    setTimeout(() => {
-      setMessageIsVisible(false);
-    }, MESSAGES_TIMEOUT);
-  }  
+    if (error) {
+      setMessageIsVisible(true);
+      setTimeout(() => {
+        setMessageIsVisible(false);
+      }, MESSAGES_TIMEOUT);
+    }
   }, []);
 
   return (
     <>
-      <h3>Home</h3>
+      <Head>
+        <title>{`${APP_NAME} | ${HOME_PAGE_NAME}`}</title>
+      </Head>
+      <DescriptionsContainer>
+        <Description text="Your favorite songs everywhere!" />
+        <Description text="Create playlists!" />
+        <Description text="Upload Songs!" />
+        <Description text="Find what others are listening to!" />
+        <Description text="Login / Register to join!" />
+        <Description text="You have the control!" />
+        <Description text="Search songs!" />
+        <Description text="Hit play!" />
+
+      </DescriptionsContainer>
       {layoutSubmitRequest.isLoading && <LoadingAnimation />}
       <SongListAndPlayer />
+      <SearchSongsForm />
+
       {messageIsVisible && layoutSubmitRequest.errorMessage && (
-        <TimedMessage
-          visible={true}
-          message={'You are not logged in!'}
-        />
+        <TimedMessage visible={true} message={"You are not logged in!"} />
       )}
-      {layoutSubmitRequest.errorMessage &&
-        console.log(
-          `${layoutSubmitRequest.errorMessage} You are not logged in!`
-        )}
+
       {songs?.length == 0 && (
         <TimedMessage visible={true} message={"No songs uploaded yet!"} />
       )}
-      <TimedMessage visible={true} message={"No songs uploaded yet!"}  data-testid="timedMessage" />
     </>
   );
 }

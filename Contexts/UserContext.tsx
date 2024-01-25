@@ -1,4 +1,4 @@
-import { SongInterface } from "@/components/FileUploader/FileUploader";
+import { UserType } from "@/Utils/tsTypes";
 import { CookieValueTypes } from "cookies-next";
 import {
   Dispatch,
@@ -8,20 +8,6 @@ import {
   useContext,
   useState,
 } from "react";
-
-export type ListOfSongs = {
-  id: number;
-  name: string;
-  playList: SongInterface[] | null;
-};
-
-export type UserType = {
-  id: number;
-  name: string;
-  email: string;
-  uploadedSongs: SongInterface[] | null;
-  playLists: ListOfSongs[] | null;
-};
 
 export interface UserContextInterface {
   user: UserType;

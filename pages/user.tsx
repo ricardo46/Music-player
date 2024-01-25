@@ -1,5 +1,5 @@
 import { useLayoutSubmitRequest } from "@/Contexts/LayoutContext";
-import { ListOfSongs, UserType, useUser } from "@/Contexts/UserContext";
+import { useUser } from "@/Contexts/UserContext";
 import { requireAuthentication } from "@/Utils/requireAuthentication";
 import LoadingAnimation from "@/components/LoadingAnimation/LoadingAnimation";
 import { useEffect } from "react";
@@ -7,10 +7,16 @@ import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
 import SongListAndPlayer from "@/components/SongListAndPlayer/SongListAndPlayer";
 import { useRouter } from "next/router";
 import RedirectOnError from "@/components/Redirect/RedirectOnError";
-import getListOfSongsObj from "@/Utils/listOfSongsObj";
+import {
+  getAllUsersUploadedSongsObj,
+  getUserUploadedSongsObj,
+} from "@/Utils/listOfSongsObj";
 import axios from "axios";
 import { useAllSongs } from "@/Contexts/AllSongsContext";
-import { SongInterface } from "@/components/FileUploader/FileUploader";
+import SearchSongsForm from "@/components/SearchSongsForm/SearchSongsForm";
+import { ListOfSongs, SongInterface, UserType } from "@/Utils/tsTypes";
+import { APP_NAME, LOGIN_PAGE_NAME, USER_PAGE_NAME } from "@/globalVariables";
+import Head from "next/head";
 
 export async function getServerSideProps(context: any) {
   const currentUrl = context.resolvedUrl;
@@ -33,12 +39,19 @@ export async function getServerSideProps(context: any) {
       userData: resAuth.props.userData,
       errorAuth: resAuth.props.errorAuth,
       allUsersSongs: responseSongs?.data || null,
-    }
-  }
-
+    },
+  };
 }
 
-const User = ({ userData, error,allUsersSongs }: { userData: UserType; error: any, allUsersSongs: SongInterface[] }) => {
+const User = ({
+  userData,
+  error,
+  allUsersSongs,
+}: {
+  userData: UserType;
+  error: any;
+  allUsersSongs: SongInterface[];
+}) => {
   const {
     layoutSubmitRequest,
     setLayoutSubmitRequest,
@@ -51,19 +64,16 @@ const User = ({ userData, error,allUsersSongs }: { userData: UserType; error: an
 
   const router = useRouter();
 
-  const uploadedListOfSongs: ListOfSongs = getListOfSongsObj(
+  const uploadedListOfSongs: ListOfSongs = getUserUploadedSongsObj(
     userData.uploadedSongs,
-    -1,
-    "User Uploaded Songs"
+    userData
   );
 
-  const listOfAllSongs: ListOfSongs = getListOfSongsObj(
-    allSongs, -2, 'All Users Songs'
-  );
+  const listOfAllSongs: ListOfSongs = getAllUsersUploadedSongsObj(allSongs);
 
   useEffect(() => {
     setUser(userData);
-    setAllSongs(allUsersSongs)
+    setAllSongs(allUsersSongs);
     console.log("user.uploadedSongs", user.uploadedSongs);
     setSongsPlaying(uploadedListOfSongs);
     setLayoutSubmitRequest({
@@ -76,20 +86,19 @@ const User = ({ userData, error,allUsersSongs }: { userData: UserType; error: an
 
   return (
     <>
-      {/* <h3>User Page</h3> */}
-      {/* {console.log("user.uploadedSongs", user.uploadedSongs)} */}
-
-      {/* {console.log("songsPlaying", songsPlaying)} */}
-
+      <Head>
+        <title>{`${APP_NAME} | ${USER_PAGE_NAME}`}</title>
+      </Head>
       {layoutSubmitRequest.isLoading && <LoadingAnimation />}
-        <SongListAndPlayer />
+      <SongListAndPlayer />
+      <SearchSongsForm />
 
-        {user.id == 0 && (
-          <RedirectOnError
-            error={error}
-            message={"You are not logged in! Redirecting to login page..."}
-          />
-        )}
+      {user.id == 0 && (
+        <RedirectOnError
+          error={error}
+          message={`You are not logged in! Redirecting to ${LOGIN_PAGE_NAME} page...`}
+        />
+      )}
     </>
   );
 };

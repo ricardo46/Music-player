@@ -1,4 +1,4 @@
-import { CookieValueTypes } from "cookies-next";
+import { SubmitRequestType } from "@/Utils/tsTypes";
 import {
   Dispatch,
   ReactNode,
@@ -7,13 +7,6 @@ import {
   useContext,
   useState,
 } from "react";
-
-export type SubmitRequestType = {
-  isLoading: boolean;
-  submitted: boolean;
-  error: boolean;
-  errorMessage: string | null;
-};
 
 export interface LayoutSubmitRequestContextInterface {
   layoutSubmitRequest: SubmitRequestType;
@@ -37,13 +30,16 @@ type LayoutSubmitRequestProviderProps = {
   children: ReactNode;
 };
 
-export const LayoutSubmitRequestProvider = ({ children }: LayoutSubmitRequestProviderProps) => {
-  const [layoutSubmitRequest, setLayoutSubmitRequest] = useState<SubmitRequestType>({
-    isLoading: true,
-    submitted: false,
-    error: false,
-    errorMessage: null,
-  });
+export const LayoutSubmitRequestProvider = ({
+  children,
+}: LayoutSubmitRequestProviderProps) => {
+  const [layoutSubmitRequest, setLayoutSubmitRequest] =
+    useState<SubmitRequestType>({
+      isLoading: true,
+      submitted: false,
+      error: false,
+      errorMessage: null,
+    });
 
   const clearLayoutSubmitRequest = () => {
     setLayoutSubmitRequest({
@@ -56,7 +52,11 @@ export const LayoutSubmitRequestProvider = ({ children }: LayoutSubmitRequestPro
 
   return (
     <LayoutSubmitRequestContext.Provider
-      value={{ layoutSubmitRequest, setLayoutSubmitRequest, clearLayoutSubmitRequest }}
+      value={{
+        layoutSubmitRequest,
+        setLayoutSubmitRequest,
+        clearLayoutSubmitRequest,
+      }}
     >
       {children}
     </LayoutSubmitRequestContext.Provider>

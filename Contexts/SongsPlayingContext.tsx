@@ -1,3 +1,4 @@
+import { ListOfSongs } from "@/Utils/tsTypes";
 import {
   Dispatch,
   ReactNode,
@@ -6,7 +7,6 @@ import {
   useState,
   createContext,
 } from "react";
-import { ListOfSongs } from "./UserContext";
 
 export interface SongsPlayingContextInterface {
   songsPlaying: ListOfSongs | null;

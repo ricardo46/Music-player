@@ -9,15 +9,14 @@ import { useRouter } from "next/router";
 import PageName from "../PageName/PageName";
 
 export default function Header() {
-  const { user, setUser, clearUser } = useUser();
+  const { user } = useUser();
   const maxMobileWidth = useMediaQuery(`(max-width:${MOBILE_MAX_WIDTH})`);
-  const router = useRouter();
 
   return (
     <>
       <HeaderContainer>
         <AppLogo />
-        <PageName/>
+        <PageName />
         {!maxMobileWidth && <NavBar />}
         {user.id != 0 && (
           <DashBoardMessage>{"Welcome " + user.name}</DashBoardMessage>

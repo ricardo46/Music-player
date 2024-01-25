@@ -34,7 +34,7 @@ const DashBoardMessage = styled(Message)`
   @media (min-width: 690px) {
     font-size: ${DASHBOARD_LAPTOP_FONT_SIZE};
     align-items: center;
-justify-content: center;
+    justify-content: center;
   }
 `;
 

@@ -4,25 +4,28 @@ import {
   BUTTON_MAX_WIDTH,
   ERROR_FONT_COLOR,
   FONT_WEIGHT,
-  INPUT_MAX_WIDTH,
-  LAPTOP_MOVIE_CARD_FONT_SIZE,
+  LAPTOP_WIDTH_ONE,
+  LIST_NAME_MOBILE_FONT_SIZE,
   MAIN_COLOR,
   MAIN_FONT_COLOR,
-  SECTION_TITLE_FONT_SIZE,
-  SMALL_FONT_SIZE,
+  MOBILE_MAX_WIDTH,
   SUCCESS_FONT_COLOR,
 } from "@/globalVariables";
 import Link from "next/link";
+import Select from "react-select";
 
 const Message = styled.p`
   color: ${MAIN_FONT_COLOR};
-  font-size: 0.6rem;
+  font-size: ${LIST_NAME_MOBILE_FONT_SIZE};
   margin: 0;
   white-space: pre-wrap;
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: normal;
   text-align: center;
+  @media (min-width: ${LAPTOP_WIDTH_ONE}) {
+    font-size: 1rem;
+  }
 `;
 
 const StyledInput = styled.input`
@@ -33,10 +36,8 @@ const StyledInput = styled.input`
   outline: none;
   padding: 0.3rem;
   border: gray 2px solid;
-  color: white;
   text-align: center;
   &:focus {
-  
   }
 `;
 
@@ -51,41 +52,61 @@ const StyledButton = styled.button`
   color: ${MAIN_FONT_COLOR};
   border: 2px solid ${MAIN_COLOR};
   background-color: transparent;
+  max-width: ${BUTTON_MAX_WIDTH};
+  min-width: 5rem;
 `;
 
-const StyledSelect = styled.select`
-  border-radius: 1rem;
-  height: 2rem;
-  box-sizing: border-box;
-  font-weight: 400;
-  font-size: 0.8rem;
-  color: ${MAIN_FONT_COLOR};
-  text-align: center;
-  background-color: transparent;
-  border: 2px solid ${MAIN_COLOR}
-;
-padding: 0 1rem 0;
-  /* width: 70%; */
-  /* max-width: ${INPUT_MAX_WIDTH}; */
+const StyledImportantButton = styled(StyledButton)`
+  color: red;
+  border: solid red 2px;
+`;
+
+const StyledSelect = styled(Select)`
+  .Select__control {
+    border-radius: 1rem;
+    height: 2rem;
+    box-sizing: border-box;
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: ${MAIN_FONT_COLOR};
+    text-align: center;
+    background-color: transparent;
+    border: 2px solid ${MAIN_COLOR};
+    padding: 0 1rem 0;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .Select__control:hover {
+    border-color: #a1a1a1;
+    z-index: 100;
+  }
+
+  .Select__control--is-focused {
+    box-shadow: 0 0 0 1px black;
+    outline: none;
+    z-index: 100;
+  }
+
+  .Select__indicator-separator {
+    display: none;
+    z-index: 100;
+  }
+
+  .Select__menu {
+    color: #3c3d3e;
+    z-index: 100;
+    font-size: 0.8rem;
+  }
 `;
 
 const StyledLink = styled(Link)`
   font-weight: 400;
   text-decoration: none;
   color: ${MAIN_FONT_COLOR};
-  
-`;
-
-const SectionContainer = styled.section`
-  width: 100%;
-  padding: 0 1rem 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
-  overflow-x: auto;
-  gap: 0.5rem;
 `;
 
 const StyledSuccessMessage = styled(Message)`
@@ -102,40 +123,17 @@ const StyledErrorMessage = styled(Message)`
   white-space: normal;
 `;
 
-const StyledInfo = styled.label`
-  font-size: ${SMALL_FONT_SIZE};
-  width: 100%;
-  color: white;
-  text-align: left;
-  line-height: 0.9rem;
-
-  @media (min-width: 768px) {
-    font-size: ${LAPTOP_MOVIE_CARD_FONT_SIZE};
-    line-height: 1rem;
-  }
-`;
-
-const SectionTitle = styled.h3`
-  font-size: ${SECTION_TITLE_FONT_SIZE};
-
-  color: ${MAIN_FONT_COLOR};
-  text-align: left;
-`;
-
-const SmallImage = styled.img`
-  display: block;
-  width: 80px;
+const DescriptionsContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 61px);
+  gap: 1.5px;
+  justify-content: center;
   height: auto;
-`;
-
-const ImageAndTextContainer = styled.div``;
-
-const SpinnerContainer = styled.div`
-  border: solid red 2px;
-  display: "block";
-  width: 10rem;
-  height: 10rem;
-  padding: 30;
+  padding: 0.5rem 0 0;
+  width: 100%;
+  @media (min-width: ${MOBILE_MAX_WIDTH}) {
+    grid-template-columns: repeat(auto-fit, 150px);
+  }
 `;
 
 export {
@@ -143,13 +141,9 @@ export {
   StyledInput,
   StyledButton,
   StyledLink,
-  SectionContainer,
   StyledSelect,
   StyledErrorMessage,
   StyledSuccessMessage,
-  StyledInfo,
-  SectionTitle,
-  SmallImage,
-  ImageAndTextContainer,
-  SpinnerContainer,
+  StyledImportantButton,
+  DescriptionsContainer,
 };

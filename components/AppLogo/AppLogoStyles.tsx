@@ -8,12 +8,7 @@ const AppLogoStyled = styled(AppLogoIcon)`
   width: 25px;
   height: 2rem;
   justify-self: start;
-
 `;
 
-/* const AppLogoStyled = styled(Image)`
-  fill: red;
-  background-color: red;
-`; */
 
 export { AppLogoStyled };

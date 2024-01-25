@@ -1,12 +1,6 @@
 import { MOBILE_MAX_WIDTH } from "@/globalVariables";
 import styled from "styled-components";
 
-// const HeaderContainer = styled.div`
-// display:flex;
-// align-items:center;
-// border-top: 2px solid black;
-// `;
-
 const HeaderContainer = styled.nav`
   display: grid;
   grid-template-columns: auto 1fr auto;

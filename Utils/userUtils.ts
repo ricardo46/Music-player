@@ -1,12 +1,11 @@
-import { ListOfSongs, UserType } from "@/Contexts/UserContext";
-import { SongInterface } from "@/components/FileUploader/FileUploader";
-import { submitRequestInterface } from "@/components/MultipleInputForm/MultipleInputForm";
 import { CookieValueTypes } from "cookies-next";
 import { SetStateAction } from "react";
-
-const getUpdatedPlayListsIds = (playLists: any[], newListId: number) => {
-  return [...playListsIds(playLists), { movielist_id: newListId }];
-};
+import {
+  ListOfSongs,
+  SongInterface,
+  UserType,
+  submitRequestInterface,
+} from "./tsTypes";
 
 const playListsIds = (playLists: any[]) =>
   playLists.map((list) => ({ listofsongs_id: list.listofsongs_id }));
@@ -25,9 +24,7 @@ const removeSongFromUserPlaylistsInFrontEnd = (user: UserType, id: number) => {
 
   const filteredPlaylists = playLists?.map((list) => {
     const playList = list.playList;
-    // console.log("plist", list.playList)
     const newPlaylist = playList?.filter((song) => song.song_id != id);
-    //   console.log("newPlaylist", newPlaylist);
     const listOfSongs: ListOfSongs = {
       ...list,
       playList: newPlaylist ? newPlaylist : null,
@@ -35,7 +32,6 @@ const removeSongFromUserPlaylistsInFrontEnd = (user: UserType, id: number) => {
 
     return listOfSongs;
   });
-  // console.log("filteredPlaylists", JSON.stringify(filteredPlaylists));
   return filteredPlaylists;
 };
 
@@ -61,7 +57,6 @@ const addSongToUserPlaylistInFrontEnd = (
 
     return list;
   });
-  // console.log("filteredPlaylists", JSON.stringify(filteredPlaylists));
   return newPlaylists;
 };
 
@@ -76,7 +71,6 @@ const removeSongFromUserPlaylistInFrontEnd = (
     if (list.id == platListID) {
       const prevPlayList = list.playList ? list.playList : [];
       console.log("prevPlayList", prevPlayList);
-      // const newPlaylist = [...prevPlayList, newSong];
 
       const newPlaylist = prevPlayList.filter((song) => song.song_id != songID);
 
@@ -89,7 +83,6 @@ const removeSongFromUserPlaylistInFrontEnd = (
 
     return list;
   });
-  // console.log("filteredPlaylists", JSON.stringify(filteredPlaylists));
   return newPlaylists;
 };
 
@@ -163,8 +156,12 @@ const removePlaylistFromList = (
   return listsOfSongs.filter((list) => list.id != listID);
 };
 
+const getSelectOptionsFromListOfSongs = (listOfLists: ListOfSongs[]) =>
+  listOfLists.map((listOfSongs) => {
+    return { value: listOfSongs.id, label: listOfSongs.name };
+  });
+
 export {
-  getUpdatedPlayListsIds,
   getNewListObject,
   removeSongFromUserPlaylistsInFrontEnd,
   removeSongFromUploadedSongs,
@@ -177,4 +174,5 @@ export {
   removePlaylistFromList,
   removeSongFromAllSongs,
   addSongToAllSongs,
+  getSelectOptionsFromListOfSongs,
 };

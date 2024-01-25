@@ -6,20 +6,23 @@ import { SongsPlayingProvider } from "@/Contexts/SongsPlayingContext";
 import { UserProvider } from "@/Contexts/UserContext";
 
 import type { AppProps } from "next/app";
+import { PlayingProvider } from "@/Contexts/PlayingContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <LayoutSubmitRequestProvider>
-        <AllSongsProvider>
-          <UserProvider>
-            <SongsPlayingProvider>
-              <Layout>
-                <Component {...pageProps} />
-              </Layout>
-            </SongsPlayingProvider>
-          </UserProvider>
-        </AllSongsProvider>
+        <PlayingProvider>
+          <AllSongsProvider>
+            <UserProvider>
+              <SongsPlayingProvider>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </SongsPlayingProvider>
+            </UserProvider>
+          </AllSongsProvider>
+        </PlayingProvider>
       </LayoutSubmitRequestProvider>
     </>
   );

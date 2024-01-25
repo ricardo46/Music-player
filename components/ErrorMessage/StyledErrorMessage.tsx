@@ -4,13 +4,12 @@ import { StyledSuccessMessage } from "../StyledComponents/StyledComponents";
 import { ERROR_FONT_COLOR } from "@/globalVariables";
 
 const ErrorMessageContainer = styled.div`
- ${StyledSuccessMessage} {
+  ${StyledSuccessMessage} {
     color: ${ERROR_FONT_COLOR};
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
   }
 `;
-
 
 export { ErrorMessageContainer };
