@@ -1,9 +1,9 @@
-
 import {
   SONGS_UPLOADED_BY_ALL_USERS_LIST_ID,
   SONGS_UPLOADED_BY_ALL_USERS_LIST_NAME,
   SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID,
   SONGS_UPLOADED_BY_CURRENT_USER_LIST_NAME,
+  SEARCH_RESULTS_LIST_NAME,
 } from "@/globalVariables";
 import { SongInterface, UserType } from "./tsTypes";
 
@@ -27,7 +27,10 @@ const getListOfSongsObj = (
   }
 };
 
-const getUserUploadedSongsObj = (uploadedSongs: SongInterface[] | null, user: UserType) => {
+const getUserUploadedSongsObj = (
+  uploadedSongs: SongInterface[] | null,
+  user: UserType
+) => {
   return getListOfSongsObj(
     uploadedSongs,
     SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID,
@@ -43,4 +46,16 @@ const getAllUsersUploadedSongsObj = (allSongs: SongInterface[]) => {
   );
 };
 
-export { getUserUploadedSongsObj, getAllUsersUploadedSongsObj };
+const getOtherAndCurrentUserSongsObj = (songs: SongInterface[]) => {
+  return getListOfSongsObj(
+    songs,
+    SONGS_UPLOADED_BY_ALL_USERS_LIST_ID,
+    `${SEARCH_RESULTS_LIST_NAME}`
+  );
+};
+
+export {
+  getUserUploadedSongsObj,
+  getAllUsersUploadedSongsObj,
+  getOtherAndCurrentUserSongsObj,
+};

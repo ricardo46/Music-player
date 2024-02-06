@@ -46,7 +46,7 @@ const Login = ({ userData, errorAuth }: any) => {
       <Head>
         <title>{`${APP_NAME} | ${LOGIN_PAGE_NAME}`}</title>
       </Head>
-      <LoginForm />
+      {!layoutSubmitRequest.isLoading && <LoginForm />}
     </>
   );
 };

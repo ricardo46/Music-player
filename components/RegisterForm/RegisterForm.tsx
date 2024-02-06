@@ -8,9 +8,9 @@ import { submitRequestInterface } from "@/Utils/tsTypes";
 import MultipleInputForm from "../MultipleInputForm/MultipleInputForm";
 
 const RegisterForm = () => {
-  const [name, setName] = useState("Enter Name");
-  const [email, setEmail] = useState("Enter Email");
-  const [password, setPassword] = useState("password");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [submitRequest, setSubmitRequest] = useState<submitRequestInterface>({
     isLoading: false,
     submitted: false,
@@ -77,14 +77,14 @@ const RegisterForm = () => {
 
   const handleClick = (e: MouseEvent<HTMLInputElement>) => {
     if (e.currentTarget.name == "name") {
-      setName("");
+      // setName("");
     }
 
     if (e.currentTarget.name == "email") {
-      setEmail("");
+      // setEmail("");
     }
     if (e.currentTarget.name == "password") {
-      setPassword("");
+      // setPassword("");
     }
   };
 
@@ -94,9 +94,9 @@ const RegisterForm = () => {
         onFormSubmit={onRegisterSubmit}
         handleTextAreaClick={handleClick}
         inputs={[
-          { name: "name", type: "text", value: name },
-          { name: "email", type: "email", value: email },
-          { name: "password", type: "password", value: password },
+          { name: "name", type: "text", value: name , labelVisible: true},
+          { name: "email", type: "email", value: email, labelVisible: true },
+          { name: "password", type: "password", value: password, labelVisible: true },
         ]}
         submitRequest={submitRequest}
         submitButtonName={"Register"}

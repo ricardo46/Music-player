@@ -47,7 +47,9 @@ export const SongsPlayingProvider = ({
 export const useSongsPlaying = () => {
   const context = useContext(SongsPlayingContext);
   if (!context) {
-    throw new Error("useUser must be used within a SongsPlayingProvider");
+    throw new Error(
+      "useSongsPlaying must be used within a SongsPlayingProvider"
+    );
   }
   return context;
 };

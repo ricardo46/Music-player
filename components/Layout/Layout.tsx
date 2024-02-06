@@ -27,7 +27,6 @@ const Layout = ({ children }: Props) => {
   const maxMobileWidth = useMediaQuery(`(max-width:${MOBILE_MAX_WIDTH})`);
 
   const router = useRouter();
-  
 
   return (
     <>
@@ -35,10 +34,11 @@ const Layout = ({ children }: Props) => {
         {layoutSubmitRequest.isLoading && <LoadingAnimation />}
         {!layoutSubmitRequest.isLoading && <Header />}
         <BackgroundImageStyled src="/layoutImage.jpg" />
-        <PageContainer >{children}</PageContainer>
-        {maxMobileWidth && <NavBar />}
+       {
+       <PageContainer>{children}</PageContainer>}
+        {!layoutSubmitRequest.isLoading && maxMobileWidth && <NavBar />}
 
-        {!maxMobileWidth && <Footer />}
+        {!layoutSubmitRequest.isLoading && !maxMobileWidth && <Footer />}
       </LayoutContainer>
     </>
   );

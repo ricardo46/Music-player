@@ -3,6 +3,8 @@ const APP_NAME = "Music Player";
 
 // Default Lists names
 const SONGS_UPLOADED_BY_ALL_USERS_LIST_NAME = "Songs uploaded by all users";
+const SEARCH_RESULTS_LIST_NAME = "Search results";
+
 const SONGS_UPLOADED_BY_CURRENT_USER_LIST_NAME = "uploaded songs";
 
 // Default Lists ids:
@@ -117,4 +119,5 @@ export {
   LIST_NAME_LAPTOP_FONT_SIZE,
   ERROR_PAGE_NAME,
   NAV_SMALL_ICON_HEIGHT,
+  SEARCH_RESULTS_LIST_NAME
 };

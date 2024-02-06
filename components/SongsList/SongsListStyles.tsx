@@ -5,6 +5,7 @@ import {
   MAIN_COLOR,
   MAIN_FONT_COLOR,
   MOBILE_MAX_WIDTH,
+  THIRD_COLOR,
 } from "@/globalVariables";
 import styled from "styled-components";
 
@@ -79,6 +80,18 @@ const SongNameContainer = styled.p`
   }
 `;
 
+const SearchTitle = styled.h4`
+  color: ${MAIN_COLOR};
+  font-size: 0.7rem;
+  margin: 0.3rem 0.5rem 0.3rem;
+  padding: 0 0 0.3rem;
+  border-bottom: 2px solid ${THIRD_COLOR};
+  font-weight: 500;
+  @media (min-width: ${LAPTOP_WIDTH_ONE}) {
+    font-size: 1rem;
+  }
+`;
+
 const PlayingSongNameContainer = styled(SongNameContainer)`
   font-weight: 700;
   border: 1px solid black;
@@ -109,4 +122,5 @@ export {
   PlayingSongNameContainer,
   SongsContainer,
   SongsListTop,
+  SearchTitle,
 };

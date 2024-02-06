@@ -36,6 +36,11 @@ import FileUploader from "../FileUploader/FileUploader";
 import { useLayoutSubmitRequest } from "@/Contexts/LayoutContext";
 import { useMediaQuery } from "@mui/material";
 import DeletePlaylistButton from "../DeletePlaylistButton/DeletePlaylistButton";
+import TimedMessage from "../TimedMessage/TimedMessage";
+import { getNumberOfOtherUserSongsInSearchResults } from "@/Utils/userUtils";
+import { useSearchSongs } from "@/Contexts/SearchSongsContext";
+import OtherUsersSearchTitle from "./OtherUsersSearchTitle";
+import CurrentUserSearchTitle from "./CurrentUserSearchTitle";
 
 interface SongsListProps {
   songIndex: number;
@@ -51,14 +56,12 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
     message: null,
   });
 
-  const { user, setUser } = useUser();
-  const {
-    layoutSubmitRequest,
-    setLayoutSubmitRequest,
-    clearLayoutSubmitRequest,
-  } = useLayoutSubmitRequest();
+  const { user } = useUser();
 
-  const { songsPlaying, setSongsPlaying } = useSongsPlaying();
+
+  const { songsPlaying } = useSongsPlaying();
+
+
   const router = useRouter();
 
   const [playListToAddSong, setPlayListToAddSong] =
@@ -113,7 +116,6 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
     toggleDeleteSongModal();
   };
 
-  const maxMobileWidth = useMediaQuery(`(max-width:${MOBILE_MAX_WIDTH})`);
 
   return (
     <>
@@ -145,7 +147,6 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
         <SongsListTop>
           {<ListName>{songsPlaying?.name}</ListName>}
           {router.pathname == USER_PAGE_PATH &&
-          !layoutSubmitRequest.isLoading &&
           songsPlaying?.id == SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID ? (
             <FileUploader />
           ) : (
@@ -156,53 +157,65 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
           {songsPlaying?.playList &&
             songsPlaying.playList.map((song: SongInterface, index: number) => {
               return (
-                <SongContainer key={song.song_id}>
-                  {songIndex == index && (
-                    <PlayingSongNameContainer
-                      onClick={(e) => handleSongClick(e, index)}
-                    >{`${index + 1}- ${song.name}`}</PlayingSongNameContainer>
-                  )}
-                  {songIndex != index && (
-                    <SongNameContainer
-                      onClick={(e) => handleSongClick(e, index)}
-                    >
-                      {`${index + 1}- ${song.name}`}
-                    </SongNameContainer>
-                  )}
-                  <SongButtonsContainer>
-                    {router.pathname == USER_PAGE_PATH &&
-                      song.song_id &&
-                      user.id != 0 &&
-                      songsPlaying.id ==
-                        SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID && (
-                        <TrashIconStyled
-                          data-testid="deleteButton"
-                          onClick={() => handleDeleteSong(song)}
-                        />
-                      )}
-                    {router.pathname == USER_PAGE_PATH &&
-                      (songsPlaying.id ==
-                        SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID ||
+                <>
+                  <OtherUsersSearchTitle songIndexInSearchList={index} />
+                  <CurrentUserSearchTitle songIndexInSearchList={index} />
+
+                  <SongContainer key={song.song_id}>
+                    {songIndex == index && (
+                      <PlayingSongNameContainer
+                        onClick={(e) => handleSongClick(e, index)}
+                      >
+                        
+                        {`${index + 1}- ${song.name}`}
+                      </PlayingSongNameContainer>
+                    )}
+                    {songIndex != index && (
+                      <SongNameContainer
+                        onClick={(e) => handleSongClick(e, index)}
+                      >
+                        
+                        {`${index + 1}- ${song.name}`}
+                      </SongNameContainer>
+                    )}
+                    <SongButtonsContainer>
+                      {router.pathname == USER_PAGE_PATH &&
+                        song.song_id &&
+                        user.id != 0 &&
                         songsPlaying.id ==
-                          SONGS_UPLOADED_BY_ALL_USERS_LIST_ID) && (
-                        <AddToPlaylistIconStyled
-                          onClick={() => handleAddSongToPlayList(song)}
-                          data-testid="addSongToPlayListButton"
-                        />
-                      )}
-                    {songsPlaying.id !=
-                      SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID &&
-                      songsPlaying.id !=
-                        SONGS_UPLOADED_BY_ALL_USERS_LIST_ID && (
-                        <RemoveSongFromListIconStyled
-                          onClick={() => handleRemoveSongFromPlayList(song)}
-                        />
-                      )}
-                  </SongButtonsContainer>
-                </SongContainer>
+                          SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID && (
+                          <TrashIconStyled
+                            data-testid="deleteButton"
+                            onClick={() => handleDeleteSong(song)}
+                          />
+                        )}
+                      {router.pathname == USER_PAGE_PATH &&
+                        (songsPlaying.id ==
+                          SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID ||
+                          songsPlaying.id ==
+                            SONGS_UPLOADED_BY_ALL_USERS_LIST_ID) && (
+                          <AddToPlaylistIconStyled
+                            onClick={() => handleAddSongToPlayList(song)}
+                            data-testid="addSongToPlayListButton"
+                          />
+                        )}
+                      {songsPlaying.id !=
+                        SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID &&
+                        songsPlaying.id !=
+                          SONGS_UPLOADED_BY_ALL_USERS_LIST_ID && (
+                          <RemoveSongFromListIconStyled
+                            onClick={() => handleRemoveSongFromPlayList(song)}
+                          />
+                        )}
+                    </SongButtonsContainer>
+                  </SongContainer>
+                </>
               );
             })}
         </SongsContainer>
+        {songsPlaying?.playList?.length == 0 && (
+          <TimedMessage visible={true} message={"No songs found!"} />
+        )}
       </StyledSongsList>
     </>
   );

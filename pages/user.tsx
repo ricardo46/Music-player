@@ -28,17 +28,19 @@ export async function getServerSideProps(context: any) {
     return await requireAuthentication(context, currentUrl);
   }
 
-  const responseSongs: any = await axios
-    .get("https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/song")
-    .catch((err) => {
-      console.log("errorDataSong", err);
-    });
+  // const responseSongs: any = await axios
+  //   .get("https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/song_other_users",{
+  //     params: { user_id: resAuth.props.userData?.id },
+  //   })
+  //   .catch((err) => {
+  //     console.log("errorDataSong", err);
+  //   });
 
   return {
     props: {
       userData: resAuth.props.userData,
       errorAuth: resAuth.props.errorAuth,
-      allUsersSongs: responseSongs?.data || null,
+      // otherUsersSongs: responseSongs?.data || null,
     },
   };
 }
@@ -46,11 +48,11 @@ export async function getServerSideProps(context: any) {
 const User = ({
   userData,
   error,
-  allUsersSongs,
+  // otherUsersSongs,
 }: {
   userData: UserType;
   error: any;
-  allUsersSongs: SongInterface[];
+  // otherUsersSongs: SongInterface[];
 }) => {
   const {
     layoutSubmitRequest,
@@ -59,7 +61,7 @@ const User = ({
   } = useLayoutSubmitRequest();
 
   const { user, setUser } = useUser();
-  const { allSongs, setAllSongs } = useAllSongs();
+  // const { allSongs, setAllSongs } = useAllSongs();
   const { songsPlaying, setSongsPlaying } = useSongsPlaying();
 
   const router = useRouter();
@@ -69,11 +71,11 @@ const User = ({
     userData
   );
 
-  const listOfAllSongs: ListOfSongs = getAllUsersUploadedSongsObj(allSongs);
+  // const listOfAllSongs: ListOfSongs = getAllUsersUploadedSongsObj(allSongs);
 
   useEffect(() => {
     setUser(userData);
-    setAllSongs(allUsersSongs);
+    // setAllSongs(otherUsersSongs);
     console.log("user.uploadedSongs", user.uploadedSongs);
     setSongsPlaying(uploadedListOfSongs);
     setLayoutSubmitRequest({
@@ -90,10 +92,14 @@ const User = ({
         <title>{`${APP_NAME} | ${USER_PAGE_NAME}`}</title>
       </Head>
       {layoutSubmitRequest.isLoading && <LoadingAnimation />}
-      <SongListAndPlayer />
-      <SearchSongsForm />
+      {!layoutSubmitRequest.isLoading && (
+        <>
+          <SongListAndPlayer />
+          <SearchSongsForm />
+        </>
+      )}
 
-      {user.id == 0 && (
+      {!layoutSubmitRequest.isLoading && user.id == 0 && (
         <RedirectOnError
           error={error}
           message={`You are not logged in! Redirecting to ${LOGIN_PAGE_NAME} page...`}

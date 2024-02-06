@@ -189,7 +189,7 @@ function FileUploader() {
           <PickerOverlay
             apikey={process.env.NEXT_PUBLIC_FILESTACK_API_KEY as string}
             pickerOptions={{
-              accept: ["audio/*"],
+              accept: [".mp3"],
               maxFiles: 1,
               maxSize: 1024 * 1024 * 15,
               onClose: () => {

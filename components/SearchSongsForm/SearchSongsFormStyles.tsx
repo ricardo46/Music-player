@@ -3,8 +3,9 @@ import {
   FormButton,
   FormContainer,
   FormInput,
+  InputLabel,
   StyledForm,
-} from "../MultipleInputForm/FormStyledComponents";
+} from "../MultipleInputForm/MultipleInputFormStyles";
 import {
   INPUT_BACKGROUND_COLOR,
   INPUT_MAX_WIDTH,
@@ -35,6 +36,16 @@ const SearchSongsFormContainer = styled.section`
       margin-bottom: 1rem;
     }
   }
+  ${InputLabel} {
+    width: 100%;
+    /* height: 100%; */
+    @media (min-width: ${MOBILE_MAX_WIDTH}) {
+      height: 100%;
+
+      position: absolute;
+      right: 0;
+    }
+  }
   ${FormButton} {
     background-color: ${INPUT_BACKGROUND_COLOR};
     border-radius: 1rem;
@@ -42,10 +53,10 @@ const SearchSongsFormContainer = styled.section`
     padding-left: 0.7rem;
     z-index: 5;
     height: 1.5rem;
-    font-size: .6rem;
+    font-size: 0.6rem;
     @media (min-width: ${MOBILE_MAX_WIDTH}) {
-    height: 2rem;
-
+      height: 2rem;
+      margin-right: 0;
       position: absolute;
       right: 0;
     }
@@ -58,10 +69,7 @@ const SearchSongsFormContainer = styled.section`
     height: 1.5rem;
 
     @media (min-width: ${MOBILE_MAX_WIDTH}) {
-    height: 2rem;
-
-      position: absolute;
-      right: 0;
+      height: 100%;
     }
   }
 

@@ -13,11 +13,28 @@ import {
 
 const FormButton = styled(StyledButton)`
   /* max-width: ${BUTTON_MAX_WIDTH}; */
+  @media (min-width: ${MOBILE_MAX_WIDTH}) {
+  margin-right: 3rem;
+    
+  }
 `;
 
 const FormInput = styled(StyledInput)`
   border: 2px solid ${MAIN_COLOR};
   background-color: ${INPUT_BACKGROUND_COLOR};
+  
+`;
+
+const InputLabel = styled.label`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  @media (min-width: ${MOBILE_MAX_WIDTH}) {
+    min-width: 16rem;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 `;
 
 const FormContainer = styled.div`
@@ -31,7 +48,9 @@ const FormContainer = styled.div`
   border-radius: 1rem;
   padding: 0.5rem;
   @media (min-width: ${MOBILE_MAX_WIDTH}) {
-    flex-direction: row;
+    width: auto;
+  align-items: end;
+    
   }
 `;
 
@@ -61,4 +80,5 @@ export {
   FormContainer,
   StyledForm,
   FormMessageStyledContainer,
+  InputLabel,
 };
