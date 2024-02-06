@@ -1,26 +1,28 @@
-import {
-  ChangeEvent,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
-import {
-  MESSAGE_DURATION,
-} from "../../globalVariables";
+import { MESSAGE_DURATION, USER_PAGE_PATH } from "../../globalVariables";
 import UserMessage from "../UserMessage/UserMessage";
-import { getAllSongsDataFromAPI } from "@/Utils/backEndUtils";
+import {
+  getAllSongsDataFromAPI,
+  getOtherAndCurrentUserSongsDataFromAPI,
+} from "@/Utils/backEndUtils";
 import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
 import { usePlaying } from "@/Contexts/PlayingContext";
 import { SearchSongsFormContainer } from "./SearchSongsFormStyles";
 import { useUser } from "@/Contexts/UserContext";
-import { getAllUsersUploadedSongsObj } from "@/Utils/listOfSongsObj";
-import { SongInterface, submitRequestInterface } from "@/Utils/tsTypes";
+import {
+  getAllUsersUploadedSongsObj,
+  getOtherAndCurrentUserSongsObj,
+} from "@/Utils/listOfSongsObj";
+import { submitRequestInterface } from "@/Utils/tsTypes";
 import MultipleInputForm from "../MultipleInputForm/MultipleInputForm";
+import { useRouter } from "next/router";
+import { useSearchSongs } from "@/Contexts/SearchSongsContext";
 
 const SearchSongsForm = () => {
   const { user, setUser, clearUser } = useUser();
-
-  const [songsData, setSongsData] = useState<SongInterface[]>([]);
+  const { otherUserSongs, setOtherUserSongs,  currentUserSongs, setCurrentUserSongs} = useSearchSongs();
+  // const [songsData, setSongsData] = useState<SongInterface[]>([]);
   const { songsPlaying, setSongsPlaying } = useSongsPlaying();
   const { playing, setPlaying } = usePlaying();
   const [inputValue, setInputValue] = useState("");
@@ -34,21 +36,25 @@ const SearchSongsForm = () => {
     message: null,
   });
 
+  const router = useRouter();
+
   useEffect(() => {
-    console.log("songsData", songsData);
-    if (songsData?.length == 0 && previousInput != "") {
+    console.log("songsPlaying?.playList", songsPlaying?.playList);
+    if (songsPlaying?.playList?.length == 0 && previousInput != "") {
       setMessageIsVisible(true);
       setTimeout(() => {
         setMessageIsVisible(false);
       }, MESSAGE_DURATION);
     }
-    setInputValue("");
-  }, [songsData]);
+    // setInputValue("");
+  }, [songsPlaying?.playList]);
 
   const onSearchSubmit = async (e: any) => {
     e.preventDefault();
     setPreviousInput(inputValue);
     setInputValue(inputValue);
+
+    console.log("songsPlaying", songsPlaying);
 
     try {
       setSubmitRequest({
@@ -58,17 +64,32 @@ const SearchSongsForm = () => {
         message: null,
         errorMessage: null,
       });
-      const response = await getAllSongsDataFromAPI(inputValue);
 
-      const songs = response.data;
+      let response = null;
 
-      setSongsPlaying(getAllUsersUploadedSongsObj(songs));
+      if (router.pathname == USER_PAGE_PATH) {
+        response = await getOtherAndCurrentUserSongsDataFromAPI(inputValue, user);
+        console.log("response", response);
+
+        const songsData=response.data
+        setOtherUserSongs(songsData.songs_other_users);
+        setCurrentUserSongs(songsData.songs_current_user);
+
+
+        setSongsPlaying(getOtherAndCurrentUserSongsObj([...songsData.songs_other_users, ...songsData.songs_current_user]));
+      } else {
+        response = await getAllSongsDataFromAPI(inputValue);
+        const songs = response.data;
+
+        setSongsPlaying(getAllUsersUploadedSongsObj(songs));
+      }
+
       setPlaying(false);
 
       setSubmitRequest({
         submitted: true,
         isLoading: false,
-        message: "All songs loaded successfully!",
+        message: "Successful request!",
         error: false,
         errorMessage: null,
       });
@@ -80,7 +101,7 @@ const SearchSongsForm = () => {
         submitted: true,
         isLoading: false,
         message: "",
-        errorMessage: "Error loading all songs from server!!",
+        errorMessage: "Request Error!!",
       });
     }
   };
@@ -90,21 +111,30 @@ const SearchSongsForm = () => {
   };
 
   const handleInputClick = async () => {
-    setInputValue("");
+    // setInputValue("");
   };
 
   return (
     <SearchSongsFormContainer>
-      <MultipleInputForm
-        inputs={[{ name: "SongName", type: "text", value: inputValue }]}
-        onFormSubmit={onSearchSubmit}
-        submitRequest={submitRequest}
-        submitButtonName={"Search Songs"}
-        onInputChange={onInputChange}
-        handleTextAreaClick={handleInputClick}
-      />
+      {
+        <MultipleInputForm
+          inputs={[
+            {
+              name: "Song name",
+              type: "text",
+              value: inputValue,
+              labelVisible: false,
+            },
+          ]}
+          onFormSubmit={onSearchSubmit}
+          submitRequest={submitRequest}
+          submitButtonName={"Search Songs"}
+          onInputChange={onInputChange}
+          handleTextAreaClick={handleInputClick}
+        />
+      }
       {messageIsVisible &&
-        songsData?.length == 0 &&
+        songsPlaying?.playList?.length == 0 &&
         !submitRequest.isLoading && (
           <UserMessage
             type={"error"}

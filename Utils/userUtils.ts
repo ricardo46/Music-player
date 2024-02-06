@@ -6,6 +6,7 @@ import {
   UserType,
   submitRequestInterface,
 } from "./tsTypes";
+import { SONGS_UPLOADED_BY_ALL_USERS_LIST_ID } from "@/globalVariables";
 
 const playListsIds = (playLists: any[]) =>
   playLists.map((list) => ({ listofsongs_id: list.listofsongs_id }));
@@ -161,6 +162,30 @@ const getSelectOptionsFromListOfSongs = (listOfLists: ListOfSongs[]) =>
     return { value: listOfSongs.id, label: listOfSongs.name };
   });
 
+const getNumberOfOtherUserSongsInSearchResults = (
+  user: UserType,
+  songsPlaying: ListOfSongs | null
+) => {
+
+
+
+  if (songsPlaying?.id != SONGS_UPLOADED_BY_ALL_USERS_LIST_ID) {
+    return 0;
+  }
+
+  const numberOfCurrentUserSongs = user.uploadedSongs
+    ? user.uploadedSongs.length
+    : 0;
+  console.log('numberOfCurrentUserSongs',numberOfCurrentUserSongs)
+
+  const numberOfSearchResults = songsPlaying.playList
+    ? songsPlaying.playList.length
+    : 0;
+  console.log('numberOfSearchResults',numberOfSearchResults)
+
+  return numberOfSearchResults - numberOfCurrentUserSongs;
+};
+
 export {
   getNewListObject,
   removeSongFromUserPlaylistsInFrontEnd,
@@ -175,4 +200,5 @@ export {
   removeSongFromAllSongs,
   addSongToAllSongs,
   getSelectOptionsFromListOfSongs,
+  getNumberOfOtherUserSongsInSearchResults,
 };

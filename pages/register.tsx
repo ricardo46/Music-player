@@ -41,7 +41,8 @@ const Register = () => {
       <Head>
         <title>{`${APP_NAME} | ${REGISTER_PAGE_NAME}`}</title>
       </Head>
-      <RegisterForm />
+
+      {!layoutSubmitRequest.isLoading && <RegisterForm />}
     </>
   );
 };

@@ -8,8 +8,8 @@ import { submitRequestInterface } from "@/Utils/tsTypes";
 import MultipleInputForm from "../MultipleInputForm/MultipleInputForm";
 
 const LoginForm = () => {
-  const [email, setEmail] = useState("Insert email");
-  const [password, setPassword] = useState("Insert password");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [submitRequest, setSubmitRequest] = useState<submitRequestInterface>({
     isLoading: false,
     submitted: false,
@@ -21,9 +21,13 @@ const LoginForm = () => {
 
   const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.name == "email") {
+    console.log('changing email',e.target.value)
+
       setEmail(e.target.value);
     }
     if (e.target.name == "password") {
+    console.log('changing pass',e.target.value)
+
       setPassword(e.target.value);
     }
   };
@@ -75,25 +79,27 @@ const LoginForm = () => {
 
   const handleClick = (e: MouseEvent<HTMLInputElement>) => {
     if (e.currentTarget.name == "email") {
-      setEmail("");
+      // setEmail("");
     }
     if (e.currentTarget.name == "password") {
-      setPassword("");
+      // setPassword("");
     }
   };
 
   return (
-    <MultipleInputForm
-      onFormSubmit={onLoginSubmit}
-      handleTextAreaClick={handleClick}
-      inputs={[
-        { name: "email", type: "email", value: email },
-        { name: "password", type: "password", value: password },
-      ]}
-      submitRequest={submitRequest}
-      submitButtonName={"Login"}
-      onInputChange={onInputChange}
-    />
+    <>
+      <MultipleInputForm
+        onFormSubmit={onLoginSubmit}
+        handleTextAreaClick={handleClick}
+        inputs={[
+          { name: "email", type: "email", value: email ,labelVisible: true},
+          { name: "password", type: "password", value: password,labelVisible: true },
+        ]}
+        submitRequest={submitRequest}
+        submitButtonName={"Login"}
+        onInputChange={onInputChange}
+      />
+    </>
   );
 };
 

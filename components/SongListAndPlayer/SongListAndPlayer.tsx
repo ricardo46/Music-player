@@ -14,15 +14,16 @@ import {
 } from "./SongListAndPlayerStyles";
 import FileUploader from "../FileUploader/FileUploader";
 import { useMediaQuery } from "@mui/material";
-import { MOBILE_MAX_WIDTH, SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID, USER_PAGE_PATH } from "@/globalVariables";
+import {
+  MOBILE_MAX_WIDTH,
+  SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID,
+  USER_PAGE_PATH,
+} from "@/globalVariables";
 import { usePlaying } from "@/Contexts/PlayingContext";
 
-interface ListOfSongsPropInterface {
- 
-}
+interface ListOfSongsPropInterface {}
 
-const SongListAndPlayer = ({}: 
-ListOfSongsPropInterface) => {
+const SongListAndPlayer = ({}: ListOfSongsPropInterface) => {
   const {
     layoutSubmitRequest,
     setLayoutSubmitRequest,
@@ -40,7 +41,6 @@ ListOfSongsPropInterface) => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressBarRef = useRef<any>();
   const animationRef = useRef<any>();
-  
 
   const maxMobileWidth = useMediaQuery(`(max-width:${MOBILE_MAX_WIDTH})`);
 
@@ -72,7 +72,6 @@ ListOfSongsPropInterface) => {
   };
 
   const handleSongClick = (e: any, index: number) => {
-    
     setSongIndex(index);
     setPlaying(true);
 
@@ -83,25 +82,24 @@ ListOfSongsPropInterface) => {
     <>
       <PlayerAndSongsContainer>
         <PlayerAndDropDownContainer>
-          {!layoutSubmitRequest.isLoading &&
-             (
-              <AudioPlayer
-                songIndex={songIndex}
-                setSongIndex={setSongIndex}
-                playing={playing}
-                setPlaying={setPlaying}
-                animationRef={animationRef}
-                whilePlaying={whilePlaying}
-                audioRef={audioRef}
-                progressBarRef={progressBarRef}
-                updatePlayerCurrentTime={updatePlayerCurrentTime}
-                currentTime={currentTime}
-                beforeWidth={beforeWidth}
-                duration={duration}
-                setDuration={setDuration}
-                togglePlaying={togglePlaying}
-              />
-            )}
+          {
+            <AudioPlayer
+              songIndex={songIndex}
+              setSongIndex={setSongIndex}
+              playing={playing}
+              setPlaying={setPlaying}
+              animationRef={animationRef}
+              whilePlaying={whilePlaying}
+              audioRef={audioRef}
+              progressBarRef={progressBarRef}
+              updatePlayerCurrentTime={updatePlayerCurrentTime}
+              currentTime={currentTime}
+              beforeWidth={beforeWidth}
+              duration={duration}
+              setDuration={setDuration}
+              togglePlaying={togglePlaying}
+            />
+          }
           {router.pathname == USER_PAGE_PATH && (
             <UserListsDropDownContainer>
               <UserListsDropDown
@@ -121,11 +119,6 @@ ListOfSongsPropInterface) => {
         {songsPlaying && (
           <SongsList songIndex={songIndex} handleSongClick={handleSongClick} />
         )}
-
-        {!layoutSubmitRequest.isLoading &&
-          songsPlaying?.playList?.length == 0 && (
-            <TimedMessage visible={true} message={"No songs found!"} />
-          )}
       </PlayerAndSongsContainer>
     </>
   );

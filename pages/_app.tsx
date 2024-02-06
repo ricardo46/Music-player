@@ -7,23 +7,26 @@ import { UserProvider } from "@/Contexts/UserContext";
 
 import type { AppProps } from "next/app";
 import { PlayingProvider } from "@/Contexts/PlayingContext";
+import { SearchSongsProvider } from "@/Contexts/SearchSongsContext";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <LayoutSubmitRequestProvider>
-        <PlayingProvider>
-          <AllSongsProvider>
-            <UserProvider>
-              <SongsPlayingProvider>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
-              </SongsPlayingProvider>
-            </UserProvider>
-          </AllSongsProvider>
-        </PlayingProvider>
-      </LayoutSubmitRequestProvider>
+      <SearchSongsProvider>
+        <LayoutSubmitRequestProvider>
+          <PlayingProvider>
+            <AllSongsProvider>
+              <UserProvider>
+                <SongsPlayingProvider>
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                </SongsPlayingProvider>
+              </UserProvider>
+            </AllSongsProvider>
+          </PlayingProvider>
+        </LayoutSubmitRequestProvider>
+      </SearchSongsProvider>
     </>
   );
 }

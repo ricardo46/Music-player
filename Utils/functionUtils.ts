@@ -21,6 +21,11 @@ const validNewListName = (input: string, lists: any[] | null) => {
     return list.length == 0;
   };
   
-  export { validNewListName, stringIsEmpty, listNameExists, getListNamesArray , listIsEmpty};
+
+const getTextWithFirstLetterToUpperCase = (text:string) => text.slice(0,1).toUpperCase()+text.slice(1).toLowerCase()
+
+
+
+  export { validNewListName, stringIsEmpty, listNameExists, getListNamesArray , listIsEmpty, getTextWithFirstLetterToUpperCase};
   
   

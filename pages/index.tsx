@@ -6,6 +6,7 @@ import { getAllUsersUploadedSongsObj } from "@/Utils/listOfSongsObj";
 import { ListOfSongs, UserType } from "@/Utils/tsTypes";
 import Description from "@/components/Description/Description";
 import { DescriptionStyled } from "@/components/Description/DescriptionStyles";
+import Descriptions from "@/components/Descriptions/Descriptions";
 import LoadingAnimation from "@/components/LoadingAnimation/LoadingAnimation";
 import SearchSongsForm from "@/components/SearchSongsForm/SearchSongsForm";
 import SongListAndPlayer from "@/components/SongListAndPlayer/SongListAndPlayer";
@@ -102,26 +103,23 @@ export default function Home({ userData, songs, errorSongs, errorAuth }: any) {
       <Head>
         <title>{`${APP_NAME} | ${HOME_PAGE_NAME}`}</title>
       </Head>
-      <DescriptionsContainer>
-        <Description text="Your favorite songs everywhere!" />
-        <Description text="Create playlists!" />
-        <Description text="Upload Songs!" />
-        <Description text="Find what others are listening to!" />
-        <Description text="Login / Register to join!" />
-        <Description text="You have the control!" />
-        <Description text="Search songs!" />
-        <Description text="Hit play!" />
-
-      </DescriptionsContainer>
+      {
+        !layoutSubmitRequest.isLoading &&
+        <Descriptions />
+      }
       {layoutSubmitRequest.isLoading && <LoadingAnimation />}
-      <SongListAndPlayer />
-      <SearchSongsForm />
+      {(
+        <>
+          <SongListAndPlayer />
+          <SearchSongsForm />
+        </>
+      )}
 
-      {messageIsVisible && layoutSubmitRequest.errorMessage && (
+      {!layoutSubmitRequest.isLoading && messageIsVisible && layoutSubmitRequest.errorMessage && (
         <TimedMessage visible={true} message={"You are not logged in!"} />
       )}
 
-      {songs?.length == 0 && (
+      {!layoutSubmitRequest.isLoading && songs?.length == 0 && (
         <TimedMessage visible={true} message={"No songs uploaded yet!"} />
       )}
     </>

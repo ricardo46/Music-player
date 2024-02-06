@@ -34,8 +34,12 @@ const NotFound = () => {
       <Head>
         <title>{`${APP_NAME} | ${ERROR_PAGE_NAME}`}</title>
       </Head>
-      <h1>{layoutSubmitRequest.errorMessage}</h1>
-      <p>Redirecting to {HOME_PAGE_NAME} page...</p>
+      {!layoutSubmitRequest.isLoading && (
+        <>
+          <h1>{layoutSubmitRequest.errorMessage}</h1>
+          <p>Redirecting to {HOME_PAGE_NAME} page...</p>
+        </>
+      )}
     </>
   );
 };

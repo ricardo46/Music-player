@@ -4,18 +4,23 @@ import {
   FormContainer,
   FormInput,
   FormMessageStyledContainer,
+  InputLabel,
   StyledForm,
-} from "./FormStyledComponents";
+} from "./MultipleInputFormStyles";
 import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 import ErrorTimedMessage from "../ErrorMessage/ErrorMessage";
 import TimedMessage from "../TimedMessage/TimedMessage";
 import { MESSAGES_TIMEOUT } from "@/globalVariables";
 import { submitRequestInterface } from "@/Utils/tsTypes";
+import { useLayoutSubmitRequest } from "@/Contexts/LayoutContext";
+import { Message } from "../StyledComponents/StyledComponents";
+import { getTextWithFirstLetterToUpperCase } from "@/Utils/functionUtils";
 
 interface MultipleInputInterface {
   name: string;
   type: string;
   value: string;
+  labelVisible: boolean;
 }
 
 type MultipleInputFormParams = {
@@ -37,6 +42,12 @@ const MultipleInputForm = ({
 }: MultipleInputFormParams) => {
   const [messageIsVisible, setMessageIsVisible] = useState(false);
 
+  const {
+    layoutSubmitRequest,
+    setLayoutSubmitRequest,
+    clearLayoutSubmitRequest,
+  } = useLayoutSubmitRequest();
+
   const onButtonClick = () => {
     setMessageIsVisible(true);
     setTimeout(() => {
@@ -47,19 +58,25 @@ const MultipleInputForm = ({
   return (
     <>
       <StyledForm onSubmit={onFormSubmit}>
-        <FormContainer>
-          {inputs.map((input) => (
-            <FormInput
-              key={input.name}
-              type={input.type}
-              name={input.name}
-              value={input.value}
-              onChange={onInputChange}
-              onClick={handleTextAreaClick}
-            />
-          ))}
-          <FormButton onClick={onButtonClick}>{submitButtonName}</FormButton>
-        </FormContainer>
+        {!layoutSubmitRequest.isLoading && (
+          <FormContainer>
+            {inputs.map((input) => (
+              <InputLabel key={input.name}>
+                {input.labelVisible &&
+                  getTextWithFirstLetterToUpperCase(input.name)}
+                <FormInput
+                  type={input.type}
+                  name={input.name}
+                  value={input.value}
+                  onChange={onInputChange}
+                  onClick={handleTextAreaClick}
+                  placeholder={input.name}
+                />
+              </InputLabel>
+            ))}
+            <FormButton onClick={onButtonClick}>{submitButtonName}</FormButton>
+          </FormContainer>
+        )}
 
         <FormMessageStyledContainer>
           {submitRequest.error && submitRequest.errorMessage && (
