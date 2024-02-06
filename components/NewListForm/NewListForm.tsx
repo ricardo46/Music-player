@@ -119,7 +119,7 @@ const NewListForm = () => {
     <NewListFormContainer>
       <MultipleInputForm
         onFormSubmit={onNewListSubmit}
-        inputs={[{ name: "NewListName", type: "text", value: inputValue }]}
+        inputs={[{ name: "NewListName", type: "text", value: inputValue, labelVisible: true }]}
         submitRequest={submitRequest}
         submitButtonName={"Create new list"}
         onInputChange={onInputChange}
