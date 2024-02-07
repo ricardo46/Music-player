@@ -16,6 +16,7 @@ import Forward15Icon from "../../components/Svgs/forward-15.svg";
 import PlayIcon from "../../components/Svgs/play.svg";
 import PauseIcon from "../../components/Svgs/pause.svg";
 import XIcon from "../../components/Svgs/circle-xmark.svg";
+import EditIcon from "../../components/Svgs/file-edit.svg";
 
 import {
   BIG_ICON_WIDTH,
@@ -24,6 +25,16 @@ import {
   NAV_SMALL_ICON_HEIGHT,
   SMALL_ICON_WIDTH,
 } from "@/globalVariables";
+
+const EditIconStyled = styled(EditIcon)`
+  fill: ${MAIN_COLOR};
+  width: ${SMALL_ICON_WIDTH};
+  height: 1.5rem;
+  @media (min-width: ${LAPTOP_WIDTH_ONE}) {
+    /* height: 2rem; */
+    width: ${BIG_ICON_WIDTH};
+  }
+`;
 
 const XIconStyled = styled(XIcon)`
   fill: ${MAIN_COLOR};
@@ -91,8 +102,6 @@ const LoginIconStyled = styled(LoginIcon)`
   fill: ${MAIN_COLOR};
   width: ${BIG_ICON_WIDTH};
   height: ${NAV_SMALL_ICON_HEIGHT};
-
-  
 `;
 
 const RegisterIconStyled = styled(RegisterIcon)`
@@ -134,10 +143,10 @@ const AddToPlaylistIconStyled = styled(AddToPlaylistIcon)`
   }
 `;
 
-const IconLabel=styled.label`
-  font-size: .6rem;
+const IconLabel = styled.label`
+  font-size: 0.6rem;
   font-weight: 500;
-`
+`;
 
 export {
   IconLabel,
@@ -158,4 +167,5 @@ export {
   PlayIconStyled,
   PauseIconStyled,
   XIconStyled,
+  EditIconStyled,
 };

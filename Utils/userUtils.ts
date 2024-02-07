@@ -91,6 +91,44 @@ const removeSongFromUploadedSongs = (user: UserType, id: number) => {
   return user.uploadedSongs?.filter((song) => song.song_id != id);
 };
 
+const editSongNameInUploadedSongs = (
+  user: UserType,
+  songId: number,
+  songName: string
+) => {
+  return user.uploadedSongs?.map((song) => {
+    if (song.song_id == songId) {
+      return { ...song, name: songName };
+    }
+    return song;
+  });
+};
+
+const editSongNameInUserPlaylists = (
+  user: UserType,
+  songName: string,
+  songId: number
+) => {
+  const playLists = user.playLists;
+  if (playLists == undefined) return [];
+
+  const newPlaylists = playLists?.map((list) => {
+    const playList = list.playList;
+    const newPlaylist = playList?.map((song) => {
+      if (song.song_id == songId) {
+        return { ...song, name: songName };
+      }
+      return song;
+    });
+
+    return {
+      ...list,
+      playList: newPlaylist,
+    };
+  });
+  return newPlaylists;
+};
+
 const removeSongFromAllSongs = (allSongs: SongInterface[], id: number) => {
   return allSongs.filter((song) => song.song_id != id);
 };
@@ -166,9 +204,6 @@ const getNumberOfOtherUserSongsInSearchResults = (
   user: UserType,
   songsPlaying: ListOfSongs | null
 ) => {
-
-
-
   if (songsPlaying?.id != SONGS_UPLOADED_BY_ALL_USERS_LIST_ID) {
     return 0;
   }
@@ -176,12 +211,12 @@ const getNumberOfOtherUserSongsInSearchResults = (
   const numberOfCurrentUserSongs = user.uploadedSongs
     ? user.uploadedSongs.length
     : 0;
-  console.log('numberOfCurrentUserSongs',numberOfCurrentUserSongs)
+  console.log("numberOfCurrentUserSongs", numberOfCurrentUserSongs);
 
   const numberOfSearchResults = songsPlaying.playList
     ? songsPlaying.playList.length
     : 0;
-  console.log('numberOfSearchResults',numberOfSearchResults)
+  console.log("numberOfSearchResults", numberOfSearchResults);
 
   return numberOfSearchResults - numberOfCurrentUserSongs;
 };
@@ -201,4 +236,6 @@ export {
   addSongToAllSongs,
   getSelectOptionsFromListOfSongs,
   getNumberOfOtherUserSongsInSearchResults,
+  editSongNameInUploadedSongs,
+  editSongNameInUserPlaylists,
 };

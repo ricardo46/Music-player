@@ -154,11 +154,25 @@ const getAllSongsDataFromAPI = async (name: string) => {
   return response;
 };
 
-const getOtherAndCurrentUserSongsDataFromAPI = async (name: string, user: UserType) => {
+const getOtherAndCurrentUserSongsDataFromAPI = async (
+  name: string,
+  user: UserType
+) => {
   const response = await axios.get(
     "https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/song_other_users_and_current",
     {
       params: { song_name: name, user_id: user.id },
+    }
+  );
+
+  return response;
+};
+
+const editSongNameInAPI = async (songName: string, songId: number) => {
+  const response = await axios.patch(
+    `https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/song/${songId}`,
+    {
+      name: songName,
     }
   );
 
@@ -175,4 +189,5 @@ export {
   deletePlaylist,
   getAllSongsDataFromAPI,
   getOtherAndCurrentUserSongsDataFromAPI,
+  editSongNameInAPI,
 };

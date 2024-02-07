@@ -14,6 +14,7 @@ import {
 } from "./SongsListStyles";
 import {
   AddToPlaylistIconStyled,
+  EditIconStyled,
   RemoveSongFromListIconStyled,
   TrashIconStyled,
 } from "../Icons/Icons";
@@ -21,7 +22,6 @@ import { AddToPlaylistModal } from "../AddToPlaylistModal/AddToPlaylistModal";
 import { DeleteSongModal } from "../DeleteSongModal/DeleteSongModal";
 import { RemoveSongFromPlaylistModal } from "../RemoveSongFromPlaylistModal/RemoveSongFromPlaylistModal";
 import {
-  MOBILE_MAX_WIDTH,
   SONGS_UPLOADED_BY_ALL_USERS_LIST_ID,
   SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID,
   USER_PAGE_PATH,
@@ -33,14 +33,11 @@ import {
 } from "@/Utils/tsTypes";
 import { useUser } from "@/Contexts/UserContext";
 import FileUploader from "../FileUploader/FileUploader";
-import { useLayoutSubmitRequest } from "@/Contexts/LayoutContext";
-import { useMediaQuery } from "@mui/material";
 import DeletePlaylistButton from "../DeletePlaylistButton/DeletePlaylistButton";
 import TimedMessage from "../TimedMessage/TimedMessage";
-import { getNumberOfOtherUserSongsInSearchResults } from "@/Utils/userUtils";
-import { useSearchSongs } from "@/Contexts/SearchSongsContext";
 import OtherUsersSearchTitle from "./OtherUsersSearchTitle";
 import CurrentUserSearchTitle from "./CurrentUserSearchTitle";
+import { EditSongNameModal } from "../EditSongNameModal/EditSongNameModal";
 
 interface SongsListProps {
   songIndex: number;
@@ -58,9 +55,7 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
 
   const { user } = useUser();
 
-
   const { songsPlaying } = useSongsPlaying();
-
 
   const router = useRouter();
 
@@ -73,6 +68,9 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
 
   const [deleteSongModalVisible, setDeleteSongModalVisible] = useState(false);
 
+  const [editSongNameModalVisible, setEditSongNameModalVisible] = useState(false);
+
+
   const [
     removeSongFromPlaylistModalVisible,
     setRemoveSongFromPlaylistModalVisible,
@@ -83,6 +81,10 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
   };
   const toggleDeleteSongModal = () => {
     setDeleteSongModalVisible(!deleteSongModalVisible);
+  };
+
+  const toggleEditSongNameModal = () => {
+    setEditSongNameModalVisible(!editSongNameModalVisible);
   };
 
   const toggleRemoveSongFromPlaylistModal = () => {
@@ -116,6 +118,11 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
     toggleDeleteSongModal();
   };
 
+  const handleEditSongName = (song: SongInterface) => {
+    setModalSong(song);
+    console.log("edit song name");
+    toggleEditSongNameModal();
+  };
 
   return (
     <>
@@ -140,6 +147,12 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
           toggleRemoveSongFromPlaylistModal={toggleRemoveSongFromPlaylistModal}
         />
       )}
+      {editSongNameModalVisible && (
+        <EditSongNameModal
+          modalSong={modalSong}
+          toggleEditSongNameModal={toggleEditSongNameModal}
+        />
+      )}
 
       {submitRequest.isLoading && <LoadingAnimation />}
 
@@ -157,16 +170,15 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
           {songsPlaying?.playList &&
             songsPlaying.playList.map((song: SongInterface, index: number) => {
               return (
-                <>
+                <div key={song.song_id}>
                   <OtherUsersSearchTitle songIndexInSearchList={index} />
                   <CurrentUserSearchTitle songIndexInSearchList={index} />
 
-                  <SongContainer key={song.song_id}>
+                  <SongContainer >
                     {songIndex == index && (
                       <PlayingSongNameContainer
                         onClick={(e) => handleSongClick(e, index)}
                       >
-                        
                         {`${index + 1}- ${song.name}`}
                       </PlayingSongNameContainer>
                     )}
@@ -174,7 +186,6 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
                       <SongNameContainer
                         onClick={(e) => handleSongClick(e, index)}
                       >
-                        
                         {`${index + 1}- ${song.name}`}
                       </SongNameContainer>
                     )}
@@ -184,10 +195,15 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
                         user.id != 0 &&
                         songsPlaying.id ==
                           SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID && (
-                          <TrashIconStyled
-                            data-testid="deleteButton"
-                            onClick={() => handleDeleteSong(song)}
-                          />
+                          <>
+                            <EditIconStyled
+                              onClick={() => handleEditSongName(song)}
+                            />
+                            <TrashIconStyled
+                              data-testid="deleteButton"
+                              onClick={() => handleDeleteSong(song)}
+                            />
+                          </>
                         )}
                       {router.pathname == USER_PAGE_PATH &&
                         (songsPlaying.id ==
@@ -209,7 +225,7 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
                         )}
                     </SongButtonsContainer>
                   </SongContainer>
-                </>
+                </div>
               );
             })}
         </SongsContainer>

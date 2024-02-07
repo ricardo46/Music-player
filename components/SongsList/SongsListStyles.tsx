@@ -113,6 +113,10 @@ const SongsContainer = styled.div`
   box-sizing: border-box;
 `;
 
+const ContainerSearchResults = styled.div`
+  border: solid 2px red;
+`;
+
 export {
   ListName,
   StyledSongsList,
@@ -123,4 +127,5 @@ export {
   SongsContainer,
   SongsListTop,
   SearchTitle,
+  ContainerSearchResults,
 };
