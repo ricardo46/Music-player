@@ -221,6 +221,31 @@ const getNumberOfOtherUserSongsInSearchResults = (
   return numberOfSearchResults - numberOfCurrentUserSongs;
 };
 
+const editPlaylistNameInFrontEnd = (
+  user: UserType,
+  newName: string,
+  platListID: number
+) => {
+  const playLists = user.playLists;
+
+  const newPlaylists = playLists?.map((list) => {
+    if (list.id == platListID) {
+      // const prevPlayList = list.playList ? list.playList : [];
+
+      const newPlaylist: ListOfSongs = {
+        id: platListID,
+        playList: list.playList,
+        name: newName,
+      };
+
+      return newPlaylist;
+    }
+
+    return list;
+  });
+  return newPlaylists;
+};
+
 export {
   getNewListObject,
   removeSongFromUserPlaylistsInFrontEnd,
@@ -238,4 +263,5 @@ export {
   getNumberOfOtherUserSongsInSearchResults,
   editSongNameInUploadedSongs,
   editSongNameInUserPlaylists,
+  editPlaylistNameInFrontEnd,
 };

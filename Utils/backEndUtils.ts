@@ -2,7 +2,7 @@ import axios from "axios";
 import { CookieValueTypes } from "cookies-next";
 import { ListOfSongs, SongInterface, UserType } from "./tsTypes";
 
-const patchUser = async (
+const patchUserLists = async (
   userId: number,
   newProps: {
     uploadedSongs: SongInterface[] | undefined;
@@ -12,6 +12,28 @@ const patchUser = async (
 ) => {
   const responsePatch = await axios.patch(
     `https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/user/${userId}`,
+    newProps,
+    {
+      headers: {
+        Authorization: "Bearer " + authToken,
+      },
+    }
+  );
+
+  return responsePatch;
+};
+
+const patchUserDetails = async (
+  userId: number,
+  newProps: {
+    name: string;
+    email: string;
+    password: string;
+  },
+  authToken: CookieValueTypes
+) => {
+  const responsePatch = await axios.patch(
+    `https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/user_details/${userId}`,
     newProps,
     {
       headers: {
@@ -179,9 +201,27 @@ const editSongNameInAPI = async (songName: string, songId: number) => {
   return response;
 };
 
+const editListNameInAPI = async (
+  name: string,
+  listId: number,
+  authToken: CookieValueTypes
+) => {
+  const response = await axios.patch(
+    `https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/listofsongs/${listId}/edit_list_name`,
+    { name: name },
+    {
+      headers: {
+        Authorization: "Bearer " + authToken,
+      },
+    }
+  );
+
+  return response;
+};
+
 export {
   deleteUploadedSong,
-  patchUser,
+  patchUserLists,
   postSong,
   patchPlaylistAddSong,
   deleteSongFromPlaylist,
@@ -190,4 +230,6 @@ export {
   getAllSongsDataFromAPI,
   getOtherAndCurrentUserSongsDataFromAPI,
   editSongNameInAPI,
+  patchUserDetails,
+  editListNameInAPI,
 };

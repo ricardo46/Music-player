@@ -2,23 +2,16 @@ import { useLayoutSubmitRequest } from "@/Contexts/LayoutContext";
 import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
 import { useRef, useState } from "react";
 import AudioPlayer from "../AudioPlayer/AudioPlayer";
-import TimedMessage from "../TimedMessage/TimedMessage";
 import SongsList from "../SongsList/SongsList";
 import UserListsDropDown from "../UserListsDropDown/UserListsDropDown";
 import { useRouter } from "next/router";
-import DeletePlaylistButton from "../DeletePlaylistButton/DeletePlaylistButton";
 import {
   PlayerAndDropDownContainer,
   PlayerAndSongsContainer,
   UserListsDropDownContainer,
 } from "./SongListAndPlayerStyles";
-import FileUploader from "../FileUploader/FileUploader";
 import { useMediaQuery } from "@mui/material";
-import {
-  MOBILE_MAX_WIDTH,
-  SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID,
-  USER_PAGE_PATH,
-} from "@/globalVariables";
+import { MOBILE_MAX_WIDTH, USER_PAGE_PATH } from "@/globalVariables";
 import { usePlaying } from "@/Contexts/PlayingContext";
 
 interface ListOfSongsPropInterface {}
@@ -82,7 +75,7 @@ const SongListAndPlayer = ({}: ListOfSongsPropInterface) => {
     <>
       <PlayerAndSongsContainer>
         <PlayerAndDropDownContainer>
-          {
+          {!layoutSubmitRequest.isLoading && (
             <AudioPlayer
               songIndex={songIndex}
               setSongIndex={setSongIndex}
@@ -99,19 +92,13 @@ const SongListAndPlayer = ({}: ListOfSongsPropInterface) => {
               setDuration={setDuration}
               togglePlaying={togglePlaying}
             />
-          }
+          )}
           {router.pathname == USER_PAGE_PATH && (
             <UserListsDropDownContainer>
               <UserListsDropDown
                 updateSongIndex={setSongIndex}
                 setPlaying={setPlaying}
               />
-
-              {/* <DeletePlaylistButton /> */}
-              {/* {router.pathname == USER_PAGE_PATH &&
-                !layoutSubmitRequest.isLoading &&
-                songsPlaying?.id == SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID &&
-                !maxMobileWidth && <FileUploader />} */}
             </UserListsDropDownContainer>
           )}
         </PlayerAndDropDownContainer>

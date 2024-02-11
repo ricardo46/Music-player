@@ -63,7 +63,6 @@ const FOURTH_COLOR = "#5aa7fff2";
 
 // FONT COLORS
 const MAIN_FONT_COLOR = "rgb(74, 74, 74)";
-// const MAIN_FONT_COLOR = 'RED';
 
 const SUCCESS_FONT_COLOR = "rgb(3, 185, 3)";
 const ERROR_FONT_COLOR = "rgb(255, 158, 2)";

@@ -3,9 +3,7 @@ import { useRef, useState } from "react";
 import { getCookie } from "cookies-next";
 import { useUser } from "@/Contexts/UserContext";
 import {
-  FileUploaderMobileButton,
   FileUploaderContainer,
-  FileUploaderLaptopButton,
 } from "./FileUploadeStyles";
 import TimedMessage from "../TimedMessage/TimedMessage";
 import ErrorTimedMessage from "../ErrorMessage/ErrorMessage";
@@ -17,13 +15,14 @@ import {
 } from "@/globalVariables";
 import { useRouter } from "next/router";
 import RedirectOnError from "../Redirect/RedirectOnError";
-import { patchUser, postSong } from "@/Utils/backEndUtils";
+import { patchUserLists, postSong } from "@/Utils/backEndUtils";
 import { addSongToAllSongs, verifyAuthentication } from "@/Utils/userUtils";
 import { IconLabel, UploadIconStyled } from "../Icons/Icons";
 import { useMediaQuery } from "@mui/material";
 import { useAllSongs } from "@/Contexts/AllSongsContext";
 import { getUserUploadedSongsObj } from "@/Utils/listOfSongsObj";
 import { SongInterface, submitRequestInterface } from "@/Utils/tsTypes";
+import ButtonOrClickableIcon from "../ButtonOrClickableIcon/ButtonOrClickableIcon";
 
 function FileUploader() {
   const [showPicker, setShowPicker] = useState(false);
@@ -83,7 +82,7 @@ function FileUploader() {
 
         console.log("newUserSongs", newSongs);
 
-        const responsePatch = await patchUser(
+        const responsePatch = await patchUserLists(
           user.id,
           { uploadedSongs: newSongs, playLists: user.playLists },
           authToken
@@ -153,37 +152,19 @@ function FileUploader() {
 
   return (
     <>
-      <FileUploaderContainer>
-        {maxMobileWidth ? (
-          <FileUploaderMobileButton
-            onClick={() => {
-              handleUploadButtonClick();
-              verifyAuthentication(
-                getCookie("tokenCookie"),
-                setSubmitRequest,
-                clearUser,
-                "Can not open file picker!"
-              );
-            }}
-          >
-            <UploadIconStyled />
-            <IconLabel>Upload Song</IconLabel>
-          </FileUploaderMobileButton>
-        ) : (
-          <FileUploaderLaptopButton
-            onClick={() => {
-              handleUploadButtonClick();
-              verifyAuthentication(
-                getCookie("tokenCookie"),
-                setSubmitRequest,
-                clearUser,
-                "Can not open file picker!"
-              );
-            }}
-          >
-            Upload Song
-          </FileUploaderLaptopButton>
-        )}
+        <ButtonOrClickableIcon
+          handleButtonClick={() => {
+            handleUploadButtonClick();
+            verifyAuthentication(
+              getCookie("tokenCookie"),
+              setSubmitRequest,
+              clearUser,
+              "Can not open file picker!"
+            );
+          }}
+          IconStyled={UploadIconStyled}
+          label={"Upload Song"}
+        />
 
         {!submitRequest.error && showPicker && (
           <PickerOverlay
@@ -227,7 +208,6 @@ function FileUploader() {
             message={`You are not logged in! Redirecting to ${LOGIN_PAGE_NAME} page...`}
           />
         )}
-      </FileUploaderContainer>
     </>
   );
 }

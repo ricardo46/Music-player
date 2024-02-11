@@ -1,14 +1,14 @@
-import { UserType } from "./tsTypes";
+import { SongInterface, UserType } from "./tsTypes";
 
-const validNewListName = (input: string, lists: any[] | null) => {
-  if (!lists) return true;
-  if (stringIsEmpty(input)) return false;
+// const validNewListName = (input: string, lists: any[] | null) => {
+//   if (!lists) return true;
+//   if (stringIsEmpty(input)) return false;
 
-  if (listNameExists(input, getListNamesArray(lists))) return false;
-  return true;
-};
+//   if (listNameExists(input, getListNamesArray(lists))) return false;
+//   return true;
+// };
 
-const listNameExists = (input: string, lists: any[]) => {
+const nameExists = (input: string, lists: string[]) => {
   return lists.includes(input);
 };
 
@@ -26,7 +26,7 @@ const listIsEmpty = (list: any[]) => {
 const getTextWithFirstLetterToUpperCase = (text: string) =>
   text.slice(0, 1).toUpperCase() + text.slice(1).toLowerCase();
 
-const validSongName = (songName: string) => {
+const validName = (songName: string) => {
   return songName.length >= 3;
 };
 
@@ -34,13 +34,18 @@ const SongNameExists = (user: UserType, songName: string) => {
   return user.uploadedSongs?.find((song) => song.name == songName);
 };
 
+const getSongNamesArray = (uploadedSongs: SongInterface[] | null) => {
+  if (!uploadedSongs) return [];
+  return uploadedSongs.map((list) => list.name);
+};
+
 export {
-  validNewListName,
   stringIsEmpty,
-  listNameExists,
+  nameExists,
   getListNamesArray,
   listIsEmpty,
   getTextWithFirstLetterToUpperCase,
-  validSongName,
+  validName,
   SongNameExists,
+  getSongNamesArray,
 };

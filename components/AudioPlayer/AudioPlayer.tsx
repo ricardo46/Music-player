@@ -62,7 +62,7 @@ const AudioPlayer = ({
 }: AudioPlayerInterface) => {
   const { songsPlaying, setSongsPlaying } = useSongsPlaying();
 
-  const onSongEnded = () => {
+  const onSongEnd = () => {
     if (songsPlaying?.playList) {
       if (songIndex == songsPlaying.playList.length - 1) {
         setSongIndex(0);
@@ -99,9 +99,9 @@ const AudioPlayer = ({
     const minutes = Math.floor(seconds / 60);
     const finalMinutes = minutes < 10 ? `0${minutes}` : "minutes";
     const flooredSeconds = Math.floor(seconds % 60);
-    const finalSeconds =
+    const remainingSeconds =
       flooredSeconds < 10 ? `0${flooredSeconds}` : flooredSeconds;
-    return `${finalMinutes} : ${finalSeconds}`;
+    return `${finalMinutes} : ${remainingSeconds}`;
   };
 
   const updateRange = () => {
@@ -152,7 +152,7 @@ const AudioPlayer = ({
               <StyledAudio
                 ref={audioRef}
                 src={songsPlaying.playList[songIndex]?.url}
-                onEnded={onSongEnded}
+                onEnded={onSongEnd}
                 onLoadedMetadata={handleOnLoadedMetadata}
               />
               <PlayerButtonsContainer>

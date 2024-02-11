@@ -7,6 +7,7 @@ import DeletePlaylistButtonContainer from "./DeletePlaylistButtonStyles";
 import { useMediaQuery } from "@mui/material";
 import { TrashIconStyled } from "../Icons/Icons";
 import { LAPTOP_WIDTH_ONE } from "@/globalVariables";
+import ButtonOrClickableIcon from "../ButtonOrClickableIcon/ButtonOrClickableIcon";
 
 const DeletePlaylistButton = () => {
   const { user, setUser } = useUser();
@@ -29,23 +30,14 @@ const DeletePlaylistButton = () => {
           toggleDeletePlaylistModal={toggleDeletePlaylistModal}
         />
       )}
-      {songsPlaying &&
-        songsPlaying?.id > 0 &&
-        (maxMobileWidth ? (
-          <TrashIconStyled
-            onClick={toggleDeletePlaylistModal}
-            data-testid="deletePlayListButton"
-          >
-            Delete selected playlist
-          </TrashIconStyled>
-        ) : (
-          <StyledImportantButton
-            onClick={toggleDeletePlaylistModal}
-            data-testid="deletePlayListButton"
-          >
-            Delete selected playlist
-          </StyledImportantButton>
-        ))}
+      {songsPlaying && songsPlaying?.id > 0 && (
+        
+        <ButtonOrClickableIcon
+          handleButtonClick={toggleDeletePlaylistModal}
+          IconStyled={TrashIconStyled}
+          label={"Delete playlist"}
+        />
+      )}
     </DeletePlaylistButtonContainer>
   );
 };

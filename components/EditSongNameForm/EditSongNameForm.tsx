@@ -2,7 +2,9 @@ import { MouseEvent, useState } from "react";
 
 import {
   SongNameExists,
-  validSongName,
+  getSongNamesArray,
+  nameExists,
+  validName,
 } from "@/Utils/functionUtils";
 import { useUser } from "@/Contexts/UserContext";
 import { editSongNameInAPI } from "@/Utils/backEndUtils";
@@ -16,7 +18,13 @@ import {
 import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
 import { getUserUploadedSongsObj } from "@/Utils/listOfSongsObj";
 
-const EditSongNameForm = ({ song, handleEditSongName }: { song: SongInterface, handleEditSongName: () => Promise<void> }) => {
+const EditSongNameForm = ({
+  song,
+  handleEditSongName,
+}: {
+  song: SongInterface;
+  handleEditSongName: () => Promise<void>;
+}) => {
   const [submitRequest, setSubmitRequest] = useState<submitRequestInterface>({
     isLoading: false,
     submitted: false,
@@ -39,10 +47,12 @@ const EditSongNameForm = ({ song, handleEditSongName }: { song: SongInterface, h
     let submitSuccessMessage: null | string = null;
     let submitErrorMessage = null;
 
+    const songNames = getSongNamesArray(user.uploadedSongs);
+
     if (
       song.song_id &&
-      validSongName(inputValue) &&
-      !SongNameExists(user, inputValue)
+      validName(inputValue) &&
+      !nameExists(inputValue, songNames)
     ) {
       console.log(`Creating list ${inputValue}`);
 
@@ -96,7 +106,7 @@ const EditSongNameForm = ({ song, handleEditSongName }: { song: SongInterface, h
             user
           )
         );
-        handleEditSongName()
+        handleEditSongName();
       } catch (err) {
         console.log("err", err);
 
@@ -112,10 +122,10 @@ const EditSongNameForm = ({ song, handleEditSongName }: { song: SongInterface, h
     } else {
       console.log(`Song name ${inputValue} not valid!`);
       let errorMessage = "";
-      if (!validSongName(inputValue)) {
-        errorMessage = "Name must have a minimum of 3 characters!";
+      if (!validName(inputValue)) {
+        errorMessage = "Name must have at least 3 characters!";
       }
-      if (SongNameExists(user, inputValue)) {
+      if (nameExists(inputValue, songNames)) {
         errorMessage = "You already have a song with that name!";
       }
 

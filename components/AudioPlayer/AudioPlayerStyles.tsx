@@ -47,6 +47,9 @@ const PlayerButtonsContainer = styled.div`
   padding: 0rem 0rem 1rem;
   gap: 0.5rem;
   width: 100%;
+  > * {
+    cursor: pointer;
+  }
 `;
 
 const ProgressBarContainer = styled.div`
@@ -114,7 +117,7 @@ const ProgressBarStyled = styled.input<{ $beforeWidth: number }>`
     background-color: ${knobby};
     cursor: pointer;
     position: relative;
-    
+
     z-index: 3;
     box-sizing: border-box;
     margin: 1px;

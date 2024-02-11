@@ -9,6 +9,7 @@ import {
   SongContainer,
   SongNameContainer,
   SongsContainer,
+  SongsListButtonsContainer,
   SongsListTop,
   StyledSongsList,
 } from "./SongsListStyles";
@@ -38,6 +39,7 @@ import TimedMessage from "../TimedMessage/TimedMessage";
 import OtherUsersSearchTitle from "./OtherUsersSearchTitle";
 import CurrentUserSearchTitle from "./CurrentUserSearchTitle";
 import { EditSongNameModal } from "../EditSongNameModal/EditSongNameModal";
+import EditPlaylistNameButton from "../EditPlaylistNameButton/EditPlaylistNameButton";
 
 interface SongsListProps {
   songIndex: number;
@@ -68,8 +70,8 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
 
   const [deleteSongModalVisible, setDeleteSongModalVisible] = useState(false);
 
-  const [editSongNameModalVisible, setEditSongNameModalVisible] = useState(false);
-
+  const [editSongNameModalVisible, setEditSongNameModalVisible] =
+    useState(false);
 
   const [
     removeSongFromPlaylistModalVisible,
@@ -159,12 +161,18 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
       <StyledSongsList>
         <SongsListTop>
           {<ListName>{songsPlaying?.name}</ListName>}
-          {router.pathname == USER_PAGE_PATH &&
-          songsPlaying?.id == SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID ? (
-            <FileUploader />
-          ) : (
-            <DeletePlaylistButton />
-          )}
+          <SongsListButtonsContainer>
+            {router.pathname == USER_PAGE_PATH &&
+            songsPlaying?.id == SONGS_UPLOADED_BY_CURRENT_USER_LIST_ID ? (
+              <FileUploader />
+            ) : (
+              <>
+                <EditPlaylistNameButton />
+
+                <DeletePlaylistButton />
+              </>
+            )}
+          </SongsListButtonsContainer>
         </SongsListTop>
         <SongsContainer>
           {songsPlaying?.playList &&
@@ -174,7 +182,7 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
                   <OtherUsersSearchTitle songIndexInSearchList={index} />
                   <CurrentUserSearchTitle songIndexInSearchList={index} />
 
-                  <SongContainer >
+                  <SongContainer>
                     {songIndex == index && (
                       <PlayingSongNameContainer
                         onClick={(e) => handleSongClick(e, index)}

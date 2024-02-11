@@ -21,7 +21,7 @@ const PlayerAndSongsContainer = styled.div`
 const PlayerAndDropDownContainer = styled.div`
   padding: 1rem 0 0;
   align-items: center;
-
+width: 100%;
   @media (min-width: ${MOBILE_MAX_WIDTH}) {
     display: flex;
     flex-direction: column;

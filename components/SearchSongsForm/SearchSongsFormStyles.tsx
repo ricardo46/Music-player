@@ -17,7 +17,7 @@ const SearchSongsFormContainer = styled.section`
   max-width: ${INPUT_MAX_WIDTH};
   width: 90%;
   width: 100%;
-  padding: 0 1rem 0.5rem;
+  padding: 0 0 0.5rem;
   ${FormContainer} {
     align-items: end;
 

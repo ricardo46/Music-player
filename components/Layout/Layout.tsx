@@ -33,9 +33,11 @@ const Layout = ({ children }: Props) => {
       <LayoutContainer>
         {layoutSubmitRequest.isLoading && <LoadingAnimation />}
         {!layoutSubmitRequest.isLoading && <Header />}
-        <BackgroundImageStyled src="/layoutImage.jpg" />
-       {
-       <PageContainer>{children}</PageContainer>}
+        {!layoutSubmitRequest.isLoading && (
+          <BackgroundImageStyled src="/layoutImage.jpg" />
+        )}
+
+        {<PageContainer>{children}</PageContainer>}
         {!layoutSubmitRequest.isLoading && maxMobileWidth && <NavBar />}
 
         {!layoutSubmitRequest.isLoading && !maxMobileWidth && <Footer />}

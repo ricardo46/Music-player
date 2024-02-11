@@ -17,6 +17,7 @@ import SearchSongsForm from "@/components/SearchSongsForm/SearchSongsForm";
 import { ListOfSongs, SongInterface, UserType } from "@/Utils/tsTypes";
 import { APP_NAME, LOGIN_PAGE_NAME, USER_PAGE_NAME } from "@/globalVariables";
 import Head from "next/head";
+import { UserDetailsModal } from "@/components/UserDetailsModal/UserDetailsModal";
 
 export async function getServerSideProps(context: any) {
   const currentUrl = context.resolvedUrl;
@@ -48,8 +49,8 @@ export async function getServerSideProps(context: any) {
 const User = ({
   userData,
   error,
-  // otherUsersSongs,
-}: {
+}: // otherUsersSongs,
+{
   userData: UserType;
   error: any;
   // otherUsersSongs: SongInterface[];
@@ -92,6 +93,7 @@ const User = ({
         <title>{`${APP_NAME} | ${USER_PAGE_NAME}`}</title>
       </Head>
       {layoutSubmitRequest.isLoading && <LoadingAnimation />}
+      
       {!layoutSubmitRequest.isLoading && (
         <>
           <SongListAndPlayer />

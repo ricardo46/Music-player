@@ -54,6 +54,7 @@ const StyledButton = styled.button`
   background-color: transparent;
   max-width: ${BUTTON_MAX_WIDTH};
   min-width: 5rem;
+  cursor: pointer;
 `;
 
 const StyledImportantButton = styled(StyledButton)`
@@ -75,6 +76,7 @@ const StyledSelect = styled(Select)`
     padding: 0 1rem 0;
     font-size: 1rem;
     font-weight: 700;
+    cursor: pointer;
   }
   .Select__control:hover {
     border-color: #a1a1a1;

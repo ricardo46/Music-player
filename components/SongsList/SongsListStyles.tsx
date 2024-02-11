@@ -14,8 +14,8 @@ const SongsListTop = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 1.5rem;
-  @media (min-width: ${MOBILE_MAX_WIDTH}) {
+  height: 2.5rem;
+  @media (min-width: ${LAPTOP_WIDTH_ONE}) {
     height: 2rem;
   }
 `;
@@ -36,7 +36,7 @@ const StyledSongsList = styled.ul`
   justify-content: center;
   height: 100%;
   width: 100%;
-  padding: 1rem 1rem 0.5rem;
+  padding: 1rem 0 0.5rem;
   gap: 0.3rem;
   overflow-y: hidden;
   min-height: 8rem;
@@ -59,6 +59,9 @@ const SongContainer = styled.div`
 const SongButtonsContainer = styled.div`
   display: flex;
   gap: 0.5rem;
+  > * {
+    cursor: pointer;
+  }
 `;
 
 const SongNameContainer = styled.p`
@@ -73,7 +76,7 @@ const SongNameContainer = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 0 1rem;
-
+  cursor: pointer;
   @media (min-width: ${LAPTOP_WIDTH_ONE}) {
     font-size: 1rem;
     height: 2.5rem;
@@ -117,6 +120,20 @@ const ContainerSearchResults = styled.div`
   border: solid 2px red;
 `;
 
+const SongsListButtonsContainer = styled.div`
+  display: flex;
+  height: 100%;
+  gap: 0rem;
+
+  * {
+    cursor: pointer;
+  }
+  @media (min-width: ${LAPTOP_WIDTH_ONE}) {
+    gap: 0.5rem;
+
+}
+`;
+
 export {
   ListName,
   StyledSongsList,
@@ -128,4 +145,5 @@ export {
   SongsListTop,
   SearchTitle,
   ContainerSearchResults,
+  SongsListButtonsContainer,
 };

@@ -2,9 +2,8 @@ import { MouseEvent, useState } from "react";
 
 import {
   getListNamesArray,
-  listNameExists,
-  stringIsEmpty,
-  validNewListName,
+  nameExists,
+  validName,
 } from "@/Utils/functionUtils";
 import { useUser } from "@/Contexts/UserContext";
 import { getCookie } from "cookies-next";
@@ -36,7 +35,9 @@ const NewListForm = () => {
     let submitSuccessMessage: null | string = null;
     let submitErrorMessage = null;
 
-    if (validNewListName(inputValue, playLists)) {
+    const playListsNames = getListNamesArray(user.playLists);
+
+    if (validName(inputValue) && !nameExists(inputValue, playListsNames)) {
       console.log(`Creating list ${inputValue}`);
 
       try {
@@ -94,7 +95,7 @@ const NewListForm = () => {
     } else {
       console.log(`list name ${inputValue} not valid!`);
 
-      listNameExists(inputValue, getListNamesArray(playLists)) &&
+      nameExists(inputValue, playListsNames) &&
         setSubmitRequest({
           error: true,
           errorMessage: "That list already exists!",
@@ -102,10 +103,10 @@ const NewListForm = () => {
           isLoading: false,
           message: "",
         });
-      stringIsEmpty(inputValue) &&
+      !validName(inputValue) &&
         setSubmitRequest({
           error: true,
-          errorMessage: "Please enter a list name!",
+          errorMessage: "Name must have at least 3 characters!",
           submitted: true,
           isLoading: false,
           message: "",
@@ -119,7 +120,14 @@ const NewListForm = () => {
     <NewListFormContainer>
       <MultipleInputForm
         onFormSubmit={onNewListSubmit}
-        inputs={[{ name: "NewListName", type: "text", value: inputValue, labelVisible: true }]}
+        inputs={[
+          {
+            name: "NewListName",
+            type: "text",
+            value: inputValue,
+            labelVisible: true,
+          },
+        ]}
         submitRequest={submitRequest}
         submitButtonName={"Create new list"}
         onInputChange={onInputChange}
