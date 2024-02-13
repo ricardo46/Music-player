@@ -41,6 +41,8 @@ interface AudioPlayerInterface {
   duration: number;
   setDuration: Dispatch<SetStateAction<number>>;
   togglePlaying: () => void;
+  setBeforeWidth: Dispatch<SetStateAction<number>>;
+  setCurrentTime: Dispatch<SetStateAction<number>>;
 }
 
 const AudioPlayer = ({
@@ -59,6 +61,8 @@ const AudioPlayer = ({
   duration,
   setDuration,
   togglePlaying,
+  setBeforeWidth,
+  setCurrentTime,
 }: AudioPlayerInterface) => {
   const { songsPlaying, setSongsPlaying } = useSongsPlaying();
 
@@ -73,6 +77,7 @@ const AudioPlayer = ({
     } else {
       console.log("Cant play songs because no songs were uploaded yet!");
     }
+    setBeforeWidth(0);
   };
 
   const incrementSongIndex = () => {
@@ -83,6 +88,7 @@ const AudioPlayer = ({
         setSongIndex((prevIndex) => prevIndex + 1);
       }
     }
+    setBeforeWidth(0);
   };
 
   const decrementSongIndex = () => {
@@ -93,6 +99,7 @@ const AudioPlayer = ({
         setSongIndex((prevIndex) => prevIndex - 1);
       }
     }
+    setBeforeWidth(0);
   };
 
   const calculateTime = (seconds: number) => {
@@ -105,29 +112,64 @@ const AudioPlayer = ({
   };
 
   const updateRange = () => {
-    audioRef.current!.currentTime = progressBarRef.current.value;
-    updatePlayerCurrentTime();
-    animationRef.current = requestAnimationFrame(whilePlaying);
+    // audioRef.current!.currentTime = progressBarRef.current.value;
+
+    if (audioRef.current && audioRef.current.duration && progressBarRef.current.value) {
+      audioRef.current!.currentTime =
+        (audioRef.current?.duration / 100) * progressBarRef.current.value;
+    }
+    
+    setBeforeWidth(progressBarRef.current.value);
+
+    // updatePlayerCurrentTime();
+
+    // animationRef.current = requestAnimationFrame(whilePlaying);
   };
 
   const back15 = () => {
-    progressBarRef.current.value = Number(progressBarRef.current.value) - 15;
+    progressBarRef.current.value = Number(progressBarRef.current.value) -  (15 / duration) * 100;
     updateRange();
   };
 
   const skip15 = () => {
-    progressBarRef.current.value = Number(progressBarRef.current.value) + 15;
+    progressBarRef.current.value = Number(progressBarRef.current.value) +  (15 / duration) * 100;
     updateRange();
+
   };
 
   const handleOnLoadedMetadata = () => {
-    if (audioRef.current && progressBarRef.current) {
-      const seconds = Math.floor(audioRef.current.duration);
-      setDuration(seconds);
+    // if (audioRef.current && progressBarRef.current) {
+    //   const seconds = Math.floor(audioRef.current.duration);
+    //   setDuration(seconds);
+    // }
+    // setBeforeWidth(0)
+    if (audioRef.current) {
+      setDuration(+audioRef.current.duration.toFixed(2));
+    }
+  };
+
+  const onTimeUpdate = () => {
+    if (audioRef.current) {
+      const percent = (
+        (audioRef.current.currentTime / audioRef.current.duration) *
+        100
+      ).toFixed(2);
+      const time = audioRef.current.currentTime;
+      if (+percent) {
+        setBeforeWidth(+percent);
+        setCurrentTime(+time.toFixed(2));
+      } else {
+        setBeforeWidth(0);
+        setCurrentTime(0);
+      }
     }
   };
 
   useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.3;
+    }
+
     if (audioRef.current && playing) {
       audioRef.current.play();
     } else {
@@ -135,13 +177,15 @@ const AudioPlayer = ({
     }
   }, [songIndex, playing]);
 
-  useEffect(() => {
-    if (audioRef.current && progressBarRef.current) {
-      const seconds = Math.floor(audioRef.current.duration);
+  
 
-      progressBarRef.current.max = seconds;
-    }
-  }, [audioRef?.current?.onloadedmetadata, audioRef?.current?.readyState]);
+  // useEffect(() => {
+  //   if (audioRef.current && progressBarRef.current) {
+  //     const seconds = Math.floor(audioRef.current.duration);
+
+  //     progressBarRef.current.max = seconds;
+  //   }
+  // }, [audioRef?.current?.onloadedmetadata, audioRef?.current?.readyState]);
 
   return (
     <>
@@ -149,12 +193,21 @@ const AudioPlayer = ({
         <PlayerUIContainer>
           {songsPlaying?.playList && (
             <>
+              {/* <StyledAudio
+                ref={audioRef}
+                src={songsPlaying.playList[songIndex]?.url}
+                onEnded={onSongEnd}
+                onLoadedMetadata={handleOnLoadedMetadata}
+              /> */}
+
               <StyledAudio
                 ref={audioRef}
                 src={songsPlaying.playList[songIndex]?.url}
                 onEnded={onSongEnd}
                 onLoadedMetadata={handleOnLoadedMetadata}
+                onTimeUpdate={onTimeUpdate}
               />
+
               <PlayerButtonsContainer>
                 <BackwardIconStyled
                   onClick={decrementSongIndex}
@@ -185,14 +238,25 @@ const AudioPlayer = ({
                 <TimeText>{calculateTime(currentTime)}</TimeText>
                 {/* progress bar */}
 
-                <ProgressBarStyled
+                {/* <ProgressBarStyled
                   type="range"
                   defaultValue="0"
                   ref={progressBarRef}
                   onChange={updateRange}
                   $beforeWidth={beforeWidth}
                   // data-testid="progressBar"
+                /> */}
+
+                <ProgressBarStyled
+                  value={beforeWidth}
+                  type="range"
+                  step="0.01"
+                  ref={progressBarRef}
+                  onChange={updateRange}
+                  $beforeWidth={beforeWidth}
+                  // data-testid="progressBar"
                 />
+
                 {/* duration */}
                 {duration && !isNaN(duration) && (
                   <TimeText>{calculateTime(duration)}</TimeText>

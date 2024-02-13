@@ -68,40 +68,41 @@ const ProgressBarStyled = styled.input<{ $beforeWidth: number }>`
   border-radius: 10px;
   position: relative;
   width: 100%;
-  height: 11px;
+  height: 4px;
   outline: none;
   @media (min-width: ${MOBILE_MAX_WIDTH}) {
-    height: 18px;
+    height: 6px;
     border-radius: 16px;
   }
 
   /* ProgressBar before knobby */
   &::before {
     content: "";
-    padding: 0 5% 0;
-    margin: 0 1px 0;
-    min-width: 5%;
-    max-width: 90%;
-    height: 9px;
+    /* padding: 0 5% 0; */
+    /* margin: 0 1px 0; */
+    /* min-width: 5%; */
+    /* max-width: 90%; */
+    height: 100%;
     width: ${(props) => props.$beforeWidth}%;
     background-color: ${seekBeforeColor};
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     position: absolute;
-    top: 1px;
-    left: 0;
+    top: 0px;
+    left: 0px;
     z-index: 2;
     cursor: pointer;
     @media (min-width: ${MOBILE_MAX_WIDTH}) {
-      min-width: 3%;
-      max-width: 95%;
+      /* min-width: 3%; */
+      /* max-width: 95%; */
 
-      padding: 0 2% 0;
+      /* padding: 0 2% 0; */
 
-      height: 11px;
-      top: 3px;
-      margin: 0 4px 0;
-      height: 12px;
+      height: 100%;
+      top: 0px;
+      left: 0px;
+      /* margin: 0 4px 0; */
+      /* height: 12px; */
       border-top-left-radius: 11px;
       border-bottom-left-radius: 10px;
     }
@@ -117,14 +118,14 @@ const ProgressBarStyled = styled.input<{ $beforeWidth: number }>`
     background-color: ${knobby};
     cursor: pointer;
     position: relative;
-
+    /* left: -2px; */
     z-index: 3;
-    box-sizing: border-box;
-    margin: 1px;
+    /* box-sizing: border-box; */
+    /* margin: 1px; */
     @media (min-width: ${MOBILE_MAX_WIDTH}) {
-      width: 25px;
-      height: 25px;
-      margin: 4px;
+      width: 18px;
+      height: 18px;
+      /* margin: 4px; */
     }
   }
 

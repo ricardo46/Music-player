@@ -42,10 +42,12 @@ const SongListAndPlayer = ({}: ListOfSongsPropInterface) => {
       progressBarRef.current.value = audioRef.current?.currentTime;
     }
     updatePlayerCurrentTime();
-    animationRef.current = requestAnimationFrame(whilePlaying);
+    // animationRef.current = requestAnimationFrame(whilePlaying);
   };
 
   const updatePlayerCurrentTime = () => {
+    // console.log("duration", duration);
+
     if (progressBarRef.current) {
       setBeforeWidth((progressBarRef.current.value / duration) * 100);
 
@@ -54,13 +56,24 @@ const SongListAndPlayer = ({}: ListOfSongsPropInterface) => {
   };
 
   const togglePlaying = () => {
-    const prev = playing;
-    setPlaying(!prev);
-    if (!prev) {
-      animationRef.current = requestAnimationFrame(whilePlaying);
-    } else {
+    // const prev = playing;
+    // setPlaying(!prev);
+    // if (!prev) {
+    //   // animationRef.current = requestAnimationFrame(whilePlaying);
+    // } else {
+    //   audioRef.current?.play();
+    //   // cancelAnimationFrame(animationRef.current);
+    //}
+    if (audioRef.current) {
+      audioRef.current.volume = 0.3;
+    }
+    if (!playing) {
+      setPlaying(true);
       audioRef.current?.play();
-      cancelAnimationFrame(animationRef.current);
+    }
+    if (playing) {
+      setPlaying(false);
+      audioRef.current?.pause();
     }
   };
 
@@ -68,7 +81,7 @@ const SongListAndPlayer = ({}: ListOfSongsPropInterface) => {
     setSongIndex(index);
     setPlaying(true);
 
-    animationRef.current = requestAnimationFrame(whilePlaying);
+    // animationRef.current = requestAnimationFrame(whilePlaying);
   };
 
   return (
@@ -91,6 +104,10 @@ const SongListAndPlayer = ({}: ListOfSongsPropInterface) => {
               duration={duration}
               setDuration={setDuration}
               togglePlaying={togglePlaying}
+              setBeforeWidth={setBeforeWidth}
+              setCurrentTime={setCurrentTime}
+
+              
             />
           )}
           {router.pathname == USER_PAGE_PATH && (

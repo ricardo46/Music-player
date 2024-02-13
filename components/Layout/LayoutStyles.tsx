@@ -22,9 +22,7 @@ const PageContainer = styled.div`
   height: 100%;
   min-height: 27rem;
   align-items: center;
-  @media (min-width: ${MOBILE_MAX_WIDTH}) {
-    /* min-height: 20rem; */
-  }
+  
 `;
 
 const BackgroundImageStyled = styled.img`
@@ -32,7 +30,6 @@ const BackgroundImageStyled = styled.img`
   position: absolute;
   opacity: 0.12;
   height: 100%;
-  /* scale: 120%; */
 `;
 
 export { LayoutContainer, PageContainer, BackgroundImageStyled };
