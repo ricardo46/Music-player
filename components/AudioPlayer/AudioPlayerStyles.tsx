@@ -2,9 +2,9 @@ import { MOBILE_MAX_WIDTH } from "@/globalVariables";
 import styled from "styled-components";
 import {
   barBg,
-  knobby,
+  thumb,
   seekBeforeColor,
-  selectedKnobby,
+  selectedThumb,
 } from "./AudioPlayerVariables";
 
 const StyledAudio = styled.audio`
@@ -75,13 +75,10 @@ const ProgressBarStyled = styled.input<{ $beforeWidth: number }>`
     border-radius: 16px;
   }
 
-  /* ProgressBar before knobby */
+  /* ProgressBar before thumb */
   &::before {
     content: "";
-    /* padding: 0 5% 0; */
-    /* margin: 0 1px 0; */
-    /* min-width: 5%; */
-    /* max-width: 90%; */
+
     height: 100%;
     width: ${(props) => props.$beforeWidth}%;
     background-color: ${seekBeforeColor};
@@ -93,46 +90,37 @@ const ProgressBarStyled = styled.input<{ $beforeWidth: number }>`
     z-index: 2;
     cursor: pointer;
     @media (min-width: ${MOBILE_MAX_WIDTH}) {
-      /* min-width: 3%; */
-      /* max-width: 95%; */
-
-      /* padding: 0 2% 0; */
-
       height: 100%;
       top: 0px;
       left: 0px;
-      /* margin: 0 4px 0; */
-      /* height: 12px; */
+
       border-top-left-radius: 11px;
       border-bottom-left-radius: 10px;
     }
   }
 
-  /* knobby */
+  /* thumb */
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 15px;
     height: 15px;
     border: none;
     border-radius: 50%;
-    background-color: ${knobby};
+    background-color: ${thumb};
     cursor: pointer;
     position: relative;
-    /* left: -2px; */
     z-index: 3;
-    /* box-sizing: border-box; */
-    /* margin: 1px; */
+
     @media (min-width: ${MOBILE_MAX_WIDTH}) {
       width: 18px;
       height: 18px;
-      /* margin: 4px; */
     }
   }
 
-  /* knobby while dragging */
+  /* thumb while dragging */
   &:active::-webkit-slider-thumb {
     transform: scale(1.2);
-    background: ${selectedKnobby};
+    background: ${selectedThumb};
   }
 `;
 

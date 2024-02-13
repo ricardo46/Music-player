@@ -4,7 +4,7 @@ import { FOURTH_COLOR, MAIN_COLOR, SECOND_COLOR, THIRD_COLOR } from "@/globalVar
 
 const barBg = SECOND_COLOR;
 const seekBeforeColor = MAIN_COLOR;
-const knobby = THIRD_COLOR;
-const selectedKnobby = FOURTH_COLOR;
+const thumb = THIRD_COLOR;
+const selectedThumb = FOURTH_COLOR;
 
-export { barBg, seekBeforeColor, knobby, selectedKnobby };
+export { barBg, seekBeforeColor, thumb, selectedThumb };

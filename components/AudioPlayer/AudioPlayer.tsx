@@ -26,16 +26,12 @@ import {
 } from "../Icons/Icons";
 
 interface AudioPlayerInterface {
-  // songs: ListOfSongs;
   songIndex: number;
   setSongIndex: Dispatch<SetStateAction<number>>;
   playing: boolean;
   setPlaying: Dispatch<SetStateAction<boolean>>;
-  animationRef: MutableRefObject<any>;
-  whilePlaying: () => void;
   audioRef: RefObject<HTMLAudioElement>;
   progressBarRef: MutableRefObject<any>;
-  updatePlayerCurrentTime: () => void;
   currentTime: number;
   beforeWidth: number;
   duration: number;
@@ -46,16 +42,12 @@ interface AudioPlayerInterface {
 }
 
 const AudioPlayer = ({
-  // songs,
   songIndex,
   setSongIndex,
   playing,
   setPlaying,
-  animationRef,
-  whilePlaying,
   audioRef,
   progressBarRef,
-  updatePlayerCurrentTime,
   currentTime,
   beforeWidth,
   duration,
@@ -112,37 +104,31 @@ const AudioPlayer = ({
   };
 
   const updateRange = () => {
-    // audioRef.current!.currentTime = progressBarRef.current.value;
-
-    if (audioRef.current && audioRef.current.duration && progressBarRef.current.value) {
+    if (
+      audioRef.current &&
+      audioRef.current.duration &&
+      progressBarRef.current.value
+    ) {
       audioRef.current!.currentTime =
         (audioRef.current?.duration / 100) * progressBarRef.current.value;
     }
-    
+
     setBeforeWidth(progressBarRef.current.value);
-
-    // updatePlayerCurrentTime();
-
-    // animationRef.current = requestAnimationFrame(whilePlaying);
   };
 
   const back15 = () => {
-    progressBarRef.current.value = Number(progressBarRef.current.value) -  (15 / duration) * 100;
+    progressBarRef.current.value =
+      Number(progressBarRef.current.value) - (15 / duration) * 100;
     updateRange();
   };
 
   const skip15 = () => {
-    progressBarRef.current.value = Number(progressBarRef.current.value) +  (15 / duration) * 100;
+    progressBarRef.current.value =
+      Number(progressBarRef.current.value) + (15 / duration) * 100;
     updateRange();
-
   };
 
   const handleOnLoadedMetadata = () => {
-    // if (audioRef.current && progressBarRef.current) {
-    //   const seconds = Math.floor(audioRef.current.duration);
-    //   setDuration(seconds);
-    // }
-    // setBeforeWidth(0)
     if (audioRef.current) {
       setDuration(+audioRef.current.duration.toFixed(2));
     }
@@ -177,29 +163,12 @@ const AudioPlayer = ({
     }
   }, [songIndex, playing]);
 
-  
-
-  // useEffect(() => {
-  //   if (audioRef.current && progressBarRef.current) {
-  //     const seconds = Math.floor(audioRef.current.duration);
-
-  //     progressBarRef.current.max = seconds;
-  //   }
-  // }, [audioRef?.current?.onloadedmetadata, audioRef?.current?.readyState]);
-
   return (
     <>
       <PlayerContainer>
         <PlayerUIContainer>
           {songsPlaying?.playList && (
             <>
-              {/* <StyledAudio
-                ref={audioRef}
-                src={songsPlaying.playList[songIndex]?.url}
-                onEnded={onSongEnd}
-                onLoadedMetadata={handleOnLoadedMetadata}
-              /> */}
-
               <StyledAudio
                 ref={audioRef}
                 src={songsPlaying.playList[songIndex]?.url}
@@ -207,7 +176,6 @@ const AudioPlayer = ({
                 onLoadedMetadata={handleOnLoadedMetadata}
                 onTimeUpdate={onTimeUpdate}
               />
-
               <PlayerButtonsContainer>
                 <BackwardIconStyled
                   onClick={decrementSongIndex}
@@ -237,16 +205,6 @@ const AudioPlayer = ({
                 {/* current time */}
                 <TimeText>{calculateTime(currentTime)}</TimeText>
                 {/* progress bar */}
-
-                {/* <ProgressBarStyled
-                  type="range"
-                  defaultValue="0"
-                  ref={progressBarRef}
-                  onChange={updateRange}
-                  $beforeWidth={beforeWidth}
-                  // data-testid="progressBar"
-                /> */}
-
                 <ProgressBarStyled
                   value={beforeWidth}
                   type="range"
@@ -254,9 +212,7 @@ const AudioPlayer = ({
                   ref={progressBarRef}
                   onChange={updateRange}
                   $beforeWidth={beforeWidth}
-                  // data-testid="progressBar"
                 />
-
                 {/* duration */}
                 {duration && !isNaN(duration) && (
                   <TimeText>{calculateTime(duration)}</TimeText>
