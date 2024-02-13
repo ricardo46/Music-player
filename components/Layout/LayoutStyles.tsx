@@ -22,14 +22,21 @@ const PageContainer = styled.div`
   height: 100%;
   min-height: 27rem;
   align-items: center;
-  
 `;
 
 const BackgroundImageStyled = styled.img`
+  /* justify-self: center; */
   z-index: -10;
   position: absolute;
+  top: 0;
   opacity: 0.12;
   height: 100%;
+  object-fit: cover;
+
+  @media (min-width: ${MOBILE_MAX_WIDTH}) {
+  width: 100%; 
+    
+  }
 `;
 
 export { LayoutContainer, PageContainer, BackgroundImageStyled };

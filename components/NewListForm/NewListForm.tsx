@@ -122,10 +122,10 @@ const NewListForm = () => {
         onFormSubmit={onNewListSubmit}
         inputs={[
           {
-            name: "NewListName",
+            name: "New List Name",
             type: "text",
             value: inputValue,
-            labelVisible: true,
+            labelVisible: false,
           },
         ]}
         submitRequest={submitRequest}

@@ -16,6 +16,7 @@ import {
 } from "@/Utils/tsTypes";
 import MultipleInputForm from "../MultipleInputForm/MultipleInputForm";
 import { useRouter } from "next/router";
+import { UserInfo } from "./UserDetailsModalStyles";
 
 const UserDetailsModal = ({
   toggleUserDetailsModal,
@@ -150,12 +151,12 @@ const UserDetailsModal = ({
         />
       ) : (
         <>
-          <span>
-            User name: <p>{user.name}</p>
-          </span>
-          <span>
-            Email: <p>{user.email}</p>
-          </span>
+          <UserInfo>
+            <p>{`User name: ${user.name}`}</p>
+          </UserInfo>
+          <UserInfo>
+          <p>{`Email: ${user.email}`}</p>
+          </UserInfo>
           <StyledButton onClick={toggleEditDetailsVisible}>
             Edit details
           </StyledButton>

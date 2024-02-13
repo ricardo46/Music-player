@@ -2,19 +2,14 @@ import { useUser } from "@/Contexts/UserContext";
 import ErrorTimedMessage from "../ErrorMessage/ErrorMessage";
 import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 import { Modal } from "../Modal/Modal";
-import {
-  StyledButton,
-  StyledImportantButton,
-} from "../StyledComponents/StyledComponents";
 import TimedMessage from "../TimedMessage/TimedMessage";
-import { editPlaylistNameInFrontEnd, getNewListObject, removePlaylistFromList } from "@/Utils/userUtils";
+import { editPlaylistNameInFrontEnd } from "@/Utils/userUtils";
 import { MouseEvent, useState } from "react";
 import { getCookie } from "cookies-next";
-import { deletePlaylist, editListNameInAPI } from "@/Utils/backEndUtils";
+import { editListNameInAPI } from "@/Utils/backEndUtils";
 import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
 import { useAllSongs } from "@/Contexts/AllSongsContext";
-import { getUserUploadedSongsObj } from "@/Utils/listOfSongsObj";
-import { ListOfSongs, submitRequestInterface } from "@/Utils/tsTypes";
+import { submitRequestInterface } from "@/Utils/tsTypes";
 import MultipleInputForm from "../MultipleInputForm/MultipleInputForm";
 import {
   getListNamesArray,
@@ -89,11 +84,9 @@ const EditPlaylistNameModal = ({
           errorMessage: null,
         });
 
-        // const newListId = postPlayListResponse.data.id;
-        // console.log("newListId", newListId);
+        
 
         if (songsPlaying) {
-          // const prevPlayLists = user.playLists ? user.playLists : [];
           const newPlayLists = editPlaylistNameInFrontEnd(user, inputValue, songsPlaying.id)
 
           setUser((prev: any) => ({
@@ -101,7 +94,7 @@ const EditPlaylistNameModal = ({
             playLists: newPlayLists,
           }));
 
-          // const newList = getNewListObject(songsPlaying.id, inputValue);
+          
 
           setSongsPlaying((prev: any) => ({
             ...prev,
@@ -109,11 +102,7 @@ const EditPlaylistNameModal = ({
           }))
         }
 
-        // console.log("newList", newList);
-
-        // console.log("prevPlayLists", prevPlayLists);
-
-        // console.log("newPlayLists", newPlayLists);
+        
 
         setTimeout(() => {
           toggleEditPlaylistNameModal();
@@ -159,10 +148,10 @@ const EditPlaylistNameModal = ({
         onFormSubmit={onEditPlaylistNameSubmit}
         inputs={[
           {
-            name: "Edit Playlist Name",
+            name: "Playlist Name",
             type: "text",
             value: inputValue,
-            labelVisible: true,
+            labelVisible: false,
           },
         ]}
         submitRequest={submitRequest}

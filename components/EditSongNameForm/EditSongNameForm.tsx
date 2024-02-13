@@ -147,10 +147,10 @@ const EditSongNameForm = ({
         onFormSubmit={onEditSongNameSubmit}
         inputs={[
           {
-            name: "Edit Song Name",
+            name: "Song Name",
             type: "text",
             value: inputValue,
-            labelVisible: true,
+            labelVisible: false,
           },
         ]}
         submitRequest={submitRequest}
