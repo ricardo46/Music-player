@@ -23,25 +23,15 @@ export async function getServerSideProps(context: any) {
   const currentUrl = context.resolvedUrl;
 
   const resAuth = await requireAuthentication(context, currentUrl);
-  console.log("resAuth", resAuth);
 
   if (resAuth.redirect) {
     return await requireAuthentication(context, currentUrl);
   }
 
-  // const responseSongs: any = await axios
-  //   .get("https://x8ki-letl-twmt.n7.xano.io/api:71Gy7uAA/song_other_users",{
-  //     params: { user_id: resAuth.props.userData?.id },
-  //   })
-  //   .catch((err) => {
-  //     console.log("errorDataSong", err);
-  //   });
-
   return {
     props: {
       userData: resAuth.props.userData,
       errorAuth: resAuth.props.errorAuth,
-      // otherUsersSongs: responseSongs?.data || null,
     },
   };
 }
@@ -72,12 +62,8 @@ const User = ({
     userData
   );
 
-  // const listOfAllSongs: ListOfSongs = getAllUsersUploadedSongsObj(allSongs);
-
   useEffect(() => {
     setUser(userData);
-    // setAllSongs(otherUsersSongs);
-    console.log("user.uploadedSongs", user.uploadedSongs);
     setSongsPlaying(uploadedListOfSongs);
     setLayoutSubmitRequest({
       error: userData.uploadedSongs ? false : true,
@@ -93,7 +79,7 @@ const User = ({
         <title>{`${APP_NAME} | ${USER_PAGE_NAME}`}</title>
       </Head>
       {layoutSubmitRequest.isLoading && <LoadingAnimation />}
-      
+
       {!layoutSubmitRequest.isLoading && (
         <>
           <SongListAndPlayer />

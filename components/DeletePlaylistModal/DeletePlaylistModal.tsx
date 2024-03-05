@@ -1,18 +1,19 @@
-import {  useUser } from "@/Contexts/UserContext";
+import { useUser } from "@/Contexts/UserContext";
 import ErrorTimedMessage from "../ErrorMessage/ErrorMessage";
 import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 import { Modal } from "../Modal/Modal";
-import { StyledButton, StyledImportantButton } from "../StyledComponents/StyledComponents";
-import TimedMessage from "../TimedMessage/TimedMessage";
 import {
-  removePlaylistFromList,
-} from "@/Utils/userUtils";
+  StyledButton,
+  StyledImportantButton,
+} from "../StyledComponents/StyledComponents";
+import TimedMessage from "../TimedMessage/TimedMessage";
+import { removePlaylistFromList } from "@/Utils/userUtils";
 import { useState } from "react";
 import { getCookie } from "cookies-next";
 import { deletePlaylist } from "@/Utils/backEndUtils";
 import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
 import { useAllSongs } from "@/Contexts/AllSongsContext";
-import  { getUserUploadedSongsObj } from "@/Utils/listOfSongsObj";
+import { getUserUploadedSongsObj } from "@/Utils/listOfSongsObj";
 import { ListOfSongs, submitRequestInterface } from "@/Utils/tsTypes";
 
 const DeletePlaylistModal = ({
@@ -56,12 +57,7 @@ const DeletePlaylistModal = ({
           playLists: newPlaylists,
         }));
 
-        setSongsPlaying(
-          getUserUploadedSongsObj(
-            user.uploadedSongs,
-            user
-          )
-        );
+        setSongsPlaying(getUserUploadedSongsObj(user.uploadedSongs, user));
       }
 
       setSubmitRequest({
@@ -72,8 +68,6 @@ const DeletePlaylistModal = ({
         message: "Playlist deleted from backend!",
       });
     } catch (err: any) {
-      console.log("error deleting Playlist", err);
-
       setSubmitRequest({
         error: true,
         submitted: true,
@@ -94,7 +88,9 @@ const DeletePlaylistModal = ({
   return (
     <Modal onModalClose={toggleDeletePlaylistModal}>
       <h4>{`Delete playlist ${songsPlaying?.name}?`}</h4>
-      <StyledImportantButton onClick={handleDeletePlaylist}>Yes</StyledImportantButton>
+      <StyledImportantButton onClick={handleDeletePlaylist}>
+        Yes
+      </StyledImportantButton>
       <StyledButton onClick={toggleDeletePlaylistModal}>No</StyledButton>
       {submitRequest.errorMessage && (
         <ErrorTimedMessage

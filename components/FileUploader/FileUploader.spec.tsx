@@ -230,8 +230,6 @@ describe("Songs list", () => {
     let uploadSongButton = screen.getByRole("button", { name: "Upload Song" });
     await userEvent.click(uploadSongButton);
 
-    // let someButton = screen.getByRole("button", { name: "shfd" });
-
     expect(uploadSongButton).toBeInTheDocument();
   });
 });

@@ -7,11 +7,14 @@ import {
   removeSongFromUploadedSongs,
   removeSongFromUserPlaylistsInFrontEnd,
 } from "@/Utils/userUtils";
-import {
-  REDIRECT_TIMEOUT,
-} from "@/globalVariables";
+import { REDIRECT_TIMEOUT } from "@/globalVariables";
 import { getUserUploadedSongsObj } from "@/Utils/listOfSongsObj";
-import { ListOfSongs, SongInterface, UserType, submitRequestInterface } from "@/Utils/tsTypes";
+import {
+  ListOfSongs,
+  SongInterface,
+  UserType,
+  submitRequestInterface,
+} from "@/Utils/tsTypes";
 
 const deleteSong = async (
   user: UserType,
@@ -71,8 +74,6 @@ const deleteSong = async (
       message: "Song deleted from backend!",
     });
   } catch (err: any) {
-    console.log("error deleting song", err);
-
     setSubmitRequest({
       error: true,
       submitted: true,

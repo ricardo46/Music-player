@@ -34,7 +34,6 @@ export async function getServerSideProps(context: any) {
   const responseSongs: any = await getAllSongsDataFromAPI("").catch((err) => {
     errorDataSong = err.response.data;
   });
-  console.log("responseSongs", responseSongs);
 
   const user: UserType = responseAuth?.data ? responseAuth?.data : null;
 
@@ -62,10 +61,7 @@ export default function Home({ userData, songs, errorSongs, errorAuth }: any) {
   } = useLayoutSubmitRequest();
 
   useEffect(() => {
-    console.log("errorSongs", errorSongs);
-    console.log("songs", songs);
     if (errorAuth) {
-      console.log("errorAuth");
       clearUser();
     }
     if (user.id == 0 && userData) {
@@ -103,21 +99,20 @@ export default function Home({ userData, songs, errorSongs, errorAuth }: any) {
       <Head>
         <title>{`${APP_NAME} | ${HOME_PAGE_NAME}`}</title>
       </Head>
-      {
-        !layoutSubmitRequest.isLoading &&
-        <Descriptions />
-      }
+      {!layoutSubmitRequest.isLoading && <Descriptions />}
       {layoutSubmitRequest.isLoading && <LoadingAnimation />}
-      {(
+      {
         <>
           <SongListAndPlayer />
           <SearchSongsForm />
         </>
-      )}
+      }
 
-      {!layoutSubmitRequest.isLoading && messageIsVisible && layoutSubmitRequest.errorMessage && (
-        <TimedMessage visible={true} message={"You are not logged in!"} />
-      )}
+      {!layoutSubmitRequest.isLoading &&
+        messageIsVisible &&
+        layoutSubmitRequest.errorMessage && (
+          <TimedMessage visible={true} message={"You are not logged in!"} />
+        )}
 
       {!layoutSubmitRequest.isLoading && songs?.length == 0 && (
         <TimedMessage visible={true} message={"No songs uploaded yet!"} />

@@ -1,13 +1,5 @@
 import { SongInterface, UserType } from "./tsTypes";
 
-// const validNewListName = (input: string, lists: any[] | null) => {
-//   if (!lists) return true;
-//   if (stringIsEmpty(input)) return false;
-
-//   if (listNameExists(input, getListNamesArray(lists))) return false;
-//   return true;
-// };
-
 const nameExists = (input: string, lists: string[]) => {
   return lists.includes(input);
 };

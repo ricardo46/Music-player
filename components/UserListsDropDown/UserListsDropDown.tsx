@@ -45,8 +45,6 @@ const UserListsDropDown = ({
   const { songsPlaying, setSongsPlaying } = useSongsPlaying();
 
   const onListChange = (selectedOption: any) => {
-    console.log("selectedOption", selectedOption);
-
     setPlaying(false);
 
     verifyAuthentication(
@@ -62,8 +60,6 @@ const UserListsDropDown = ({
     );
 
     playList ? setSongsPlaying(playList) : setSongsPlaying(null);
-    console.log("onListChange list", playList);
-    console.log("onListChange listOfLists", listOfLists);
   };
 
   const handleClick = (e: MouseEvent<HTMLInputElement>) => {};

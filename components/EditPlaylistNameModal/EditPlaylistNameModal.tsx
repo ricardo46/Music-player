@@ -55,8 +55,6 @@ const EditPlaylistNameModal = ({
     const playListsNames = getListNamesArray(user.playLists);
 
     if (validName(inputValue) && !nameExists(inputValue, playListsNames)) {
-      console.log(`Editing list name to ${inputValue}`);
-
       try {
         setSubmitRequest({
           isLoading: true,
@@ -72,7 +70,6 @@ const EditPlaylistNameModal = ({
             songsPlaying.id,
             getCookie("tokenCookie")
           );
-          console.log("postPlayListResponse", postPlayListResponse);
         }
 
         submitSuccessMessage = `Playlist name was changed to ${inputValue}`;
@@ -84,32 +81,28 @@ const EditPlaylistNameModal = ({
           errorMessage: null,
         });
 
-        
-
         if (songsPlaying) {
-          const newPlayLists = editPlaylistNameInFrontEnd(user, inputValue, songsPlaying.id)
+          const newPlayLists = editPlaylistNameInFrontEnd(
+            user,
+            inputValue,
+            songsPlaying.id
+          );
 
           setUser((prev: any) => ({
             ...prev,
             playLists: newPlayLists,
           }));
 
-          
-
           setSongsPlaying((prev: any) => ({
             ...prev,
             name: inputValue,
-          }))
+          }));
         }
-
-        
 
         setTimeout(() => {
           toggleEditPlaylistNameModal();
         }, MESSAGES_TIMEOUT);
       } catch (err) {
-        console.log("err", err);
-
         submitErrorMessage = `${inputValue} not changed on the server!`;
         setSubmitRequest({
           error: true,
@@ -120,8 +113,6 @@ const EditPlaylistNameModal = ({
         });
       }
     } else {
-      console.log(`list name ${inputValue} not valid!`);
-
       nameExists(inputValue, playListsNames) &&
         setSubmitRequest({
           error: true,

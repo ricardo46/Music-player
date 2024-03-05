@@ -54,8 +54,6 @@ const EditSongNameForm = ({
       validName(inputValue) &&
       !nameExists(inputValue, songNames)
     ) {
-      console.log(`Creating list ${inputValue}`);
-
       try {
         setSubmitRequest({
           isLoading: true,
@@ -78,22 +76,17 @@ const EditSongNameForm = ({
           errorMessage: null,
         });
 
-        console.log("editSongNameResponse", editSongNameResponse);
-
         const newUploadedSongs = editSongNameInUploadedSongs(
           user,
           song.song_id,
           inputValue
         );
 
-        console.log("prevUserPlaylists", user.playLists);
-
         const newUserPlaylists = editSongNameInUserPlaylists(
           user,
           inputValue,
           song.song_id
         );
-        console.log("newUserPlaylists", newUserPlaylists);
 
         setUser((prev: any) => ({
           ...prev,
@@ -108,8 +101,6 @@ const EditSongNameForm = ({
         );
         handleEditSongName();
       } catch (err) {
-        console.log("err", err);
-
         submitErrorMessage = `Error changing song name in the server!`;
         setSubmitRequest({
           error: true,
@@ -120,7 +111,6 @@ const EditSongNameForm = ({
         });
       }
     } else {
-      console.log(`Song name ${inputValue} not valid!`);
       let errorMessage = "";
       if (!validName(inputValue)) {
         errorMessage = "Name must have at least 3 characters!";

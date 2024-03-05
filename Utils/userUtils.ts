@@ -71,7 +71,6 @@ const removeSongFromUserPlaylistInFrontEnd = (
   const newPlaylists = playLists?.map((list) => {
     if (list.id == platListID) {
       const prevPlayList = list.playList ? list.playList : [];
-      console.log("prevPlayList", prevPlayList);
 
       const newPlaylist = prevPlayList.filter((song) => song.song_id != songID);
 
@@ -134,9 +133,6 @@ const removeSongFromAllSongs = (allSongs: SongInterface[], id: number) => {
 };
 
 const addSongToAllSongs = (allSongs: SongInterface[], song: SongInterface) => {
-  console.log("allSongs", allSongs);
-  console.log("song", song);
-
   if (allSongs) {
     return [...allSongs, song];
   } else {
@@ -211,12 +207,10 @@ const getNumberOfOtherUserSongsInSearchResults = (
   const numberOfCurrentUserSongs = user.uploadedSongs
     ? user.uploadedSongs.length
     : 0;
-  console.log("numberOfCurrentUserSongs", numberOfCurrentUserSongs);
 
   const numberOfSearchResults = songsPlaying.playList
     ? songsPlaying.playList.length
     : 0;
-  console.log("numberOfSearchResults", numberOfSearchResults);
 
   return numberOfSearchResults - numberOfCurrentUserSongs;
 };
@@ -230,8 +224,6 @@ const editPlaylistNameInFrontEnd = (
 
   const newPlaylists = playLists?.map((list) => {
     if (list.id == platListID) {
-      // const prevPlayList = list.playList ? list.playList : [];
-
       const newPlaylist: ListOfSongs = {
         id: platListID,
         playList: list.playList,

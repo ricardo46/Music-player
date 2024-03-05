@@ -38,8 +38,6 @@ const NewListForm = () => {
     const playListsNames = getListNamesArray(user.playLists);
 
     if (validName(inputValue) && !nameExists(inputValue, playListsNames)) {
-      console.log(`Creating list ${inputValue}`);
-
       try {
         setSubmitRequest({
           isLoading: true,
@@ -65,24 +63,18 @@ const NewListForm = () => {
         });
 
         const newListId = postPlayListResponse.data.id;
-        console.log("newListId", newListId);
 
         const newList = getNewListObject(newListId, inputValue);
-        console.log("newList", newList);
 
         const prevPlayLists = playLists ? playLists : [];
-        console.log("prevPlayLists", prevPlayLists);
 
         const newPlayLists = [...prevPlayLists, newList];
-        console.log("newPlayLists", newPlayLists);
 
         setUser((prev: any) => ({
           ...prev,
           playLists: newPlayLists,
         }));
       } catch (err) {
-        console.log("err", err);
-
         submitErrorMessage = `${inputValue} not added to the server!`;
         setSubmitRequest({
           error: true,
@@ -93,8 +85,6 @@ const NewListForm = () => {
         });
       }
     } else {
-      console.log(`list name ${inputValue} not valid!`);
-
       nameExists(inputValue, playListsNames) &&
         setSubmitRequest({
           error: true,

@@ -48,8 +48,6 @@ const RegisterForm = () => {
       setTimeout(() => {
         router.push(LOGIN_PAGE_PATH);
       }, REDIRECT_TIMEOUT);
-
-      console.log("response", response);
     } catch (err: any) {
       setSubmitRequest({
         error: true,
@@ -58,8 +56,6 @@ const RegisterForm = () => {
         isLoading: false,
         message: null,
       });
-
-      console.log("error", err);
     }
   };
 

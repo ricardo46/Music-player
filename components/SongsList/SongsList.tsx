@@ -122,7 +122,6 @@ const SongsList = ({ songIndex, handleSongClick }: SongsListProps) => {
 
   const handleEditSongName = (song: SongInterface) => {
     setModalSong(song);
-    console.log("edit song name");
     toggleEditSongNameModal();
   };
 

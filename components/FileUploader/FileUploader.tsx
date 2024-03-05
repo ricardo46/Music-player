@@ -2,9 +2,7 @@ import { PickerOverlay } from "filestack-react";
 import { useRef, useState } from "react";
 import { getCookie } from "cookies-next";
 import { useUser } from "@/Contexts/UserContext";
-import {
-  FileUploaderContainer,
-} from "./FileUploadeStyles";
+import { FileUploaderContainer } from "./FileUploadeStyles";
 import TimedMessage from "../TimedMessage/TimedMessage";
 import ErrorTimedMessage from "../ErrorMessage/ErrorMessage";
 import { useSongsPlaying } from "@/Contexts/SongsPlayingContext";
@@ -63,8 +61,6 @@ function FileUploader() {
 
         const postSongResponse = await postSong(songName, songUrl, authToken);
 
-        console.log("postSongResponse", postSongResponse);
-
         let userPreviousSongs: SongInterface[] = [];
         if (user.uploadedSongs) {
           userPreviousSongs = user.uploadedSongs;
@@ -79,8 +75,6 @@ function FileUploader() {
         };
 
         const newSongs: SongInterface[] = [...userPreviousSongs, newSong];
-
-        console.log("newUserSongs", newSongs);
 
         const responsePatch = await patchUserLists(
           user.id,
@@ -111,8 +105,6 @@ function FileUploader() {
         });
       }
     } catch (err: any) {
-      console.log("error uploading song", err);
-
       setSubmitRequest({
         error: true,
         submitted: true,
@@ -152,62 +144,62 @@ function FileUploader() {
 
   return (
     <>
-        <ButtonOrClickableIcon
-          handleButtonClick={() => {
-            handleUploadButtonClick();
+      <ButtonOrClickableIcon
+        handleButtonClick={() => {
+          handleUploadButtonClick();
+          verifyAuthentication(
+            getCookie("tokenCookie"),
+            setSubmitRequest,
+            clearUser,
+            "Can not open file picker!"
+          );
+        }}
+        IconStyled={UploadIconStyled}
+        label={"Upload Song"}
+      />
+
+      {!submitRequest.error && showPicker && (
+        <PickerOverlay
+          apikey={process.env.NEXT_PUBLIC_FILESTACK_API_KEY as string}
+          pickerOptions={{
+            accept: [".mp3"],
+            maxFiles: 1,
+            maxSize: 1024 * 1024 * 15,
+            onClose: () => {
+              handleOnclose();
+            },
+          }}
+          onUploadDone={(e) => {
+            handleUpload(e);
             verifyAuthentication(
               getCookie("tokenCookie"),
               setSubmitRequest,
               clearUser,
-              "Can not open file picker!"
+              "Can not upload file!"
             );
           }}
-          IconStyled={UploadIconStyled}
-          label={"Upload Song"}
         />
+      )}
 
-        {!submitRequest.error && showPicker && (
-          <PickerOverlay
-            apikey={process.env.NEXT_PUBLIC_FILESTACK_API_KEY as string}
-            pickerOptions={{
-              accept: [".mp3"],
-              maxFiles: 1,
-              maxSize: 1024 * 1024 * 15,
-              onClose: () => {
-                handleOnclose();
-              },
-            }}
-            onUploadDone={(e) => {
-              handleUpload(e);
-              verifyAuthentication(
-                getCookie("tokenCookie"),
-                setSubmitRequest,
-                clearUser,
-                "Can not upload file!"
-              );
-            }}
-          />
-        )}
+      {submitRequest.errorMessage && (
+        <ErrorTimedMessage
+          visible={uploadMessageVisible}
+          errorMessage={submitRequest.errorMessage}
+        />
+      )}
+      {submitRequest.message && (
+        <TimedMessage
+          visible={uploadMessageVisible}
+          message={submitRequest.message}
+        />
+      )}
 
-        {submitRequest.errorMessage && (
-          <ErrorTimedMessage
-            visible={uploadMessageVisible}
-            errorMessage={submitRequest.errorMessage}
-          />
-        )}
-        {submitRequest.message && (
-          <TimedMessage
-            visible={uploadMessageVisible}
-            message={submitRequest.message}
-          />
-        )}
-
-        {user.id == 0 && (
-          <RedirectOnError
-            error={submitRequest.error}
-            message={`You are not logged in! Redirecting to ${LOGIN_PAGE_NAME} page...`}
-          />
-        )}
+      {user.id == 0 && (
+        <RedirectOnError
+          error={submitRequest.error}
+          message={`You are not logged in! Redirecting to ${LOGIN_PAGE_NAME} page...`}
+        />
+      )}
     </>
   );
 }

@@ -21,7 +21,12 @@ import { useSearchSongs } from "@/Contexts/SearchSongsContext";
 
 const SearchSongsForm = () => {
   const { user, setUser, clearUser } = useUser();
-  const { otherUserSongs, setOtherUserSongs,  currentUserSongs, setCurrentUserSongs} = useSearchSongs();
+  const {
+    otherUserSongs,
+    setOtherUserSongs,
+    currentUserSongs,
+    setCurrentUserSongs,
+  } = useSearchSongs();
   // const [songsData, setSongsData] = useState<SongInterface[]>([]);
   const { songsPlaying, setSongsPlaying } = useSongsPlaying();
   const { playing, setPlaying } = usePlaying();
@@ -39,7 +44,6 @@ const SearchSongsForm = () => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("songsPlaying?.playList", songsPlaying?.playList);
     if (songsPlaying?.playList?.length == 0 && previousInput != "") {
       setMessageIsVisible(true);
       setTimeout(() => {
@@ -54,8 +58,6 @@ const SearchSongsForm = () => {
     setPreviousInput(inputValue);
     setInputValue(inputValue);
 
-    console.log("songsPlaying", songsPlaying);
-
     try {
       setSubmitRequest({
         isLoading: true,
@@ -68,15 +70,21 @@ const SearchSongsForm = () => {
       let response = null;
 
       if (router.pathname == USER_PAGE_PATH) {
-        response = await getOtherAndCurrentUserSongsDataFromAPI(inputValue, user);
-        console.log("response", response);
+        response = await getOtherAndCurrentUserSongsDataFromAPI(
+          inputValue,
+          user
+        );
 
-        const songsData=response.data
+        const songsData = response.data;
         setOtherUserSongs(songsData.songs_other_users);
         setCurrentUserSongs(songsData.songs_current_user);
 
-
-        setSongsPlaying(getOtherAndCurrentUserSongsObj([...songsData.songs_other_users, ...songsData.songs_current_user]));
+        setSongsPlaying(
+          getOtherAndCurrentUserSongsObj([
+            ...songsData.songs_other_users,
+            ...songsData.songs_current_user,
+          ])
+        );
       } else {
         response = await getAllSongsDataFromAPI(inputValue);
         const songs = response.data;
@@ -94,8 +102,6 @@ const SearchSongsForm = () => {
         errorMessage: null,
       });
     } catch (err) {
-      console.log("err", err);
-
       setSubmitRequest({
         error: true,
         submitted: true,

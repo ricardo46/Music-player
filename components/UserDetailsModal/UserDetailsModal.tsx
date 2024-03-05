@@ -1,19 +1,10 @@
 import { useUser } from "@/Contexts/UserContext";
 import { Modal } from "../Modal/Modal";
-import {
-  StyledButton,
-} from "../StyledComponents/StyledComponents";
-import {
-  ChangeEvent,
-  FormEvent,
-  MouseEvent,
-  useState,
-} from "react";
+import { StyledButton } from "../StyledComponents/StyledComponents";
+import { ChangeEvent, FormEvent, MouseEvent, useState } from "react";
 import { getCookie } from "cookies-next";
 import { patchUserDetails } from "@/Utils/backEndUtils";
-import {
-  submitRequestInterface,
-} from "@/Utils/tsTypes";
+import { submitRequestInterface } from "@/Utils/tsTypes";
 import MultipleInputForm from "../MultipleInputForm/MultipleInputForm";
 import { useRouter } from "next/router";
 import { UserInfo } from "./UserDetailsModalStyles";
@@ -78,11 +69,6 @@ const UserDetailsModal = ({
           message: "User details updated successfully!",
         });
 
-        // setTimeout(() => {
-        //   toggleUserDetailsModal();
-        // }, MESSAGES_TIMEOUT);
-
-        console.log("response success", response);
         toggleEditDetailsVisible();
       }
     } catch (err: any) {
@@ -93,8 +79,6 @@ const UserDetailsModal = ({
         isLoading: false,
         message: null,
       });
-
-      console.log("error", err);
     }
   };
 
@@ -155,7 +139,7 @@ const UserDetailsModal = ({
             <p>{`User name: ${user.name}`}</p>
           </UserInfo>
           <UserInfo>
-          <p>{`Email: ${user.email}`}</p>
+            <p>{`Email: ${user.email}`}</p>
           </UserInfo>
           <StyledButton onClick={toggleEditDetailsVisible}>
             Edit details
