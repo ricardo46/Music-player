@@ -94,9 +94,14 @@ const RegisterForm = () => {
         onFormSubmit={onRegisterSubmit}
         handleTextAreaClick={handleClick}
         inputs={[
-          { name: "name", type: "text", value: name , labelVisible: true},
+          { name: "name", type: "text", value: name, labelVisible: true },
           { name: "email", type: "email", value: email, labelVisible: true },
-          { name: "password", type: "password", value: password, labelVisible: true },
+          {
+            name: "password",
+            type: "password",
+            value: password,
+            labelVisible: true,
+          },
         ]}
         submitRequest={submitRequest}
         submitButtonName={"Register"}
